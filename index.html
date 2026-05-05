@@ -843,13 +843,13 @@ body.ar .letter-body::before { left: auto; right: 14px; }
   <!-- ══ GUIDE PANEL (collapsible) ══ -->
   <div id="guide-panel" style="display:none;margin-bottom:20px;">
     <div style="background:var(--surface);border:1px solid rgba(200,169,110,.2);border-radius:14px;padding:22px 20px;">
-      <div style="font-family:var(--mono);font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);opacity:.7;margin-bottom:16px;">How to Use Verbal Mirror</div>
+      <div id="guide-heading" style="font-family:var(--mono);font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);opacity:.7;margin-bottom:16px;">How to Use Verbal Mirror</div>
 
       <!-- What it does -->
-      <p style="font-size:15px;line-height:1.8;color:var(--muted2);margin-bottom:18px;font-family:system-ui,sans-serif;">Verbal Mirror combines <strong style="color:var(--text);">real voice acoustics</strong> (pitch, pace, hesitation) with <strong style="color:var(--text);">verbal pattern analysis</strong> to produce a complete psychological portrait — including a Gravity Score, Mask Score™, and a Voice Letter written in your own linguistic fingerprint.</p>
+      <p id="guide-intro" style="font-size:15px;line-height:1.8;color:var(--muted2);margin-bottom:18px;font-family:system-ui,sans-serif;">Verbal Mirror combines <strong style="color:var(--text);">real voice acoustics</strong> (pitch, pace, hesitation) with <strong style="color:var(--text);">verbal pattern analysis</strong> to produce a complete psychological portrait — including a Gravity Score, Mask Score™, and a Voice Letter written in your own linguistic fingerprint.</p>
 
       <!-- Three modes -->
-      <div style="font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);opacity:.65;margin-bottom:10px;">Three Modes</div>
+      <div id="guide-modes-label" style="font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);opacity:.65;margin-bottom:10px;">Three Modes</div>
       <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px;">
         <div style="padding:12px 14px;border-radius:10px;border:1px solid rgba(200,169,110,.15);background:rgba(200,169,110,.04);">
           <div style="font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:5px;">Solo Analysis</div>
@@ -927,19 +927,19 @@ body.ar .letter-body::before { left: auto; right: 14px; }
     <div class="journal-stats">
       <div class="journal-stat">
         <div class="journal-stat-val" id="j-streak" style="color:var(--gold)">0</div>
-        <div class="journal-stat-lbl">Day Streak</div>
+        <div class="journal-stat-lbl" id="journal-stat-lbl-streak">Day Streak</div>
       </div>
       <div class="journal-stat">
         <div class="journal-stat-val" id="j-total" style="color:var(--purple)">0</div>
-        <div class="journal-stat-lbl">Total Entries</div>
+        <div class="journal-stat-lbl" id="journal-stat-lbl-total">Total Entries</div>
       </div>
       <div class="journal-stat">
         <div class="journal-stat-val" id="j-avg-pitch" style="color:var(--teal)">—</div>
-        <div class="journal-stat-lbl">Avg Pitch</div>
+        <div class="journal-stat-lbl" id="journal-stat-lbl-pitch">Avg Pitch</div>
       </div>
       <div class="journal-stat">
         <div class="journal-stat-val" id="j-heaviest" style="color:var(--muted2)">—</div>
-        <div class="journal-stat-lbl">Heaviest Domain</div>
+        <div class="journal-stat-lbl" id="journal-stat-lbl-heavy">Heaviest Domain</div>
       </div>
     </div>
 
@@ -1761,12 +1761,35 @@ const T = {
     errShort:'يرجى إدخال بضع جمل على الأقل.',
     errNoKey:'لا يوجد مفتاح API.',
     errGeneric:'فشل التحليل: ',
+    // Journal
+    jStreak:'سلسلة الأيام',
+    jTotal:'إجمالي التسجيلات',
+    jAvgPitch:'متوسط طبقة الصوت',
+    jHeaviest:'النطاق الأثقل',
+    jCheckin:'◉ تسجيل اليوم',
+    jRecStatus:'اضغط للتسجيل — ٦٠ ثانية',
+    jNoteHolder:'ملاحظة اختيارية — سياق اليوم (مثل: بعد عرض، بعد رياضة، صباح صعب)…',
+    jSaveBtn:'◈ تحليل وحفظ التسجيل',
+    jInsightTag:'رؤية صوتية اليوم',
+    jGravityTitle:'◉ انجراف الثقالة — اتجاهات النطاقات',
+    jGravitySub:'الكتلة النفسية عبر ثلاثة نطاقات عادات بمرور الوقت',
+    jPitchTitle:'◈ اتجاه طبقة الصوت',
+    jPitchSub:'متوسط طبقة الصوت لكل تسجيل — الانجراف للأسفل يشير إلى تعمق التنظيم الذاتي',
+    jWeeklyTag:'✦ الصورة الصوتية الأسبوعية',
+    jWeeklyBtn:'توليد صورة هذا الأسبوع',
+    jHistoryTitle:'التسجيلات الأخيرة',
+    jEmpty:'سجّل أول تسجيل يومي لمدة ٦٠ ثانية لبدء تتبع صوتك عبر الزمن.<br>بياناتك خاصة — محفوظة على هذا الجهاز فقط.',
+    // Comparison
+    compLive:'صوتان مباشران',
+    compLiveSub:'سجّل كلا الجانبين',
+    compReply:'تحليل الرد',
+    compReplySub:'ارفع صوتهم · سجّل صوتك',
   }
 };
 
 /* ── API PROXY ── */
 const WORKER_URL = '/.netlify/functions/claude-proxy';
-const DEMO_KEY = '';  // No demo key — server handles auth
+const DEMO_KEY = null;
 
 let lang = S.get('lang') || 'en';
 
@@ -1843,6 +1866,57 @@ function applyLang() {
     ? 'المرآة اللفظية · أنتي غرافيتي · الذكاء الصوتي'
     : 'VERBAL MIRROR · ANTIGRAVITY · ACOUSTIC INTELLIGENCE';
 
+  // ── Arabic Journal UI strings ──
+  const jIds = {
+    'journal-stat-lbl-streak':  isAr ? t('jStreak')       : 'Day Streak',
+    'journal-stat-lbl-total':   isAr ? t('jTotal')        : 'Total Entries',
+    'journal-stat-lbl-pitch':   isAr ? t('jAvgPitch')     : 'Avg Pitch',
+    'journal-stat-lbl-heavy':   isAr ? t('jHeaviest')     : 'Heaviest Domain',
+    'ui-j-checkin-tag':         isAr ? t('jCheckin')      : '◉ Today's Check-in',
+    'ui-btn-journal-save':      isAr ? t('jSaveBtn')      : '◈ Analyse & Save Entry',
+    'ui-j-insight-tag':         isAr ? t('jInsightTag')   : 'Today's Voice Insight',
+    'ui-j-gravity-title':       isAr ? t('jGravityTitle') : '◉ Gravity Drift — Domain Trends',
+    'ui-j-gravity-sub':         isAr ? t('jGravitySub')   : 'Psychological mass across three habit domains over time',
+    'ui-j-pitch-title':         isAr ? t('jPitchTitle')   : '◈ Pitch Trend',
+    'ui-j-pitch-sub':           isAr ? t('jPitchSub')     : 'Average vocal pitch per entry — downward drift signals deepening self-regulation',
+    'ui-j-weekly-tag':          isAr ? t('jWeeklyTag')    : '✦ Weekly Voice Portrait',
+    'ui-btn-weekly':            isAr ? t('jWeeklyBtn')    : 'Generate This Week's Portrait',
+    'ui-j-history-title':       isAr ? t('jHistoryTitle') : 'Recent Entries',
+  };
+  for (const [id, val] of Object.entries(jIds)) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = val;
+  }
+  // Journal empty state (has HTML)
+  const jEmpty = document.getElementById('ui-j-empty');
+  if (jEmpty) jEmpty.innerHTML = isAr ? t('jEmpty') : 'Record your first 60-second check-in to begin tracking your voice over time.<br>Your data stays private — stored only on this device.';
+
+  // Journal note placeholder
+  const jNote = document.getElementById('j-note-input');
+  if (jNote) jNote.placeholder = isAr ? t('jNoteHolder') : 'Optional note — context for today (e.g. post-presentation, after workout, rough morning)…';
+
+  // Journal rec status
+  const jRecStatus = document.getElementById('j-rec-status');
+  if (jRecStatus && !isJournalRecording) jRecStatus.textContent = isAr ? t('jRecStatus') : 'Tap to record your 60-second check-in';
+
+  // ── Arabic Comparison mode buttons ──
+  const compLiveBtn = document.getElementById('comp-mode-live');
+  if (compLiveBtn) compLiveBtn.innerHTML = (isAr ? t('compLive') : 'Two Live Voices') +
+    `<span class="comp-mode-btn-sub">${isAr ? t('compLiveSub') : 'Record both sides'}</span>`;
+  const compReplyBtn = document.getElementById('comp-mode-reply');
+  if (compReplyBtn) compReplyBtn.innerHTML = (isAr ? t('compReply') : 'Reply Analysis') +
+    `<span class="comp-mode-btn-sub">${isAr ? t('compReplySub') : 'Upload their voice · Record yours'}</span>`;
+
+  // ── Arabic Guide panel ──
+  const guideHeading = document.getElementById('guide-heading');
+  if (guideHeading) guideHeading.textContent = isAr ? 'كيفية استخدام المرآة اللفظية' : 'How to Use Verbal Mirror';
+  const guideIntro = document.getElementById('guide-intro');
+  if (guideIntro) guideIntro.innerHTML = isAr
+    ? 'تجمع المرآة اللفظية بين <strong style="color:var(--text);">الصوت الحقيقي</strong> (الطبقة، والسرعة، والتردد) و<strong style="color:var(--text);">تحليل النمط اللفظي</strong> لبناء صورة نفسية كاملة — تشمل درجة الثقالة، ودرجة القناع™، ورسالة صوتية مكتوبة ببصمتك اللغوية.'
+    : 'Verbal Mirror combines <strong style="color:var(--text);">real voice acoustics</strong> (pitch, pace, hesitation) with <strong style="color:var(--text);">verbal pattern analysis</strong> to produce a complete psychological portrait — including a Gravity Score, Mask Score™, and a Voice Letter written in your own linguistic fingerprint.';
+  const guideModesLabel = document.getElementById('guide-modes-label');
+  if (guideModesLabel) guideModesLabel.textContent = isAr ? 'الأوضاع الثلاثة' : 'Three Modes';
+
 }
 
 /* ═══════════════════════════════════════════
@@ -1870,7 +1944,7 @@ function updateApiIndicator() {
   const key = getKey();
   const demoBanner = document.getElementById('demo-banner');
   if (demoBanner) {
-    demoBanner.style.display = (key && key === DEMO_KEY) ? 'flex' : 'none';
+    demoBanner.style.display = 'none'; // Server handles API key — no demo banner needed
   }
   document.querySelectorAll('.api-status').forEach(el => {
     if (key) {
@@ -2449,7 +2523,7 @@ function renderMetaprograms(txt) {
   if (dominant[0].strength > 60) {
     const d0 = dominant[0];
     const d1 = dominant[1];
-    const insightMap = {
+    const insightMapEn = {
       'Toward':      'pulls toward goals',
       'Away-From':   'organises around avoiding risk',
       'Internal':    'trusts internal judgment as primary guide',
@@ -2461,11 +2535,24 @@ function renderMetaprograms(txt) {
       'Matching':    'seeks agreement and alignment first',
       'Mismatching': 'notices difference and inconsistency first'
     };
+    const insightMapAr = {
+      'Toward':      'ينجذب نحو الأهداف',
+      'Away-From':   'ينظّم نفسه حول تجنب المخاطر',
+      'Internal':    'يثق بحكمه الداخلي كمرجع أساسي',
+      'External':    'يتوجه للمعايير الخارجية للتحقق',
+      'Options':     'يولّد الاحتمالات قبل الاختيار',
+      'Procedures':  'يتحرك عبر خطوات محددة',
+      'Big Picture': 'يعالج المعلومات بنظرة شاملة وبصيرة',
+      'Detail':      'يرسو في التفاصيل والتحديد',
+      'Matching':    'يبحث عن الاتفاق والتوافق أولاً',
+      'Mismatching': 'يلاحظ الاختلاف وعدم الاتساق أولاً'
+    };
+    const insightMap = lang === 'ar' ? insightMapAr : insightMapEn;
     const txt1 = insightMap[d0.pole] || d0.pole;
     const txt2 = d1 ? insightMap[d1.pole] || d1.pole : '';
-    const insightTxt = txt2
-      ? `Dominant pattern: attention ${txt1}, while also tending to ${txt2}.`
-      : `Dominant pattern: attention ${txt1}.`;
+    const insightTxt = lang === 'ar'
+      ? (txt2 ? `النمط السائد: الانتباه ${txt1}، مع ميل إلى ${txt2}.` : `النمط السائد: الانتباه ${txt1}.`)
+      : (txt2 ? `Dominant pattern: attention ${txt1}, while also tending to ${txt2}.` : `Dominant pattern: attention ${txt1}.`);
     insight.textContent = insightTxt;
     insight.style.display = 'block';
   } else {
@@ -2624,11 +2711,10 @@ function renderResult(r) {
 
 function showError(msg) {
   const el = document.getElementById('error-box');
-  el.textContent = msg;
+  el.innerHTML = msg;
   el.style.display = 'block';
 }
 
-/* ═══════════════════════════════════════════
 /* ═══════════════════════════════════════════
    THE MASK SCORE™ — AUTHENTICITY ARCHITECTURE
    Three-axis dissonance detection:
@@ -3144,7 +3230,7 @@ function copyLetter() {
       btn.classList.remove('copied');
     }, 2200);
   }).catch(() => {
-    showError('Could not copy — please select and copy manually.');
+    showError(lang === 'ar' ? 'تعذّر النسخ — يرجى التحديد والنسخ يدوياً.' : 'Could not copy — please select and copy manually.');
   });
 }
 
