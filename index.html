@@ -1897,7 +1897,7 @@ function applyLang() {
 
   // Journal rec status
   const jRecStatus = document.getElementById('j-rec-status');
-  if (jRecStatus && !isJournalRecording) jRecStatus.textContent = isAr ? t('jRecStatus') : 'Tap to record your 60-second check-in';
+  if (jRecStatus) jRecStatus.textContent = isAr ? t('jRecStatus') : 'Tap to record your 60-second check-in';
 
   // ── Arabic Comparison mode buttons ──
   const compLiveBtn = document.getElementById('comp-mode-live');
