@@ -1765,7 +1765,7 @@ const T = {
 };
 
 /* ── API PROXY ── */
-const WORKER_URL = 'https://raspy-brook-dab3.obeidatshadi.workers.dev';
+const WORKER_URL = '/.netlify/functions/claude-proxy';  // Secure server-side proxy — API key never exposed to browser
 
 let lang = S.get('lang') || 'en';
 
@@ -5004,7 +5004,7 @@ function renderRapportIntelligence(result, acA, acB, nameA, nameB) {
 ════════════════════════════════════════════════════ -->
 <script>
   window.__SUPABASE_URL__      = 'https://llyc1ptrojjnxesvnuss.supabase.co';
-  window.__SUPABASE_ANON_KEY__ = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxseWNpcHRyb2pqbnhlc3ZudXNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MDYxOTksImV4cCI6MjA5MzI4MjE5OX0.eIDxC_Ecks2QWQFpYjknbVFkfMmAh5AU5_cB7-yrZik';
+  window.__SUPABASE_ANON_KEY__ = 'PASTE_YOUR_ANON_KEY_HERE';
 </script>
 
 <script type="module">
