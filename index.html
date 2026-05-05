@@ -1765,7 +1765,8 @@ const T = {
 };
 
 /* ── API PROXY ── */
-const WORKER_URL = '/.netlify/functions/claude-proxy';  // Secure server-side proxy — API key never exposed to browser
+const WORKER_URL = '/.netlify/functions/claude-proxy';
+const DEMO_KEY = '';  // No demo key — server handles auth
 
 let lang = S.get('lang') || 'en';
 
@@ -2511,7 +2512,7 @@ ${text}`;
       WORKER_URL,
       {
         method:'POST',
-        signal: (() => { const c = new AbortController(); setTimeout(()=>c.abort(), 15000); return c.signal; })(),
+        signal: (() => { const c = new AbortController(); setTimeout(()=>c.abort(), 45000); return c.signal; })(),
         headers:{'Content-Type':'application/json'},
         body:JSON.stringify({
           model:'claude-haiku-4-5-20251001',
@@ -2742,7 +2743,7 @@ async function generateMaskScore() {
       WORKER_URL,
       {
         method: 'POST',
-        signal: (() => { const c = new AbortController(); setTimeout(()=>c.abort(), 15000); return c.signal; })(),
+        signal: (() => { const c = new AbortController(); setTimeout(()=>c.abort(), 45000); return c.signal; })(),
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
           model: 'claude-haiku-4-5-20251001',
@@ -3039,7 +3040,7 @@ async function generateLetter() {
       WORKER_URL,
       {
         method: 'POST',
-        signal: (() => { const c = new AbortController(); setTimeout(()=>c.abort(), 15000); return c.signal; })(),
+        signal: (() => { const c = new AbortController(); setTimeout(()=>c.abort(), 45000); return c.signal; })(),
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
           model: 'claude-sonnet-4-6',
@@ -3296,7 +3297,7 @@ async function generateGravityScore() {
       WORKER_URL,
       {
         method: 'POST',
-        signal: (() => { const c = new AbortController(); setTimeout(()=>c.abort(), 15000); return c.signal; })(),
+        signal: (() => { const c = new AbortController(); setTimeout(()=>c.abort(), 45000); return c.signal; })(),
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
           model: 'claude-haiku-4-5-20251001',
@@ -3712,7 +3713,7 @@ async function runComparison() {
       WORKER_URL,
       {
         method: 'POST',
-        signal: (() => { const c = new AbortController(); setTimeout(()=>c.abort(), 15000); return c.signal; })(),
+        signal: (() => { const c = new AbortController(); setTimeout(()=>c.abort(), 45000); return c.signal; })(),
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
           model: 'claude-sonnet-4-6',
@@ -4052,7 +4053,7 @@ async function saveJournalEntry() {
       WORKER_URL,
       {
         method: 'POST',
-        signal: (() => { const c = new AbortController(); setTimeout(()=>c.abort(), 15000); return c.signal; })(),
+        signal: (() => { const c = new AbortController(); setTimeout(()=>c.abort(), 45000); return c.signal; })(),
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
           model: 'claude-haiku-4-5-20251001',
@@ -4410,7 +4411,7 @@ async function generateWeeklyPortrait() {
       WORKER_URL,
       {
         method: 'POST',
-        signal: (() => { const c = new AbortController(); setTimeout(()=>c.abort(), 15000); return c.signal; })(),
+        signal: (() => { const c = new AbortController(); setTimeout(()=>c.abort(), 45000); return c.signal; })(),
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
           model: 'claude-sonnet-4-6',
@@ -4792,7 +4793,7 @@ async function runReplyAnalysis() {
     const prompt = buildRapportPrompt(nameA, textA, uploadedAcoustics, nameB, textB, acousticB);
     const resp = await fetch(WORKER_URL, {
       method: 'POST',
-      signal: (() => { const c = new AbortController(); setTimeout(()=>c.abort(), 15000); return c.signal; })(),
+      signal: (() => { const c = new AbortController(); setTimeout(()=>c.abort(), 45000); return c.signal; })(),
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
