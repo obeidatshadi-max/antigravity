@@ -1789,7 +1789,7 @@ const T = {
 
 /* ── API PROXY ── */
 const WORKER_URL = '/.netlify/functions/claude-proxy';
-const DEMO_KEY = null;
+const DEMO_KEY = "server-managed"; // Proxy handles auth — no user key needed
 
 let lang = S.get('lang') || 'en';
 
@@ -3810,7 +3810,7 @@ async function runComparison() {
     );
     if (!resp.ok) {
       const err = await resp.json().catch(()=>({}));
-      if (resp.status === 401) { S.set('api_key',null); updateApiIndicator(); openModal(); throw new Error('Invalid API key'); }
+      if (resp.status === 401) { throw new Error('API key error — check Netlify environment variable ANTHROPIC_API_KEY'); }
       throw new Error(err?.error?.message || 'HTTP ' + resp.status);
     }
     const data  = await resp.json();
@@ -4657,7 +4657,8 @@ function toggleGuide() {
 lang = S.get('lang') || 'en';
 applyLang();
 updateApiIndicator();
-if (!getKey()) setTimeout(openModal, 800);
+// API key managed server-side — modal not needed
+// if (!getKey()) setTimeout(openModal, 800);
 readOrbitContext();
 
 /* ══════════════════════════════════════════════════════
