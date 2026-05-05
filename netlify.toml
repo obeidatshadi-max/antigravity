@@ -1,6 +1,3 @@
-# netlify.toml
-# Place this in the root of your GitHub repo
-
 [build]
   publish = "."
   functions = "netlify/functions"
