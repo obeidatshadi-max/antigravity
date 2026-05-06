@@ -835,7 +835,7 @@ body.ar .letter-body::before { left: auto; right: 14px; }
 
   <!-- Top bar -->
   <div class="top-bar">
-    
+    <button class="top-btn" id="back-btn" onclick="goHome()" style="display:none;opacity:.7;">← <span id="back-btn-label">Home</span></button>
     <button class="top-btn" onclick="toggleGuide()" id="guide-btn">Guide</button>
     <button class="top-btn" id="lang-btn" onclick="toggleLang()">عربي</button>
   </div>
@@ -4860,9 +4860,29 @@ function toggleGuide() {
 }
 
 
+
+function goHome() {
+  // Hide main app
+  document.getElementById('main-app').style.display = 'none';
+  // Show welcome screen
+  document.getElementById('welcome-screen').style.display = 'block';
+  // Hide back button
+  document.getElementById('back-btn').style.display = 'none';
+  // Reset results
+  const results = document.getElementById('results');
+  if (results) results.style.display = 'none';
+  // Reset error box
+  const err = document.getElementById('error-box');
+  if (err) err.style.display = 'none';
+  // Close guide if open
+  const guide = document.getElementById('guide-panel');
+  if (guide) guide.style.display = 'none';
+}
+
 function startMode(mode) {
   document.getElementById('welcome-screen').style.display = 'none';
   document.getElementById('main-app').style.display = 'block';
+  document.getElementById('back-btn').style.display = 'inline-flex';
   setMode(mode);
   // Update active tab
   ['solo','compare','journal'].forEach(m => {
@@ -4884,6 +4904,7 @@ function updateWelcomeLanguage() {
     'wc-jour-tag':    isAr ? 'مجلة الصوت' : 'Voice Journal',
     'wc-jour-desc':   isAr ? 'تسجيل يومي ٦٠ ثانية. تتبّع كيف تتحرك حالتك الداخلية بمرور الوقت.' : '60-second daily check-in. Track how your inner state drifts over time.',
     'welcome-footer': isAr ? 'بدون حساب · يعمل بالعربية والإنجليزية' : 'No account needed · Works in Arabic & English',
+    'back-btn-label': isAr ? 'الرئيسية' : 'Home',
   };
   for (const [id, val] of Object.entries(els)) {
     const el = document.getElementById(id);
