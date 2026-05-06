@@ -1638,6 +1638,82 @@ body.ar .letter-body::before { left: auto; right: 14px; }
       <div id="res-interventions"></div>
     </div>
 
+
+    <!-- ══ NEXT RESPONSE ENGINE ══ -->
+    <div id="nre-section" style="display:none; margin-top:8px;">
+      <button class="letter-trigger-btn" id="nre-trigger-btn" onclick="generateNextResponse()" style="
+        background: linear-gradient(135deg, rgba(91,191,181,.08), rgba(91,191,181,.04));
+        border-color: rgba(91,191,181,.35);
+      ">
+        ◈ Generate Optimal Next Response
+        <span class="letter-trigger-sub" id="nre-trigger-sub">How to respond to this person — tone, pace, framing, exact language</span>
+      </button>
+
+      <div class="letter-loading" id="nre-loading" style="display:none;">
+        <div class="letter-dots"><span></span><span></span><span></span></div>
+        <div class="letter-loading-text" id="nre-loading-text">Analysing communication patterns. Building your response strategy…</div>
+      </div>
+
+      <div id="nre-card" style="display:none;
+        background: linear-gradient(135deg, rgba(91,191,181,.06), rgba(13,20,32,.9));
+        border: 1px solid rgba(91,191,181,.25); border-radius: 16px;
+        padding: 24px 20px; margin-top: 12px;
+        animation: fadeUp .5s ease both;">
+
+        <!-- Header -->
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px;">
+          <div style="width:6px;height:6px;border-radius:50%;background:var(--teal);
+            box-shadow:0 0 8px var(--teal);"></div>
+          <span id="nre-eyebrow" style="font-family:var(--mono);font-size:9px;
+            letter-spacing:.22em;text-transform:uppercase;color:var(--teal);opacity:.9;">
+            ◈ Optimal Next Response
+          </span>
+        </div>
+
+        <!-- 5 strategy tiles -->
+        <div id="nre-tiles" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px;"></div>
+
+        <!-- Suggested opening -->
+        <div id="nre-opening-wrap" style="background:rgba(91,191,181,.06);
+          border:1px solid rgba(91,191,181,.2);border-radius:12px;
+          padding:14px 16px;margin-bottom:14px;">
+          <div id="nre-opening-label" style="font-family:var(--mono);font-size:9px;
+            letter-spacing:.18em;text-transform:uppercase;color:var(--teal);
+            opacity:.7;margin-bottom:8px;">Suggested Opening</div>
+          <div id="nre-opening" style="font-size:15px;color:var(--text);
+            line-height:1.7;font-style:italic;font-family:var(--serif);"></div>
+        </div>
+
+        <!-- Avoid section -->
+        <div id="nre-avoid-wrap" style="background:rgba(212,107,107,.05);
+          border:1px solid rgba(212,107,107,.18);border-radius:12px;
+          padding:14px 16px;margin-bottom:14px;">
+          <div id="nre-avoid-label" style="font-family:var(--mono);font-size:9px;
+            letter-spacing:.18em;text-transform:uppercase;color:var(--red);
+            opacity:.7;margin-bottom:8px;">Avoid</div>
+          <div id="nre-avoid" style="font-size:13px;color:var(--muted2);line-height:1.7;"></div>
+        </div>
+
+        <!-- Expected effect -->
+        <div style="border-top:1px solid rgba(255,255,255,.06);padding-top:14px;">
+          <div id="nre-effect-label" style="font-family:var(--mono);font-size:9px;
+            letter-spacing:.18em;text-transform:uppercase;color:var(--muted);
+            opacity:.7;margin-bottom:8px;">Expected Effect</div>
+          <div id="nre-effect" style="font-size:13px;color:var(--muted2);line-height:1.7;font-style:italic;"></div>
+        </div>
+
+        <!-- Copy button -->
+        <div style="margin-top:14px;display:flex;justify-content:flex-end;">
+          <button onclick="copyNRE()" style="
+            background:rgba(91,191,181,.1);border:1px solid rgba(91,191,181,.25);
+            color:var(--teal);font-family:var(--mono);font-size:9px;letter-spacing:.12em;
+            text-transform:uppercase;padding:8px 16px;border-radius:8px;cursor:pointer;">
+            <span id="nre-copy-btn">Copy Strategy</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Closing -->
     <div class="quote-box" id="res-closing"></div>
 
@@ -2845,6 +2921,15 @@ function renderResult(r) {
   document.getElementById('res-profile-summary').textContent = r.profileSummary || '—';
   document.getElementById('res-enneagram').textContent       = r.enneagramHint  || '—';
   document.getElementById('res-closing').textContent         = '"' + (r.closingInsight || '—') + '"';
+
+  // Show Next Response Engine trigger
+  const nreSection = document.getElementById('nre-section');
+  if (nreSection) {
+    nreSection.style.display = 'block';
+    document.getElementById('nre-trigger-btn').style.display = 'block';
+    document.getElementById('nre-card').style.display = 'none';
+    document.getElementById('nre-loading').style.display = 'none';
+  }
 
   // Reset letter section for new analysis
   document.getElementById('letter-trigger-btn').style.display = 'block';
@@ -4913,6 +4998,185 @@ function updateWelcomeLanguage() {
   const ws = document.getElementById('welcome-screen');
   if (ws) ws.style.direction = isAr ? 'rtl' : 'ltr';
 }
+
+
+/* ══════════════════════════════════════════════════════
+   NEXT RESPONSE ENGINE
+   Generates optimal communication strategy based on
+   the current analysis result
+══════════════════════════════════════════════════════ */
+
+let lastNREData = null;
+
+function buildNREPrompt(analysisResult, transcript, acoustics) {
+  const isAr = lang === 'ar';
+  const gravDomains = analysisResult?.gravityScore
+    ? `Thinking: ${analysisResult.gravityScore.thinking}/10, Emotional: ${analysisResult.gravityScore.emotional}/10, Behavioral: ${analysisResult.gravityScore.physical}/10`
+    : 'Not available';
+  const maskInfo = analysisResult?.maskScore
+    ? `Type: ${analysisResult.maskScore.dominantType}, Score: ${analysisResult.maskScore.composite}/100`
+    : 'Not available';
+  const patterns = (analysisResult?.patterns || []).map(p => `${p.label}: ${p.finding}`).join('\n');
+  const acousticStr = acoustics
+    ? `Pitch: ${acoustics.pitchLabel} (${acoustics.avgPitch?.toFixed(0)}Hz), Pace: ${acoustics.wpm} WPM, Hesitation: ${acoustics.hesitationLabel}`
+    : 'Text-only (no acoustic data)';
+
+  const sysPrompt = isAr
+    ? `أنت مدرب اتصال متخصص في استراتيجية الاستجابة المثالية. بناءً على التحليل النفسي والصوتي المُقدَّم، ولّد استراتيجية استجابة محددة وقابلة للتطبيق. أعد كائن JSON صالحاً فقط.`
+    : `You are an elite communication strategist specializing in adaptive response design. Based on the psychological and acoustic analysis provided, generate a highly specific, actionable response strategy. Return ONLY valid JSON.`;
+
+  const userMsg = isAr
+    ? `الملف الشخصي: ${analysisResult?.profileTitle || '—'}
+ملخص: ${analysisResult?.profileSummary || '—'}
+الأنماط: ${patterns}
+الثقالة: ${gravDomains}
+القناع: ${maskInfo}
+الصوت: ${acousticStr}
+النص: ${(transcript || '').slice(0, 400)}
+
+أنشئ استراتيجية الاستجابة المثلى بتنسيق JSON:
+{
+  "tone": "النبرة الموصى بها (هادئ/محايد/دافئ/...)",
+  "pace": "الإيقاع الموصى به",
+  "authority": "مستوى السلطة (خفِّف/حافِظ/عزِّز)",
+  "emotionalMatch": "استراتيجية التطابق العاطفي",
+  "suggestedOpening": "جملة افتتاحية مقترحة محددة",
+  "framing": "نهج التأطير الموصى به مع شرح",
+  "avoid": "قائمة مفصولة بفاصلة منقوطة لما يجب تجنبه",
+  "expectedEffect": "كيف سيغير هذا ديناميكية التواصل"
+}`
+    : `Profile: ${analysisResult?.profileTitle || '—'}
+Summary: ${analysisResult?.profileSummary || '—'}
+Patterns: ${patterns}
+Gravity Domains: ${gravDomains}
+Mask: ${maskInfo}
+Acoustics: ${acousticStr}
+Transcript excerpt: ${(transcript || '').slice(0, 400)}
+
+Generate the optimal response strategy as JSON:
+{
+  "tone": "recommended tone (calm/warm/assertive/analytical/etc.)",
+  "pace": "recommended pacing strategy",
+  "authority": "authority level to project (soften/maintain/increase)",
+  "emotionalMatch": "emotional mirroring strategy",
+  "suggestedOpening": "one specific suggested opening sentence",
+  "framing": "recommended framing approach with explanation",
+  "avoid": "semicolon-separated list of what to avoid",
+  "expectedEffect": "how this response strategy will shift the dynamic"
+}`;
+
+  return { sysPrompt, userMsg };
+}
+
+async function generateNextResponse() {
+  if (!lastAnalysisResult) return;
+
+  const triggerBtn = document.getElementById('nre-trigger-btn');
+  const loading    = document.getElementById('nre-loading');
+  const card       = document.getElementById('nre-card');
+
+  triggerBtn.style.display = 'none';
+  loading.style.display    = 'block';
+  card.style.display       = 'none';
+
+  const { sysPrompt, userMsg } = buildNREPrompt(lastAnalysisResult, lastTranscript, acousticData);
+
+  try {
+    const resp = await fetch(WORKER_URL, {
+      method: 'POST',
+      signal: (() => { const c = new AbortController(); setTimeout(() => c.abort(), 45000); return c.signal; })(),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model:      'claude-haiku-4-5-20251001',
+        max_tokens: 1000,
+        system:     sysPrompt,
+        messages:   [{ role: 'user', content: userMsg }],
+      }),
+    });
+
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const data = await resp.json();
+    const raw  = data?.content?.[0]?.text || '';
+    const cleaned = raw.replace(/```json|```/g, '').trim();
+    const nre = JSON.parse(cleaned);
+
+    loading.style.display = 'none';
+    renderNRE(nre);
+
+  } catch (err) {
+    loading.style.display    = 'none';
+    triggerBtn.style.display = 'block';
+    console.error('[NRE]', err.message);
+    showError(lang === 'ar' ? 'فشل توليد الاستراتيجية — حاول مرة أخرى.' : 'Strategy generation failed — please try again.');
+  }
+}
+
+function renderNRE(nre) {
+  lastNREData = nre;
+  const isAr = lang === 'ar';
+  const card  = document.getElementById('nre-card');
+
+  // Arabic labels
+  document.getElementById('nre-eyebrow').textContent      = isAr ? '◈ استراتيجية الاستجابة المثلى' : '◈ Optimal Next Response';
+  document.getElementById('nre-opening-label').textContent = isAr ? 'الافتتاحية المقترحة' : 'Suggested Opening';
+  document.getElementById('nre-avoid-label').textContent   = isAr ? 'تجنّب' : 'Avoid';
+  document.getElementById('nre-effect-label').textContent  = isAr ? 'التأثير المتوقع' : 'Expected Effect';
+  document.getElementById('nre-copy-btn').textContent      = isAr ? 'نسخ الاستراتيجية' : 'Copy Strategy';
+  document.getElementById('nre-trigger-sub').textContent   = isAr
+    ? 'كيفية الرد على هذا الشخص — النبرة والإيقاع والتأطير واللغة'
+    : 'How to respond to this person — tone, pace, framing, exact language';
+
+  // 5 strategy tiles
+  const tileData = [
+    { label: isAr ? 'النبرة' : 'Tone',            val: nre.tone,           color: 'var(--teal)' },
+    { label: isAr ? 'الإيقاع' : 'Pace',           val: nre.pace,           color: 'var(--gold)' },
+    { label: isAr ? 'السلطة' : 'Authority',       val: nre.authority,      color: 'var(--purple)' },
+    { label: isAr ? 'التطابق العاطفي' : 'Emotion Match', val: nre.emotionalMatch, color: 'var(--amber)' },
+    { label: isAr ? 'التأطير' : 'Framing',        val: nre.framing,        color: 'var(--teal)' },
+  ];
+
+  document.getElementById('nre-tiles').innerHTML = tileData.map(t => `
+    <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);
+      border-radius:10px;padding:12px 14px;">
+      <div style="font-family:var(--mono);font-size:9px;letter-spacing:.14em;
+        text-transform:uppercase;color:${t.color};opacity:.8;margin-bottom:6px;">${t.label}</div>
+      <div style="font-size:13px;color:var(--muted2);line-height:1.5;">${t.val || '—'}</div>
+    </div>
+  `).join('');
+
+  // Opening, avoid, effect
+  document.getElementById('nre-opening').textContent = nre.suggestedOpening || '—';
+  document.getElementById('nre-avoid').innerHTML = (nre.avoid || '—')
+    .split(';').map(a => a.trim()).filter(Boolean)
+    .map(a => `<div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:4px;">
+      <span style="color:var(--red);margin-top:2px;flex-shrink:0;">✕</span>
+      <span>${a}</span></div>`).join('');
+  document.getElementById('nre-effect').textContent = nre.expectedEffect || '—';
+
+  card.style.display = 'block';
+}
+
+function copyNRE() {
+  if (!lastNREData) return;
+  const isAr = lang === 'ar';
+  const text = [
+    isAr ? `نبرة: ${lastNREData.tone}` : `Tone: ${lastNREData.tone}`,
+    isAr ? `إيقاع: ${lastNREData.pace}` : `Pace: ${lastNREData.pace}`,
+    isAr ? `سلطة: ${lastNREData.authority}` : `Authority: ${lastNREData.authority}`,
+    isAr ? `افتتاحية مقترحة: ${lastNREData.suggestedOpening}` : `Suggested Opening: "${lastNREData.suggestedOpening}"`,
+    isAr ? `تجنّب: ${lastNREData.avoid}` : `Avoid: ${lastNREData.avoid}`,
+    isAr ? `التأثير المتوقع: ${lastNREData.expectedEffect}` : `Expected Effect: ${lastNREData.expectedEffect}`,
+  ].join('\n\n');
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('nre-copy-btn');
+    btn.textContent = isAr ? '✓ تم النسخ' : '✓ Copied';
+    setTimeout(() => { btn.textContent = isAr ? 'نسخ الاستراتيجية' : 'Copy Strategy'; }, 2000);
+  });
+}
+
+// Store transcript for NRE use
+let lastTranscript = '';
+
 
 /* ── Init ── */
 lang = S.get('lang') || 'en';
