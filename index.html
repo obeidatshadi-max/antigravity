@@ -5554,7 +5554,7 @@ async function simStartRec() {
     const buf = new Float32Array(simState.analyser.fftSize);
     simState.analyser.getFloatTimeDomainData(buf);
     const f0 = simDetectPitch(buf, simState.audioCtx.sampleRate);
-    if (f0 > 60 && f0 < 600) simState.pitchSamples.push({ f0, t: Date.now()-startT });
+    if (f0 > 60 && f0 < 600) simState.pitchSamples.push({ f0, t: Date.now()-startT, sec: simState.recSecs });
   }, 1000);
 
   // Speech recognition
@@ -5593,11 +5593,59 @@ function simStopRec() {
   if (simState.stream) { simState.stream.getTracks().forEach(t=>t.stop()); simState.stream = null; }
   if (simState.audioCtx) { simState.audioCtx.close(); simState.audioCtx = null; }
 
-  // Compute acoustics
-  const pitches = simState.pitchSamples.map(p=>p.f0).filter(f=>f>60&&f<600);
+  // Compute rich acoustics for replay timeline
+  const allSamples = simState.pitchSamples.filter(p=>p.f0>60&&p.f0<600);
+  const pitches = allSamples.map(p=>p.f0);
   const avgPitch = pitches.length ? pitches.reduce((a,b)=>a+b,0)/pitches.length : 0;
-  const wpm = simState.transcript ? Math.round((simState.transcript.split(' ').length / Math.max(simState.recSecs,1)) * 60) : 0;
-  simState.acoustics = { avgPitch: avgPitch.toFixed(0), wpm, duration: simState.recSecs };
+  const duration = simState.recSecs || 1;
+  const wpm = simState.transcript
+    ? Math.round((simState.transcript.split(' ').filter(w=>w).length / duration) * 60) : 0;
+
+  // Build per-second pitch buckets for timeline
+  const buckets = [];
+  for (let sec = 0; sec < duration; sec++) {
+    const inBucket = allSamples.filter(p => p.t >= sec*1000 && p.t < (sec+1)*1000);
+    const bucketAvg = inBucket.length
+      ? inBucket.reduce((a,p)=>a+p.f0,0)/inBucket.length : null;
+    buckets.push({ sec, pitch: bucketAvg });
+  }
+
+  // Detect hesitation clusters (gaps > 1.5s with no pitch data)
+  const hesitations = [];
+  let gapStart = null;
+  for (let i=0; i<buckets.length; i++) {
+    if (!buckets[i].pitch) {
+      if (gapStart === null) gapStart = i;
+    } else {
+      if (gapStart !== null && i - gapStart >= 2) {
+        hesitations.push({ start: gapStart, end: i, duration: i - gapStart });
+      }
+      gapStart = null;
+    }
+  }
+
+  // Detect pace bursts (where wpm-equivalent spikes)
+  const words = simState.transcript ? simState.transcript.split(' ').filter(w=>w) : [];
+  const wordTimeline = words.map((w,i) => ({
+    word: w,
+    approxSec: Math.round((i / Math.max(words.length,1)) * duration)
+  }));
+
+  // Detect emphasis moments (pitch > avgPitch + 15%)
+  const emphasisMoments = allSamples
+    .filter(p => p.f0 > avgPitch * 1.15)
+    .map(p => ({ t: p.t, f0: p.f0 }));
+
+  simState.acoustics = {
+    avgPitch: avgPitch.toFixed(0),
+    wpm,
+    duration,
+    buckets,
+    hesitations,
+    emphasisMoments,
+    wordTimeline,
+    transcript: simState.transcript
+  };
   simState.recSecs = 0;
 
   document.getElementById('sim-icon-mic').style.display = 'block';
@@ -5718,6 +5766,9 @@ function simRenderFeedback(fb) {
   document.getElementById('sim-gaps').textContent            = fb.gaps;
   document.getElementById('sim-better-response').textContent = fb.betterResponse;
 
+  // Render replay timeline with acoustic data
+  renderReplayTimeline(simState.acoustics);
+
   card.style.display = 'block';
   card.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
@@ -5763,6 +5814,198 @@ function simShowError(msg) {
 
 // ── Welcome screen Arabic for sim ─────────────────────────────
 // (added to updateWelcomeLanguage via existing hook)
+
+
+
+/* ══════════════════════════════════════════════════════════════
+   POST-ROUND REPLAY TIMELINE
+   Visualises pitch, hesitations, emphasis, and pace
+   after each simulator round
+══════════════════════════════════════════════════════════════ */
+
+function renderReplayTimeline(acoustics) {
+  const isAr = lang === 'ar';
+  const section = document.getElementById('sim-replay-section');
+  if (!section) return;
+
+  // If no acoustic data (text-only), show simplified text timeline
+  if (!acoustics || !acoustics.buckets || acoustics.buckets.length === 0) {
+    renderTextTimeline(acoustics);
+    return;
+  }
+
+  const { buckets, hesitations, emphasisMoments, wordTimeline, avgPitch, wpm, duration } = acoustics;
+
+  // ── Label ────────────────────────────────────────────────────
+  document.getElementById('sim-replay-label').textContent =
+    isAr ? 'تحليل الاستجابة — لحظة بلحظة' : 'Response Replay — moment by moment';
+
+  // ── Build pitch bars ─────────────────────────────────────────
+  const barsEl = document.getElementById('sim-timeline-bars');
+  const maxPitch = Math.max(...buckets.filter(b=>b.pitch).map(b=>b.pitch), parseFloat(avgPitch)*1.3);
+  const minPitch = Math.min(...buckets.filter(b=>b.pitch).map(b=>b.pitch), parseFloat(avgPitch)*0.7);
+  const pitchRange = maxPitch - minPitch || 1;
+
+  barsEl.innerHTML = buckets.map((b, i) => {
+    if (!b.pitch) {
+      // Hesitation — red gap
+      const isHes = hesitations.some(h => i >= h.start && i < h.end);
+      return `<div style="flex:1;height:100%;display:flex;align-items:flex-end;">
+        <div style="width:100%;height:${isHes?'60':'20'}%;
+          background:${isHes?'rgba(212,107,107,.5)':'rgba(255,255,255,.05)'};
+          border-radius:2px 2px 0 0;
+          ${isHes?'box-shadow:0 0 6px rgba(212,107,107,.3)':''}">
+        </div>
+      </div>`;
+    }
+    const heightPct = Math.max(10, Math.round(((b.pitch - minPitch) / pitchRange) * 90));
+    const isEmphasis = emphasisMoments.some(e => e.t >= i*1000 && e.t < (i+1)*1000);
+    const isAboveAvg = b.pitch > parseFloat(avgPitch);
+    const color = isEmphasis
+      ? 'rgba(200,169,110,.9)'
+      : isAboveAvg
+        ? 'rgba(91,191,181,.7)'
+        : 'rgba(155,143,224,.5)';
+    return `<div style="flex:1;height:100%;display:flex;align-items:flex-end;cursor:pointer;"
+      title="${Math.round(b.pitch)}Hz @ ${b.sec}s${isEmphasis?' — emphasis spike':''}">
+      <div style="width:100%;height:${heightPct}%;background:${color};
+        border-radius:2px 2px 0 0;transition:opacity .2s;
+        ${isEmphasis?'box-shadow:0 0 8px rgba(200,169,110,.5)':''}">
+      </div>
+    </div>`;
+  }).join('');
+
+  // ── Time markers ─────────────────────────────────────────────
+  const markersEl = document.getElementById('sim-timeline-markers');
+  const markerCount = Math.min(duration, 5);
+  const markers = [];
+  for (let i=0; i<=markerCount; i++) {
+    const sec = Math.round((i/markerCount)*duration);
+    markers.push(`<span>${sec}s</span>`);
+  }
+  markersEl.innerHTML = markers.join('');
+
+  // ── Annotation badges ─────────────────────────────────────────
+  const annotations = [];
+  const avgP = parseFloat(avgPitch);
+
+  // Pace badge
+  if (wpm > 180) annotations.push({ label: isAr?'سرعة مرتفعة':'High pace', color:'var(--amber)', icon:'⚡' });
+  else if (wpm < 110) annotations.push({ label: isAr?'إيقاع بطيء':'Slow pace', color:'var(--purple)', icon:'◎' });
+  else annotations.push({ label: isAr?'إيقاع متوازن':'Balanced pace', color:'var(--teal)', icon:'◉' });
+
+  // Pitch badge
+  if (avgP > 220) annotations.push({ label: isAr?'طبقة مرتفعة':'High pitch', color:'var(--amber)', icon:'↑' });
+  else if (avgP < 130 && avgP > 0) annotations.push({ label: isAr?'طبقة منخفضة':'Low pitch', color:'var(--teal)', icon:'↓' });
+  else if (avgP > 0) annotations.push({ label: isAr?'طبقة معتدلة':'Moderate pitch', color:'var(--muted2)', icon:'→' });
+
+  // Hesitation badge
+  if (hesitations.length > 2) annotations.push({ label: isAr?'توقفات متعددة':'Multiple pauses', color:'var(--red)', icon:'…' });
+  else if (hesitations.length > 0) annotations.push({ label: isAr?'توقفات خفيفة':'Mild pauses', color:'var(--muted2)', icon:'…' });
+
+  // Emphasis badge
+  if (emphasisMoments.length > 3) annotations.push({ label: isAr?'تأكيد قوي':'Strong emphasis', color:'var(--gold)', icon:'★' });
+
+  document.getElementById('sim-timeline-annotations').innerHTML = annotations.map(a =>
+    `<div style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;
+      background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+      border-radius:20px;font-family:var(--mono);font-size:9px;
+      letter-spacing:.1em;color:${a.color};">
+      <span>${a.icon}</span><span>${a.label}</span>
+    </div>`
+  ).join('');
+
+  // ── Key moments list ──────────────────────────────────────────
+  const moments = [];
+
+  // Opening pace
+  const firstThirdBuckets = buckets.slice(0, Math.ceil(duration/3)).filter(b=>b.pitch);
+  const lastThirdBuckets  = buckets.slice(Math.floor(duration*2/3)).filter(b=>b.pitch);
+  if (firstThirdBuckets.length && lastThirdBuckets.length) {
+    const openPitch = firstThirdBuckets.reduce((a,b)=>a+b.pitch,0)/firstThirdBuckets.length;
+    const closePitch = lastThirdBuckets.reduce((a,b)=>a+b.pitch,0)/lastThirdBuckets.length;
+    if (openPitch - closePitch > 20) {
+      moments.push({
+        icon:'↘',
+        color:'var(--teal)',
+        text: isAr
+          ? 'طبقة الصوت انخفضت نحو النهاية — يشير إلى ثقة متزايدة أو استقرار'
+          : 'Pitch dropped toward the end — consistent with growing confidence or settling'
+      });
+    } else if (closePitch - openPitch > 20) {
+      moments.push({
+        icon:'↗',
+        color:'var(--amber)',
+        text: isAr
+          ? 'طبقة الصوت ارتفعت نحو النهاية — قد يشير إلى توتر أو عدم يقين'
+          : 'Pitch rose toward the end — may suggest rising tension or uncertainty'
+      });
+    }
+  }
+
+  // Hesitation moments
+  hesitations.forEach(h => {
+    if (h.duration >= 2) {
+      moments.push({
+        icon:'…',
+        color:'var(--red)',
+        text: isAr
+          ? `توقف ملحوظ عند الثانية ${h.start} (${h.duration} ثوانٍ) — قد يشير إلى معالجة معرفية أو تردد`
+          : `Notable pause at ${h.start}s (${h.duration}s) — may indicate cognitive processing or hesitation`
+      });
+    }
+  });
+
+  // Emphasis moments
+  if (emphasisMoments.length > 0) {
+    const emphasisSecs = [...new Set(emphasisMoments.map(e=>Math.floor(e.t/1000)))].slice(0,3);
+    moments.push({
+      icon:'★',
+      color:'var(--gold)',
+      text: isAr
+        ? `نقاط تأكيد صوتي عند: ${emphasisSecs.map(s=>s+'s').join(', ')} — كلمات نُطقت بطبقة أعلى من المتوسط`
+        : `Pitch emphasis detected at: ${emphasisSecs.map(s=>s+'s').join(', ')} — words spoken above average pitch`
+    });
+  }
+
+  // Pace reading
+  if (wpm > 0) {
+    const paceText = wpm > 180
+      ? (isAr ? `${wpm} كلمة/دقيقة — سرعة مرتفعة. قد يُفسَّر كإلحاح أو قلق` : `${wpm} WPM — fast. May read as urgency or anxiety under pressure`)
+      : wpm < 110
+        ? (isAr ? `${wpm} كلمة/دقيقة — إيقاع بطيء. يشير إلى تأنٍّ أو إيقاع محكوم` : `${wpm} WPM — slow. Suggests deliberateness or controlled pacing`)
+        : (isAr ? `${wpm} كلمة/دقيقة — إيقاع متوازن في النطاق المثالي` : `${wpm} WPM — balanced pace in the optimal range`);
+    moments.push({ icon:'→', color:'var(--muted2)', text: paceText });
+  }
+
+  document.getElementById('sim-moments-list').innerHTML = moments.map(m =>
+    `<div style="display:flex;gap:10px;align-items:flex-start;padding:10px 12px;
+      background:rgba(255,255,255,.02);border-radius:8px;
+      border-left:2px solid ${m.color};">
+      <span style="color:${m.color};font-size:14px;flex-shrink:0;margin-top:1px;">${m.icon}</span>
+      <span style="font-size:13px;color:var(--muted2);line-height:1.6;">${m.text}</span>
+    </div>`
+  ).join('');
+}
+
+// Text-only timeline (no voice recording)
+function renderTextTimeline(acoustics) {
+  const isAr = lang === 'ar';
+  document.getElementById('sim-replay-label').textContent =
+    isAr ? 'تحليل النص — لا توجد بيانات صوتية' : 'Text Analysis — no acoustic data';
+  document.getElementById('sim-timeline-bars').innerHTML =
+    `<div style="font-size:12px;color:var(--muted);padding:8px 0;font-style:italic;">
+      ${isAr ? 'سجّل صوتك للحصول على تحليل صوتي مرئي' : 'Record your voice to see acoustic visualisation'}
+    </div>`;
+  document.getElementById('sim-timeline-markers').innerHTML = '';
+  document.getElementById('sim-timeline-annotations').innerHTML = '';
+  if (acoustics && acoustics.wpm) {
+    document.getElementById('sim-moments-list').innerHTML =
+      `<div style="font-size:13px;color:var(--muted2);padding:8px 0;">
+        ${isAr ? `الإيقاع التقريبي: ${acoustics.wpm} كلمة/دقيقة` : `Approximate pace: ${acoustics.wpm} WPM`}
+      </div>`;
+  }
+}
 
 
 /* ── Init ── */
@@ -6404,6 +6647,35 @@ function renderRapportIntelligence(result, acA, acB, nameA, nameB) {
             id="sim-better-label">Stronger Alternative</div>
           <div id="sim-better-response" style="font-size:14px;color:var(--text);
             line-height:1.75;font-style:italic;font-family:var(--serif);"></div>
+        </div>
+
+        <!-- ══ REPLAY TIMELINE ══ -->
+        <div id="sim-replay-section" style="margin-bottom:16px;">
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:.16em;
+            text-transform:uppercase;color:var(--muted);margin-bottom:10px;"
+            id="sim-replay-label">Response Replay</div>
+
+          <!-- Pitch + hesitation timeline canvas -->
+          <div style="position:relative;background:rgba(255,255,255,.02);
+            border:1px solid rgba(255,255,255,.07);border-radius:10px;
+            padding:14px 14px 10px;overflow:hidden;">
+
+            <!-- Timeline bars -->
+            <div id="sim-timeline-bars" style="display:flex;align-items:flex-end;
+              gap:2px;height:48px;margin-bottom:8px;"></div>
+
+            <!-- Time markers -->
+            <div id="sim-timeline-markers" style="display:flex;justify-content:space-between;
+              font-family:var(--mono);font-size:9px;color:var(--muted);opacity:.6;"></div>
+
+            <!-- Annotation badges -->
+            <div id="sim-timeline-annotations" style="margin-top:10px;
+              display:flex;flex-wrap:wrap;gap:6px;"></div>
+          </div>
+
+          <!-- Key moments list -->
+          <div id="sim-moments-list" style="margin-top:12px;
+            display:flex;flex-direction:column;gap:6px;"></div>
         </div>
 
         <!-- Action buttons -->
