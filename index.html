@@ -966,6 +966,18 @@ body.ar .letter-body::before { left: auto; right: 14px; }
         <div style="font-size:14px;color:var(--muted2);line-height:1.6;
           font-family:system-ui,sans-serif;" id="wc-jour-desc">60-second daily check-in. Track how your inner state drifts over time.</div>
       </button>
+
+      <button onclick="startMode('sim')" style="
+        background: rgba(91,191,181,.04); border: 1px solid rgba(91,191,181,.2);
+        border-radius: 14px; padding: 16px 18px; cursor: pointer; text-align:left;
+        transition: all .2s; width:100%;
+      " onmouseover="this.style.background='rgba(91,191,181,.09)'"
+         onmouseout="this.style.background='rgba(91,191,181,.04)'">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:.15em;
+          text-transform:uppercase;color:var(--teal);margin-bottom:6px;" id="wc-sim-tag">Conversation Simulator</div>
+        <div style="font-size:14px;color:var(--muted2);line-height:1.6;
+          font-family:system-ui,sans-serif;" id="wc-sim-desc">Practice high-stakes conversations. Get scored and coached in real time.</div>
+      </button>
     </div>
 
     <p style="font-size:12px;color:var(--muted);font-family:var(--mono);
@@ -989,6 +1001,10 @@ body.ar .letter-body::before { left: auto; right: 14px; }
     <button class="mode-btn" id="mode-journal" onclick="setMode('journal')">
       Voice Journal
       <span class="mode-btn-sub">Daily tracking · drift</span>
+    </button>
+    <button class="mode-btn" id="mode-sim" onclick="setMode('sim')" style="border-color:rgba(155,143,224,.3);">
+      Simulator
+      <span class="mode-btn-sub" style="color:rgba(155,143,224,.7);">Practice · train · rehearse</span>
     </button>
   </div>
 
@@ -1916,11 +1932,11 @@ const T = {
     voiceDone:'✓ Acoustic data captured — tap Analyze',
     btnAnalyse:'Analyze Verbal + Acoustic Patterns',
     btnAnalysing:'Reading all patterns…',
-    resultsHeader:'— Coaching Diagnostic Report —',
+    resultsHeader:'— Communication Pattern Report —',
     tagProfile:'◆ Personality Profile',
     tagVoiceSig:'◈ Voice Signature Analysis',
     tagEnn:'Enneagram Signal',
-    tagInt:'◆ Coaching Entry Points',
+    tagInt:'◆ Growth Entry Points',
     apiTag:'API KEY REQUIRED',apiTitle:'Connect to Claude AI',
     apiBody:'Verbal Mirror uses the Anthropic Claude API. Your key is stored only on your device.',
     apiHow:'HOW TO GET YOUR KEY',
@@ -2539,6 +2555,28 @@ let isAnalysing = false;
 function buildSystemPrompt() {
   const base = `You are an expert coaching psychologist specializing in integrated vocal and verbal pattern analysis. You draw on established research frameworks:
 
+CRITICAL LANGUAGE RULE — NON-NEGOTIABLE:
+Never use deterministic statements about personality or psychological state. Always use probabilistic, pattern-based language.
+
+FORBIDDEN phrases (never use):
+- "You are [trait]" → say "Current patterns suggest a tendency toward..."
+- "You feel [emotion]" → say "The vocal and verbal signals may indicate..."
+- "This shows you are" → say "This pattern often correlates with..."
+- "definitely", "clearly shows", "proves", "confirms" → say "suggests", "may indicate", "tends to correlate with", "is consistent with"
+- "You are suppressing" → say "Suppression patterns appear present"
+- "You are anxious" → say "Elevated hesitation clustering is consistent with cognitive load or performance anxiety"
+
+REQUIRED language style:
+✓ "Current patterns suggest..."
+✓ "This may indicate..."
+✓ "Tends to correlate with..."
+✓ "Is consistent with..."
+✓ "The evidence suggests a probable tendency toward..."
+✓ "Pattern implies..."
+✓ "Signals that often accompany..."
+
+Every finding must feel like a calibrated observation, not a verdict. The user is a whole person — you are reading a signal, not defining them.
+
 ACOUSTIC-PERSONALITY RESEARCH (integrated into your analysis):
 • Lower pitch (below ~140Hz) correlates with dominance, extraversion, self-regulation, and mindful self-control (ScienceDirect 2021; Psychology Today 2019; Alfred Tomatis research).
 • Higher pitch signals emotional expressiveness, perceived vulnerability, or heightened emotional activation (Brit. J. Social Psych. 2023).
@@ -2558,38 +2596,54 @@ When acoustic data is provided, LEAD your interpretation with the voice signatur
 
 Return ONLY a valid JSON object (no markdown, no backticks):
 {
-  "profileTitle": "3-6 word evocative label",
-  "profileSummary": "2-3 sentences. If acoustic data present: open with voice signature interpretation, then connect to verbal pattern.",
+  "profileTitle": "3-6 word evocative label — describe a pattern or tendency, not a fixed identity (e.g. \'The Measured Strategist\' not \'The Anxious Person\')",
+  "profileSummary": "2-3 sentences using probabilistic language. MUST start with \'Current patterns suggest...\' or \'The vocal and verbal signals indicate a probable tendency toward...\'. If acoustic data: open with voice signature observation.",
   "voiceSignature": {
     "show": true/false,
-    "pitchPersonality": "1 sentence: what their pitch level reveals psychologically",
-    "pacePersonality": "1 sentence: what their speech pace reveals",
-    "hesitationPersonality": "1 sentence: what their hesitation pattern reveals",
-    "toneAlignment": "1 sentence: do the emphasized words (high pitch) align with or contradict the words they downplay (low pitch)? What does this reveal?",
-    "overallVoiceProfile": "2 sentences synthesizing all acoustic signals into a coherent personality read"
+    "pitchPersonality": "1 sentence using probabilistic language e.g. \'This pitch range tends to correlate with...\' NEVER \'Your pitch shows you are...\'",
+    "pacePersonality": "1 sentence e.g. \'This pace pattern is often associated with...\'",
+    "hesitationPersonality": "1 sentence e.g. \'This hesitation distribution may suggest...\' — note it could reflect multiple causes",
+    "toneAlignment": "1 sentence on acoustic-verbal congruence using observational language",
+    "overallVoiceProfile": "2 sentences synthesizing acoustic signals — use \'The overall acoustic signature suggests...\' and hold findings as tendencies not certainties"
   },
   "patterns": [
-    {"label": "Locus of Control", "finding": "one sentence", "badge": "internal", "badgeColor": "teal"},
-    {"label": "Time Orientation", "finding": "one sentence", "badge": "future", "badgeColor": "purple"},
-    {"label": "Agency & Verbs", "finding": "one sentence", "badge": "active", "badgeColor": "gold"},
-    {"label": "Modal Operators", "finding": "one sentence", "badge": "obligation", "badgeColor": "red"},
-    {"label": "Emotional Vocabulary", "finding": "one sentence", "badge": "suppressed", "badgeColor": "red"},
-    {"label": "Voice-Word Harmony", "finding": "one sentence about alignment or dissonance between acoustic patterns and word choices", "badge": "aligned", "badgeColor": "teal"}
+    {"label": "Locus of Control", "finding": "one sentence using pattern language e.g. \'Language patterns suggest an internal reference point\'", "badge": "internal", "badgeColor": "teal"},
+    {"label": "Time Orientation", "finding": "one sentence e.g. \'Temporal markers tend toward future framing\'", "badge": "future", "badgeColor": "purple"},
+    {"label": "Agency & Verbs", "finding": "one sentence e.g. \'Verb choices correlate with active agency orientation\'", "badge": "active", "badgeColor": "gold"},
+    {"label": "Modal Operators", "finding": "one sentence e.g. \'Obligation language appears at moderate frequency\'", "badge": "obligation", "badgeColor": "red"},
+    {"label": "Emotional Vocabulary", "finding": "one sentence e.g. \'Emotional word frequency suggests understated expression style\'", "badge": "moderate", "badgeColor": "gold"},
+    {"label": "Voice-Word Harmony", "finding": "one sentence on acoustic-verbal alignment e.g. \'Pitch patterns and word choices appear broadly congruent\'", "badge": "aligned", "badgeColor": "teal"}
   ],
-  "enneagramHint": "2-3 sentences. If acoustic data: include voice cues as supporting evidence for the type.",
+  "enneagramHint": "2-3 sentences using exploratory language. NEVER say \'You are type X\'. Say \'The patterns observed share characteristics with...\'  or \'Vocal and verbal signals are consistent with tendencies often seen in...\'. Offer it as a pointer, not a verdict.",
   "interventions": [
-    "First coaching entry point (may reference voice pattern if applicable)",
-    "Second specific coaching entry point",
-    "Third specific coaching entry point",
-    "Fourth specific coaching entry point"
+    "Specific coaching entry point phrased as invitation not instruction e.g. \'One area worth exploring is...\'",
+    "Second coaching entry phrased as curiosity e.g. \'A pattern that may be worth examining is...\'",
+    "Third entry point connecting acoustic and verbal signals to a growth edge",
+    "Fourth entry point — one concrete behavioral experiment to try"
   ],
-  "closingInsight": "One poetic, precise sentence about what this person's voice and words together reveal about their inner world."
+  "confidenceNote": "One sentence on the confidence level of this reading e.g. \'This analysis reflects patterns in the current sample — a single session is one data point, not a complete portrait.\'",
+  "closingInsight": "One poetic, precise sentence that holds the person with curiosity and care — not a verdict, but an observation that opens rather than closes."
 }`;
   return base;
 }
 
 function buildArSystemPrompt() {
   return `أنت خبير في علم النفس التدريبي متخصص في تحليل الأنماط الصوتية واللفظية المتكاملة. تستخدم أبحاث علمية راسخة:
+
+قاعدة اللغة الأساسية — غير قابلة للتفاوض:
+لا تستخدم أبداً عبارات قاطعة عن الشخصية. استخدم دائماً لغة احتمالية قائمة على الأنماط.
+
+عبارات ممنوعة:
+- "أنت [صفة]" → قل "تشير الأنماط الحالية إلى ميل نحو..."
+- "تشعر بـ..." → قل "قد تشير الإشارات إلى..."
+- "يثبت" أو "يؤكد" → قل "يرتبط بـ" أو "يتسق مع"
+
+الأسلوب المطلوب:
+✓ "تشير الأنماط الحالية إلى..."
+✓ "قد يدل هذا على..."
+✓ "يرتبط عادةً بـ..."
+✓ "يتسق مع..."
+✓ "الأدلة تشير إلى احتمال..."
 
 الأبحاث الصوتية النفسية:
 • الصوت المنخفض (أقل من 140 هرتز) يرتبط بالسيطرة والانبساطية والتحكم الذاتي والوعي الذاتي (ScienceDirect 2021).
@@ -2918,6 +2972,17 @@ function renderResult(r) {
 
 
   document.getElementById('res-profile-title').textContent   = r.profileTitle   || '—';
+
+  // Render confidence note if present
+  let confNote = document.getElementById('confidence-note');
+  if (!confNote) {
+    confNote = document.createElement('div');
+    confNote.id = 'confidence-note';
+    confNote.style.cssText = 'margin-top:10px;padding:10px 14px;background:rgba(255,255,255,.03);border-radius:8px;border-left:2px solid rgba(200,169,110,.3);font-size:12px;color:var(--muted);font-style:italic;line-height:1.6;';
+    const profileCard = document.querySelector('.card-gold');
+    if (profileCard) profileCard.appendChild(confNote);
+  }
+  if (r.confidenceNote) confNote.textContent = r.confidenceNote;
   document.getElementById('res-profile-summary').textContent = r.profileSummary || '—';
   document.getElementById('res-enneagram').textContent       = r.enneagramHint  || '—';
   document.getElementById('res-closing').textContent         = '"' + (r.closingInsight || '—') + '"';
@@ -3039,7 +3104,7 @@ TASK: Detect and score THREE types of psychological masking.
 
 TYPE 1 — CONFIDENCE MASK (0-10)
 Does the person verbally assert confidence, certainty, or calm while their voice/pace/emphasis contradicts it?
-Evidence: Look for confidence words (fine, definitely, completely, no problem, of course) paired with:
+Evidence: Look for confidence words (fine, completely, no problem, of course) paired with — note: these are probabilistic signals, not definitive proof:
 - High pitch on those specific words (if acoustic available)
 - Fast pace around certainty claims
 - Hesitation immediately before/after strong assertions
@@ -3575,6 +3640,8 @@ ACOUSTIC:
 
   return `You are applying the Antigravity framework by Shadi Obeidat to a verbal/acoustic profile.
 
+CRITICAL: Use probabilistic, pattern-based language throughout. Never make deterministic claims about the person's inner state. Say "patterns suggest", "may indicate", "correlates with", not "you are" or "you feel".
+
 THE ANTIGRAVITY FRAMEWORK:
 Antigravity uses Newton's law of gravity as metaphor for human habit formation. Psychological MASS = the accumulated weight of a habit pattern in a domain. Heavier mass = stronger gravitational pull = harder to escape = more energy needed to change. Three domains:
 
@@ -3833,6 +3900,11 @@ function setMode(mode) {
   if (journalPanel) journalPanel.style.display = 'none';
   if (header)       header.style.display       = 'none';
 
+  const simEl    = document.getElementById('mode-sim');
+  const simPanel  = document.getElementById('sim-panel');
+  if (simEl) simEl.classList.remove('active');
+  if (simPanel) simPanel.style.display = 'none';
+
   if (mode === 'solo') {
     soloEl.classList.add('active');
     soloPanel.forEach(el => { if(el) el.style.display = ''; });
@@ -3844,6 +3916,10 @@ function setMode(mode) {
     journalEl.classList.add('active');
     if (journalPanel) journalPanel.style.display = 'block';
     refreshJournalOnEnter();
+  } else if (mode === 'sim') {
+    if (simEl) simEl.classList.add('active');
+    if (simPanel) simPanel.style.display = 'block';
+    simInit();
   }
 }
 
@@ -3977,6 +4053,8 @@ function buildComparisonPrompt(nameA, textA, acousticA, nameB, textB, acousticB)
     : `${name}: no acoustic data`;
 
   return `You are an expert coaching psychologist analyzing two voices in a conversational or relational context. Apply the Antigravity framework (Thinking / Emotional / Behavioral-Physical habit domains) and established voice-personality research to both profiles, then deliver a comparison analysis.
+
+LANGUAGE RULE: Frame all findings as observations and probabilistic patterns, not verdicts. Use "suggests", "may indicate", "appears to", "tends to correlate with". The comparison reveals interaction tendencies, not fixed truths about either person.
 
 VOICE A — "${nameA || 'Voice A'}":
 ${fmtAc(nameA||'Voice A', acousticA)}
@@ -4500,6 +4578,8 @@ async function saveJournalEntry() {
 function buildJournalAnalysisPrompt(text, ac, note, prevCtx) {
   return `You are analysing a 60-second voice journal entry using the Antigravity framework (Thinking/Emotional/Behavioral-Physical habit domains).
 
+LANGUAGE RULE: Use probabilistic language throughout. Say "patterns suggest", "tends to indicate", "consistent with" — never "you are" or definitive claims about inner state. Each entry is one data point, not a complete picture.
+
 ACOUSTIC SNAPSHOT: ${ac
     ? `pitch ${ac.avgPitch}Hz (${ac.pitchLabel}), pace ${ac.wpm}WPM (${ac.paceLabel}), hesitations ${ac.hesitations}, range ${ac.pitchRange}Hz`
     : 'no acoustic data'}
@@ -4817,6 +4897,8 @@ function buildWeeklyPrompt(entries) {
 
   return `You are writing a Weekly Voice Portrait — a reflective paragraph synthesizing a week of voice journal entries through the Antigravity framework.
 
+LANGUAGE RULE: Write as a compassionate, curious observer — not a judge. Use language like "this week's patterns suggest...", "a recurring theme appears to be...", "the acoustic drift may reflect...". Hold the person with care, not certainty.
+
 WEEK'S DATA:
 ${summary}
 
@@ -4990,6 +5072,8 @@ function updateWelcomeLanguage() {
     'wc-jour-desc':   isAr ? 'تسجيل يومي ٦٠ ثانية. تتبّع كيف تتحرك حالتك الداخلية بمرور الوقت.' : '60-second daily check-in. Track how your inner state drifts over time.',
     'welcome-footer': isAr ? 'بدون حساب · يعمل بالعربية والإنجليزية' : 'No account needed · Works in Arabic & English',
     'back-btn-label': isAr ? 'الرئيسية' : 'Home',
+    'wc-sim-tag':  isAr ? 'محاكي المحادثة' : 'Conversation Simulator',
+    'wc-sim-desc': isAr ? 'تدرّب على المحادثات الصعبة. احصل على تقييم وتدريب فوري.' : 'Practice high-stakes conversations. Get scored and coached in real time.',
   };
   for (const [id, val] of Object.entries(els)) {
     const el = document.getElementById(id);
@@ -5176,6 +5260,509 @@ function copyNRE() {
 
 // Store transcript for NRE use
 let lastTranscript = '';
+
+
+
+/* ══════════════════════════════════════════════════════════════
+   CONVERSATION SIMULATOR ENGINE
+   4th mode — scenario selection, AI character, user response,
+   analysis, scoring, next round
+══════════════════════════════════════════════════════════════ */
+
+// ── Scenario library ─────────────────────────────────────────
+const SIM_SCENARIOS = {
+  sales: [
+    {
+      id: 's1',
+      title: 'The Loyal Competitor',
+      desc: 'A senior buyer who has used a competitor for 7 years and sees no reason to switch.',
+      char: 'Sarah Al-Hassan — Senior Procurement Manager',
+      charDesc: 'Analytical, risk-averse, externally referenced. Values certainty over innovation.',
+      opening: "Look, I appreciate you coming in. But frankly we have been with our current supplier since 2017 and everything is working fine. I'm not sure why we'd want to disrupt that."
+    },
+    {
+      id: 's2',
+      title: 'The Price Objector',
+      desc: 'A client who wants your product but is pushing hard on price.',
+      char: 'Karim Mansour — Operations Director',
+      charDesc: 'Direct, numbers-focused, tests boundaries. Responds to logic and data.',
+      opening: "Your proposal is interesting but honestly? Your price is 40% above what we're currently paying. And I have three other vendors I can call today. Why should I pay that premium?"
+    },
+    {
+      id: 's3',
+      title: 'The Disengaged Decision Maker',
+      desc: 'A C-level executive who agreed to the meeting but seems distracted and uninterested.',
+      char: 'Dr. Rania Yousef — Chief Medical Officer',
+      charDesc: 'High autonomy, internally referenced, time-pressured. Needs relevance fast.',
+      opening: "Sorry, I only have about eight minutes. My assistant scheduled this — what exactly is it you want to show me?"
+    }
+  ],
+  leadership: [
+    {
+      id: 'l1',
+      title: 'The Resistant Team Member',
+      desc: 'A high performer who is openly skeptical of a new process you are introducing.',
+      char: 'Omar Khalil — Senior Engineer',
+      charDesc: 'Internally referenced, away-from motivated, high standards. Dislikes imposed change.',
+      opening: "With respect, I have been doing this for twelve years and what you are describing just adds bureaucracy. The old way worked. I don't understand why we're fixing something that isn't broken."
+    },
+    {
+      id: 'l2',
+      title: 'The Emotional Team Conflict',
+      desc: 'Two team members in conflict and you need to lead a resolution conversation.',
+      char: 'Lina Saad — Marketing Lead',
+      charDesc: 'Emotionally expressive, people-oriented, feels undervalued.',
+      opening: "I am honestly exhausted by this situation. Every time I bring an idea to the team meeting Faisal cuts it down. I have started not saying anything just to avoid the confrontation. I need this to stop."
+    }
+  ],
+  negotiation: [
+    {
+      id: 'n1',
+      title: 'The Hardball Negotiator',
+      desc: 'A counterpart using pressure tactics and artificial deadlines.',
+      char: 'Jad Frem — Business Development VP',
+      charDesc: 'Dominant, certainty-signaling, uses silence and ultimatums deliberately.',
+      opening: "I will be direct with you. We have another offer on the table and we need a decision by Friday. If you cannot match what they are offering, we are going in a different direction. That is not a bluff."
+    },
+    {
+      id: 'n2',
+      title: 'The Salary Negotiation',
+      desc: 'You are negotiating your salary with a manager who seems firm on their number.',
+      char: 'Nadia Hamdan — HR Director',
+      charDesc: 'Process-oriented, procedural, constrained by budget but has flexibility.',
+      opening: "We really want you on the team and we think our offer reflects that. The salary band for this role is firm — it is set by corporate and I honestly do not have room to go above it."
+    }
+  ],
+  interview: [
+    {
+      id: 'i1',
+      title: 'The Stress Interview',
+      desc: 'An interviewer who challenges your answers and pushes back aggressively.',
+      char: 'Tariq Al-Rashid — Partner',
+      charDesc: 'Tests resilience, authority, and self-regulation under pressure.',
+      opening: "Your CV looks fine on paper. But I have interviewed a hundred people with similar backgrounds and most of them could not handle real pressure when it came. What makes you think you would be different?"
+    },
+    {
+      id: 'i2',
+      title: 'The Vague Opener',
+      desc: 'A classic open-ended question that requires strong, structured framing.',
+      char: 'Maya Tannous — Hiring Manager',
+      charDesc: 'Listening for clarity, confidence, and authentic self-knowledge.',
+      opening: "So — tell me about yourself. And I do not mean your CV. I mean who you actually are and what drives you."
+    }
+  ],
+  pharma: [
+    {
+      id: 'p1',
+      title: 'The Skeptical Physician',
+      desc: 'A doctor who is skeptical of your clinical data and prefers their current prescription habit.',
+      char: 'Dr. Fawzi Nassar — Cardiologist',
+      charDesc: 'Evidence-driven, high autonomy, pattern-oriented. Time is scarce.',
+      opening: "I have seen three reps from your company in the last two months and the study you keep quoting was funded by your own company. My patients have been doing fine on the generic. Give me one real reason to switch."
+    },
+    {
+      id: 'p2',
+      title: 'The Rushed GP',
+      desc: 'A GP who has only 90 seconds between patients and seems impatient.',
+      char: 'Dr. Hala Azizi — General Practitioner',
+      charDesc: 'Overwhelmed, procedural, responds to efficiency and brevity.',
+      opening: "I have five patients waiting. You have two minutes. Make it count."
+    }
+  ]
+};
+
+// ── State ─────────────────────────────────────────────────────
+let simState = {
+  industry: 'sales',
+  scenario: null,
+  round: 1,
+  history: [],
+  isRecording: false,
+  stream: null,
+  recognition: null,
+  audioCtx: null,
+  analyser: null,
+  pitchSamples: [],
+  recInterval: null,
+  recSecs: 0,
+  transcript: '',
+  acoustics: null,
+};
+
+// ── Init ──────────────────────────────────────────────────────
+function simInit() {
+  if (simState.scenario) return; // already running
+  simSelectIndustry('sales');
+}
+
+function simSelectIndustry(industry) {
+  simState.industry = industry;
+  // Update tab styles
+  document.querySelectorAll('.sim-industry-btn').forEach(btn => {
+    btn.style.background = 'none';
+    btn.style.borderColor = 'rgba(255,255,255,.1)';
+    btn.style.color = 'var(--muted)';
+  });
+  const active = document.getElementById('sim-ind-' + industry);
+  if (active) {
+    active.style.background = 'rgba(200,169,110,.1)';
+    active.style.borderColor = 'rgba(200,169,110,.4)';
+    active.style.color = 'var(--gold)';
+  }
+  simRenderScenarios(industry);
+}
+
+function simRenderScenarios(industry) {
+  const isAr = lang === 'ar';
+  const scenarios = SIM_SCENARIOS[industry] || [];
+  const container = document.getElementById('sim-scenarios');
+  container.innerHTML = scenarios.map(s => `
+    <button onclick="simStart('${s.id}', '${industry}')" style="
+      text-align:left;width:100%;background:rgba(155,143,224,.04);
+      border:1px solid rgba(155,143,224,.18);border-radius:14px;
+      padding:16px 18px;cursor:pointer;transition:all .2s;"
+      onmouseover="this.style.background='rgba(155,143,224,.1)'"
+      onmouseout="this.style.background='rgba(155,143,224,.04)'">
+      <div style="font-family:var(--mono);font-size:9px;letter-spacing:.14em;
+        text-transform:uppercase;color:var(--purple);margin-bottom:6px;">${s.title}</div>
+      <div style="font-size:13px;color:var(--muted2);line-height:1.5;">${s.desc}</div>
+    </button>
+  `).join('');
+}
+
+function simStart(scenarioId, industry) {
+  const scenario = SIM_SCENARIOS[industry].find(s => s.id === scenarioId);
+  if (!scenario) return;
+  simState.scenario = scenario;
+  simState.round = 1;
+  simState.history = [];
+  simLaunch(scenario.opening);
+}
+
+function simStartCustom() {
+  const custom = document.getElementById('sim-custom-input').value.trim();
+  if (!custom || custom.length < 10) return;
+  simState.scenario = {
+    id: 'custom',
+    title: 'Custom Scenario',
+    char: 'AI Character',
+    charDesc: 'Adapts to your described scenario.',
+    opening: null,
+    customDesc: custom
+  };
+  simState.round = 1;
+  simState.history = [];
+  // Generate opening from custom description
+  simGenerateCustomOpening(custom);
+}
+
+async function simGenerateCustomOpening(desc) {
+  const loading = document.getElementById('sim-loading');
+  document.getElementById('sim-phase-select').style.display = 'none';
+  document.getElementById('sim-phase-active').style.display = 'block';
+  loading.style.display = 'block';
+  document.getElementById('sim-loading-text').textContent = 'Creating your scenario…';
+
+  try {
+    const resp = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 400,
+        system: `You are playing a character in a communication training simulation. Based on the scenario description, generate a realistic opening statement this character would say. Return ONLY the opening statement — no quotes, no explanation.`,
+        messages: [{ role: 'user', content: `Scenario: ${desc}\n\nGenerate a realistic, challenging opening statement from this character's perspective (2-4 sentences):` }]
+      })
+    });
+    const data = await resp.json();
+    const opening = data?.content?.[0]?.text?.trim() || "Let's discuss this situation.";
+    simState.scenario.char = 'Custom Character';
+    simState.scenario.charDesc = desc.slice(0, 80) + (desc.length > 80 ? '…' : '');
+    simLaunch(opening);
+  } catch(err) {
+    loading.style.display = 'none';
+    simShowError('Could not generate scenario. Please try again.');
+  }
+}
+
+function simLaunch(opening) {
+  const isAr = lang === 'ar';
+  const s = simState.scenario;
+
+  // Switch to active phase
+  document.getElementById('sim-phase-select').style.display = 'none';
+  document.getElementById('sim-phase-active').style.display = 'block';
+  document.getElementById('sim-loading').style.display = 'none';
+  document.getElementById('sim-feedback-card').style.display = 'none';
+  document.getElementById('sim-error').style.display = 'none';
+
+  // Populate character card
+  document.getElementById('sim-char-name').textContent = s.char;
+  document.getElementById('sim-char-desc').textContent = s.charDesc;
+  document.getElementById('sim-char-statement').textContent = opening;
+  document.getElementById('sim-round-badge').textContent = `Round ${simState.round}`;
+
+  // Store in history
+  simState.history.push({ role: 'character', text: opening });
+
+  // Reset response area
+  document.getElementById('sim-text-response').value = '';
+  simState.transcript = '';
+  simState.acoustics = null;
+  document.getElementById('sim-rec-status').textContent = isAr ? 'اضغط للتسجيل' : 'Tap mic to record your response';
+  document.getElementById('sim-rec-timer').style.display = 'none';
+
+  // Translate labels
+  if (isAr) {
+    document.getElementById('sim-eyebrow').textContent = 'محاكي المحادثة';
+    document.getElementById('sim-char-role-tag').textContent = 'الشخصية';
+    document.getElementById('sim-char-says-label').textContent = 'يقول';
+    document.getElementById('sim-your-turn-label').textContent = 'ردّك';
+    document.getElementById('sim-next-btn').textContent = 'الجولة التالية ←';
+    document.getElementById('sim-restart-btn').textContent = 'سيناريو جديد';
+  }
+}
+
+// ── Voice recording for simulator ─────────────────────────────
+async function toggleSimRec() {
+  simState.isRecording ? simStopRec() : simStartRec();
+}
+
+async function simStartRec() {
+  try {
+    simState.stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  } catch(e) {
+    simShowError('Microphone access denied.');
+    return;
+  }
+
+  simState.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  const src = simState.audioCtx.createMediaStreamSource(simState.stream);
+  simState.analyser = simState.audioCtx.createAnalyser();
+  simState.analyser.fftSize = 2048;
+  src.connect(simState.analyser);
+  simState.pitchSamples = [];
+
+  const startT = Date.now();
+  simState.recInterval = setInterval(() => {
+    simState.recSecs++;
+    const m = Math.floor(simState.recSecs/60), s = simState.recSecs%60;
+    document.getElementById('sim-rec-timer').textContent = m+':'+String(s).padStart(2,'0');
+    if (simState.recSecs >= 120) simStopRec();
+
+    // Pitch detection
+    const buf = new Float32Array(simState.analyser.fftSize);
+    simState.analyser.getFloatTimeDomainData(buf);
+    const f0 = simDetectPitch(buf, simState.audioCtx.sampleRate);
+    if (f0 > 60 && f0 < 600) simState.pitchSamples.push({ f0, t: Date.now()-startT });
+  }, 1000);
+
+  // Speech recognition
+  if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    simState.recognition = new SR();
+    simState.recognition.continuous = true;
+    simState.recognition.interimResults = true;
+    simState.recognition.lang = lang === 'ar' ? 'ar-SA' : 'en-US';
+    let final = '';
+    simState.recognition.onresult = e => {
+      let interim = '';
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        if (e.results[i].isFinal) final += e.results[i][0].transcript + ' ';
+        else interim += e.results[i][0].transcript;
+      }
+      simState.transcript = (final + interim).trim();
+      document.getElementById('sim-text-response').value = simState.transcript;
+    };
+    simState.recognition.start();
+  }
+
+  simState.isRecording = true;
+  simState.recSecs = 0;
+  document.getElementById('sim-icon-mic').style.display = 'none';
+  document.getElementById('sim-icon-stop').style.display = 'block';
+  document.getElementById('sim-rec-btn').style.borderColor = 'var(--red)';
+  document.getElementById('sim-rec-timer').style.display = 'block';
+  document.getElementById('sim-rec-status').textContent = lang==='ar' ? 'جارٍ التسجيل…' : 'Recording…';
+}
+
+function simStopRec() {
+  simState.isRecording = false;
+  clearInterval(simState.recInterval);
+  if (simState.recognition) { simState.recognition.stop(); simState.recognition = null; }
+  if (simState.stream) { simState.stream.getTracks().forEach(t=>t.stop()); simState.stream = null; }
+  if (simState.audioCtx) { simState.audioCtx.close(); simState.audioCtx = null; }
+
+  // Compute acoustics
+  const pitches = simState.pitchSamples.map(p=>p.f0).filter(f=>f>60&&f<600);
+  const avgPitch = pitches.length ? pitches.reduce((a,b)=>a+b,0)/pitches.length : 0;
+  const wpm = simState.transcript ? Math.round((simState.transcript.split(' ').length / Math.max(simState.recSecs,1)) * 60) : 0;
+  simState.acoustics = { avgPitch: avgPitch.toFixed(0), wpm, duration: simState.recSecs };
+  simState.recSecs = 0;
+
+  document.getElementById('sim-icon-mic').style.display = 'block';
+  document.getElementById('sim-icon-stop').style.display = 'none';
+  document.getElementById('sim-rec-btn').style.borderColor = 'var(--purple)';
+  document.getElementById('sim-rec-status').textContent = lang==='ar' ? '✓ تم التسجيل' : '✓ Recorded — ready to analyse';
+}
+
+function simDetectPitch(buf, sr) {
+  // YIN-lite autocorrelation
+  const SIZE = buf.length;
+  let rms = 0;
+  for (let i=0;i<SIZE;i++) rms+=buf[i]*buf[i];
+  if (Math.sqrt(rms/SIZE)<0.01) return 0;
+  for (let lag=50;lag<SIZE/2;lag++) {
+    let sum=0;
+    for (let i=0;i<SIZE/2;i++) sum+=buf[i]*buf[i+lag];
+    if (sum>0.3*SIZE) return sr/lag;
+  }
+  return 0;
+}
+
+// ── Analyse response ─────────────────────────────────────────
+async function simAnalyseResponse() {
+  const response = document.getElementById('sim-text-response').value.trim() || simState.transcript;
+  if (!response || response.length < 5) {
+    simShowError(lang==='ar' ? 'الرجاء إدخال ردٍّ أولاً.' : 'Please record or type a response first.');
+    return;
+  }
+
+  simState.history.push({ role: 'user', text: response });
+  simState.transcript = response;
+
+  document.getElementById('sim-analyse-btn').style.opacity = '0.4';
+  document.getElementById('sim-loading').style.display = 'block';
+  document.getElementById('sim-loading-text').textContent = lang==='ar' ? 'جارٍ تحليل ردّك…' : 'Analysing your response…';
+  document.getElementById('sim-feedback-card').style.display = 'none';
+  document.getElementById('sim-error').style.display = 'none';
+
+  const isAr = lang === 'ar';
+  const s = simState.scenario;
+  const acousticStr = simState.acoustics
+    ? `Pitch: ${simState.acoustics.avgPitch}Hz, Pace: ${simState.acoustics.wpm} WPM, Duration: ${simState.acoustics.duration}s`
+    : 'Text-only';
+
+  const sysPrompt = isAr
+    ? `أنت مدرب اتصال متخصص في تحليل ردود المحادثة. قيّم رد المستخدم بناءً على الديناميكية المحددة والشخصية. أعد كائن JSON صالحاً فقط.`
+    : `You are an elite communication coach specialising in conversational response analysis. You evaluate user responses based on specific interaction dynamics and character psychology. Return ONLY valid JSON.`;
+
+  const userMsg = isAr
+    ? `السيناريو: ${s.title}\nالشخصية: ${s.char} — ${s.charDesc}\nما قالته الشخصية: "${simState.history.find(h=>h.role==='character')?.text}"\nردّ المستخدم: "${response}"\nالصوت: ${acousticStr}\n\nقيّم الرد وأعد JSON:\n{\n  "rapportScore": 0-100,\n  "authorityScore": 0-100,\n  "persuasionScore": 0-100,\n  "adaptabilityScore": 0-100,\n  "strengths": "ما الذي نجح في هذا الرد (2-3 جمل)",\n  "gaps": "ما الذي يمكن تحسينه (2-3 جمل)",\n  "betterResponse": "ردٌّ أقوى بديل (2-4 جمل كما لو قالها الشخص)",\n  "nextStatement": "ردّ الشخصية التالية المنطقي (1-3 جمل)"\n}`
+    : `Scenario: ${s.title}\nCharacter: ${s.char} — ${s.charDesc}\nCharacter said: "${simState.history.find(h=>h.role==='character')?.text}"\nUser response: "${response}"\nAcoustics: ${acousticStr}\n\nEvaluate the response and return JSON:\n{\n  "rapportScore": 0-100,\n  "authorityScore": 0-100,\n  "persuasionScore": 0-100,\n  "adaptabilityScore": 0-100,\n  "strengths": "what worked in this response (2-3 sentences using probabilistic language)",\n  "gaps": "what could be stronger (2-3 sentences)",\n  "betterResponse": "a stronger alternative response (2-4 sentences as the user would say it)",\n  "nextStatement": "the character logical next reply (1-3 sentences, stay in character)"\n}`;
+
+  try {
+    const resp = await fetch(WORKER_URL, {
+      method: 'POST',
+      signal: (() => { const c = new AbortController(); setTimeout(()=>c.abort(), 45000); return c.signal; })(),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 1000,
+        system: sysPrompt,
+        messages: [{ role: 'user', content: userMsg }]
+      })
+    });
+
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const data = await resp.json();
+    const raw = data?.content?.[0]?.text || '';
+    const feedback = JSON.parse(raw.replace(/```json|```/g,'').trim());
+
+    simState.history.push({ role: 'character', text: feedback.nextStatement });
+    document.getElementById('sim-loading').style.display = 'none';
+    document.getElementById('sim-analyse-btn').style.opacity = '1';
+    simRenderFeedback(feedback);
+
+  } catch(err) {
+    document.getElementById('sim-loading').style.display = 'none';
+    document.getElementById('sim-analyse-btn').style.opacity = '1';
+    simShowError(lang==='ar' ? 'فشل التحليل — حاول مرة أخرى.' : 'Analysis failed — please try again.');
+  }
+}
+
+// ── Render feedback ───────────────────────────────────────────
+function simRenderFeedback(fb) {
+  const isAr = lang === 'ar';
+  const card = document.getElementById('sim-feedback-card');
+
+  // Score tiles
+  const scores = [
+    { label: isAr?'التناغم':'Rapport',      val: fb.rapportScore,      color:'var(--teal)' },
+    { label: isAr?'السلطة':'Authority',     val: fb.authorityScore,    color:'var(--purple)' },
+    { label: isAr?'الإقناع':'Persuasion',   val: fb.persuasionScore,   color:'var(--gold)' },
+    { label: isAr?'التكيّف':'Adaptability', val: fb.adaptabilityScore, color:'var(--amber)' },
+  ];
+
+  document.getElementById('sim-score-grid').innerHTML = scores.map(s => `
+    <div style="text-align:center;padding:12px 8px;background:rgba(255,255,255,.03);
+      border-radius:10px;border:1px solid rgba(255,255,255,.07);">
+      <div style="font-family:var(--mono);font-size:20px;font-weight:700;
+        color:${s.color};margin-bottom:4px;">${s.val}</div>
+      <div style="font-family:var(--mono);font-size:9px;letter-spacing:.1em;
+        text-transform:uppercase;color:var(--muted);opacity:.8;">${s.label}</div>
+      <!-- Progress bar -->
+      <div style="height:3px;background:rgba(255,255,255,.06);border-radius:2px;
+        margin-top:6px;overflow:hidden;">
+        <div style="height:100%;width:${s.val}%;background:${s.color};
+          border-radius:2px;transition:width .8s ease;"></div>
+      </div>
+    </div>
+  `).join('');
+
+  // Strengths, gaps, better
+  document.getElementById('sim-strengths-label').textContent = isAr ? 'ما نجح' : 'What Worked';
+  document.getElementById('sim-gaps-label').textContent      = isAr ? 'ما يمكن تحسينه' : 'What to Improve';
+  document.getElementById('sim-better-label').textContent    = isAr ? 'ردٌّ أقوى' : 'Stronger Alternative';
+  document.getElementById('sim-strengths').textContent       = fb.strengths;
+  document.getElementById('sim-gaps').textContent            = fb.gaps;
+  document.getElementById('sim-better-response').textContent = fb.betterResponse;
+
+  card.style.display = 'block';
+  card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ── Next round ────────────────────────────────────────────────
+function simNextRound() {
+  simState.round++;
+  const lastCharLine = simState.history.filter(h=>h.role==='character').pop();
+  if (!lastCharLine) { simRestart(); return; }
+
+  document.getElementById('sim-feedback-card').style.display = 'none';
+  document.getElementById('sim-text-response').value = '';
+  simState.transcript = '';
+  simState.acoustics = null;
+
+  // Update character statement with their next line
+  document.getElementById('sim-char-statement').textContent = lastCharLine.text;
+  document.getElementById('sim-round-badge').textContent = `Round ${simState.round}`;
+  document.getElementById('sim-rec-status').textContent = lang==='ar' ? 'اضغط للتسجيل' : 'Tap mic to record your response';
+
+  // Scroll to top of active section
+  document.getElementById('sim-character-card').scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+// ── Restart ───────────────────────────────────────────────────
+function simRestart() {
+  simState.scenario = null;
+  simState.round = 1;
+  simState.history = [];
+  simState.transcript = '';
+  simState.acoustics = null;
+  document.getElementById('sim-phase-select').style.display = 'block';
+  document.getElementById('sim-phase-active').style.display = 'none';
+  document.getElementById('sim-feedback-card').style.display = 'none';
+  document.getElementById('sim-custom-input').value = '';
+}
+
+function simShowError(msg) {
+  const el = document.getElementById('sim-error');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+// ── Welcome screen Arabic for sim ─────────────────────────────
+// (added to updateWelcomeLanguage via existing hook)
 
 
 /* ── Init ── */
@@ -5620,6 +6207,229 @@ function renderRapportIntelligence(result, acA, acB, nameA, nameB) {
   window.__SUPABASE_URL__      = 'https://llyc1ptrojjnxesvnuss.supabase.co';
   window.__SUPABASE_ANON_KEY__ = 'PASTE_YOUR_ANON_KEY_HERE';
 </script>
+
+
+  <!-- ══════════════════════════════════════════════════════════
+       CONVERSATION SIMULATOR PANEL
+  ══════════════════════════════════════════════════════════ -->
+  <div id="sim-panel" style="display:none; padding:0 0 40px;">
+
+    <!-- Header -->
+    <div style="text-align:center;padding:24px 0 20px;">
+      <div style="font-family:var(--mono);font-size:9px;letter-spacing:.22em;
+        text-transform:uppercase;color:var(--purple);opacity:.8;margin-bottom:10px;"
+        id="sim-eyebrow">Conversation Simulator</div>
+      <p style="font-size:14px;color:var(--muted2);line-height:1.7;max-width:400px;
+        margin:0 auto;font-family:system-ui,sans-serif;" id="sim-subtitle">
+        Choose a scenario. The AI plays a character. You respond with your voice.
+        Get analysed and coached.
+      </p>
+    </div>
+
+    <!-- ── Phase 1: Scenario Selection ── -->
+    <div id="sim-phase-select">
+
+      <!-- Industry tabs -->
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;">
+        <button class="sim-industry-btn active" onclick="simSelectIndustry('sales')" id="sim-ind-sales"
+          style="font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+          padding:7px 14px;border-radius:20px;border:1px solid rgba(200,169,110,.4);
+          background:rgba(200,169,110,.1);color:var(--gold);cursor:pointer;">Sales</button>
+        <button class="sim-industry-btn" onclick="simSelectIndustry('leadership')" id="sim-ind-leadership"
+          style="font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+          padding:7px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.1);
+          background:none;color:var(--muted);cursor:pointer;">Leadership</button>
+        <button class="sim-industry-btn" onclick="simSelectIndustry('negotiation')" id="sim-ind-negotiation"
+          style="font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+          padding:7px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.1);
+          background:none;color:var(--muted);cursor:pointer;">Negotiation</button>
+        <button class="sim-industry-btn" onclick="simSelectIndustry('interview')" id="sim-ind-interview"
+          style="font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+          padding:7px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.1);
+          background:none;color:var(--muted);cursor:pointer;">Interview</button>
+        <button class="sim-industry-btn" onclick="simSelectIndustry('pharma')" id="sim-ind-pharma"
+          style="font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+          padding:7px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.1);
+          background:none;color:var(--muted);cursor:pointer;">Pharma</button>
+      </div>
+
+      <!-- Scenario cards -->
+      <div id="sim-scenarios" style="display:flex;flex-direction:column;gap:10px;"></div>
+
+      <!-- Custom scenario -->
+      <div style="margin-top:16px;padding:16px;background:rgba(155,143,224,.05);
+        border:1px solid rgba(155,143,224,.2);border-radius:14px;">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:.15em;
+          text-transform:uppercase;color:var(--purple);margin-bottom:10px;" id="sim-custom-label">
+          Custom Scenario
+        </div>
+        <textarea id="sim-custom-input" rows="2"
+          style="width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);
+          border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;
+          font-family:system-ui,sans-serif;resize:none;box-sizing:border-box;"
+          placeholder="Describe your scenario — e.g. A skeptical client who has used a competitor for 5 years..."></textarea>
+        <button onclick="simStartCustom()" style="margin-top:10px;width:100%;
+          padding:11px;background:rgba(155,143,224,.12);border:1px solid rgba(155,143,224,.3);
+          border-radius:8px;color:var(--purple);font-family:var(--mono);font-size:9px;
+          letter-spacing:.12em;text-transform:uppercase;cursor:pointer;" id="sim-custom-btn">
+          Start Custom Simulation
+        </button>
+      </div>
+    </div>
+
+    <!-- ── Phase 2: Active Simulation ── -->
+    <div id="sim-phase-active" style="display:none;">
+
+      <!-- Character card -->
+      <div id="sim-character-card" style="
+        background:linear-gradient(135deg,rgba(155,143,224,.08),rgba(13,20,32,.95));
+        border:1px solid rgba(155,143,224,.25);border-radius:16px;
+        padding:20px;margin-bottom:16px;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;">
+          <div>
+            <div style="font-family:var(--mono);font-size:9px;letter-spacing:.18em;
+              text-transform:uppercase;color:var(--purple);opacity:.8;margin-bottom:6px;"
+              id="sim-char-role-tag">AI Character</div>
+            <div style="font-size:17px;font-weight:600;color:var(--text);
+              font-family:var(--serif);margin-bottom:4px;" id="sim-char-name">—</div>
+            <div style="font-size:12px;color:var(--muted2);" id="sim-char-desc">—</div>
+          </div>
+          <div id="sim-round-badge" style="
+            font-family:var(--mono);font-size:10px;color:var(--purple);
+            background:rgba(155,143,224,.1);border:1px solid rgba(155,143,224,.2);
+            border-radius:20px;padding:4px 12px;white-space:nowrap;">
+            Round 1
+          </div>
+        </div>
+
+        <!-- Character says -->
+        <div style="background:rgba(255,255,255,.03);border-radius:10px;
+          padding:14px 16px;border-left:3px solid var(--purple);">
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:.14em;
+            text-transform:uppercase;color:var(--purple);opacity:.7;margin-bottom:8px;"
+            id="sim-char-says-label">They say</div>
+          <div id="sim-char-statement" style="font-size:14px;color:var(--text);
+            line-height:1.75;font-family:system-ui,sans-serif;font-style:italic;">—</div>
+        </div>
+      </div>
+
+      <!-- User response section -->
+      <div style="background:rgba(13,20,32,.8);border:1px solid rgba(255,255,255,.08);
+        border-radius:14px;padding:18px;margin-bottom:14px;">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:.16em;
+          text-transform:uppercase;color:var(--muted);margin-bottom:12px;" id="sim-your-turn-label">
+          Your Response
+        </div>
+
+        <!-- Voice recording for sim -->
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+          <button id="sim-rec-btn" onclick="toggleSimRec()" style="
+            width:52px;height:52px;border-radius:50%;border:2px solid var(--purple);
+            background:rgba(155,143,224,.08);cursor:pointer;display:flex;
+            align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;">
+            <svg id="sim-icon-mic" width="18" height="18" viewBox="0 0 24 24" fill="none"
+              stroke="var(--purple)" stroke-width="2">
+              <rect x="9" y="2" width="6" height="12" rx="3"/>
+              <path d="M5 10a7 7 0 0014 0M12 19v3M9 22h6"/>
+            </svg>
+            <svg id="sim-icon-stop" width="18" height="18" viewBox="0 0 24 24"
+              fill="var(--red)" style="display:none;">
+              <rect x="4" y="4" width="16" height="16" rx="2"/>
+            </svg>
+          </button>
+          <div style="flex:1;">
+            <div id="sim-rec-status" style="font-size:13px;color:var(--muted2);
+              font-family:system-ui,sans-serif;">Tap mic to record your response</div>
+            <div id="sim-rec-timer" style="font-family:var(--mono);font-size:11px;
+              color:var(--purple);display:none;">0:00</div>
+          </div>
+        </div>
+
+        <!-- Text fallback -->
+        <textarea id="sim-text-response" rows="3"
+          style="width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+          border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;
+          font-family:system-ui,sans-serif;resize:none;box-sizing:border-box;"
+          placeholder="Or type your response here..."></textarea>
+
+        <button onclick="simAnalyseResponse()" id="sim-analyse-btn" style="
+          width:100%;margin-top:12px;padding:13px;
+          background:rgba(155,143,224,.1);border:1px solid rgba(155,143,224,.3);
+          border-radius:10px;color:var(--purple);font-family:var(--mono);
+          font-size:9px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;">
+          ◈ Analyse My Response
+        </button>
+      </div>
+
+      <!-- Loading -->
+      <div id="sim-loading" style="display:none;text-align:center;padding:24px;">
+        <div class="letter-dots"><span></span><span></span><span></span></div>
+        <div style="font-family:var(--mono);font-size:11px;color:var(--muted);
+          margin-top:12px;letter-spacing:.1em;" id="sim-loading-text">
+          Analysing your response…
+        </div>
+      </div>
+
+      <!-- ── Feedback card ── -->
+      <div id="sim-feedback-card" style="display:none;
+        background:linear-gradient(135deg,rgba(91,191,181,.06),rgba(13,20,32,.95));
+        border:1px solid rgba(91,191,181,.22);border-radius:16px;padding:20px;
+        animation:fadeUp .5s ease both;">
+
+        <!-- Score row -->
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:18px;"
+          id="sim-score-grid"></div>
+
+        <!-- Strengths -->
+        <div style="margin-bottom:14px;">
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:.16em;
+            text-transform:uppercase;color:var(--teal);margin-bottom:8px;"
+            id="sim-strengths-label">What Worked</div>
+          <div id="sim-strengths" style="font-size:13px;color:var(--muted2);line-height:1.7;"></div>
+        </div>
+
+        <!-- Gaps -->
+        <div style="margin-bottom:14px;">
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:.16em;
+            text-transform:uppercase;color:var(--amber);margin-bottom:8px;"
+            id="sim-gaps-label">What to Improve</div>
+          <div id="sim-gaps" style="font-size:13px;color:var(--muted2);line-height:1.7;"></div>
+        </div>
+
+        <!-- Better response -->
+        <div style="background:rgba(91,191,181,.05);border:1px solid rgba(91,191,181,.18);
+          border-radius:12px;padding:14px 16px;margin-bottom:14px;">
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:.16em;
+            text-transform:uppercase;color:var(--teal);margin-bottom:8px;"
+            id="sim-better-label">Stronger Alternative</div>
+          <div id="sim-better-response" style="font-size:14px;color:var(--text);
+            line-height:1.75;font-style:italic;font-family:var(--serif);"></div>
+        </div>
+
+        <!-- Action buttons -->
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button onclick="simNextRound()" style="
+            flex:1;padding:12px;background:rgba(155,143,224,.1);
+            border:1px solid rgba(155,143,224,.3);border-radius:10px;
+            color:var(--purple);font-family:var(--mono);font-size:9px;
+            letter-spacing:.12em;text-transform:uppercase;cursor:pointer;"
+            id="sim-next-btn">Next Round →</button>
+          <button onclick="simRestart()" style="
+            flex:1;padding:12px;background:none;
+            border:1px solid rgba(255,255,255,.1);border-radius:10px;
+            color:var(--muted);font-family:var(--mono);font-size:9px;
+            letter-spacing:.12em;text-transform:uppercase;cursor:pointer;"
+            id="sim-restart-btn">New Scenario</button>
+        </div>
+      </div>
+
+      <!-- Error -->
+      <div id="sim-error" style="display:none;padding:14px 16px;
+        background:rgba(212,107,107,.08);border:1px solid rgba(212,107,107,.2);
+        border-radius:10px;color:var(--red);font-size:13px;line-height:1.6;"></div>
+    </div>
+
+  </div><!-- end sim-panel -->
 
   </div><!-- end main-app -->
 <script type="module">
