@@ -791,7 +791,70 @@ body.ar .letter-body::before { left: auto; right: 14px; }
   .bottom-bar,.top-bar,.voice-section,.btn-analyse,.btn-compare{display:none;}
 }
 
-</style>
+
+    /* ── TTS Audio Player ─────────────────────────── */
+    .tts-player {
+      display: none;
+      background: rgba(155,143,224,.06);
+      border: 1px solid rgba(155,143,224,.22);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-top: 12px;
+      animation: fadeUp .4s ease both;
+    }
+    .tts-player.visible { display: block; }
+    .tts-player-row {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .tts-play-btn {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: rgba(155,143,224,.15);
+      border: 1px solid rgba(155,143,224,.35);
+      color: var(--purple); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; transition: all .2s; font-size: 14px;
+    }
+    .tts-play-btn:hover { background: rgba(155,143,224,.25); }
+    .tts-play-btn.loading { opacity: .5; cursor: wait; }
+    .tts-progress-wrap {
+      flex: 1; display: flex; flex-direction: column; gap: 4px;
+    }
+    .tts-label {
+      font-family: var(--mono); font-size: 9px; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--purple); opacity: .8;
+    }
+    .tts-progress-bar {
+      height: 3px; background: rgba(255,255,255,.08);
+      border-radius: 2px; overflow: hidden; cursor: pointer;
+    }
+    .tts-progress-fill {
+      height: 100%; width: 0%; background: var(--purple);
+      border-radius: 2px; transition: width .1s linear;
+    }
+    .tts-time {
+      font-family: var(--mono); font-size: 9px;
+      color: var(--muted); letter-spacing: .08em;
+    }
+    .tts-speed-btn {
+      font-family: var(--mono); font-size: 9px; letter-spacing: .1em;
+      padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,.1);
+      background: none; color: var(--muted); cursor: pointer;
+      transition: all .15s; flex-shrink: 0;
+    }
+    .tts-speed-btn:hover { border-color: var(--purple); color: var(--purple); }
+    .tts-generate-btn {
+      width: 100%; padding: 11px; margin-top: 10px;
+      background: rgba(155,143,224,.08);
+      border: 1px solid rgba(155,143,224,.25); border-radius: 10px;
+      color: var(--purple); font-family: var(--mono); font-size: 9px;
+      letter-spacing: .14em; text-transform: uppercase; cursor: pointer;
+      transition: all .2s; display: flex; align-items: center;
+      justify-content: center; gap: 8px;
+    }
+    .tts-generate-btn:hover { background: rgba(155,143,224,.15); }
+    .tts-generate-btn:disabled { opacity: .4; cursor: wait; }
+
+  </style>
 </head>
 <body>
 
@@ -1718,8 +1781,31 @@ body.ar .letter-body::before { left: auto; right: 14px; }
           <div id="nre-effect" style="font-size:13px;color:var(--muted2);line-height:1.7;font-style:italic;"></div>
         </div>
 
+        <!-- TTS for coaching feedback -->
+        <div style="margin-top:14px;">
+          <button class="tts-generate-btn" id="nre-tts-btn"
+            onclick="generateNRETTS()">
+            <span>◉</span>
+            <span id="nre-tts-btn-text">Hear Strategy</span>
+          </button>
+          <div class="tts-player" id="nre-tts-player">
+            <div class="tts-player-row">
+              <button class="tts-play-btn" id="nre-tts-play" onclick="ttsTogglePlay('nre')">▶</button>
+              <div class="tts-progress-wrap">
+                <div class="tts-label" id="nre-tts-label">Response Strategy</div>
+                <div class="tts-progress-bar" id="nre-tts-bar" onclick="ttsSeek(event,'nre')">
+                  <div class="tts-progress-fill" id="nre-tts-fill"></div>
+                </div>
+                <div class="tts-time" id="nre-tts-time">0:00</div>
+              </div>
+              <button class="tts-speed-btn" id="nre-tts-speed"
+                onclick="ttsCycleSpeed('nre')">1×</button>
+            </div>
+          </div>
+        </div>
+
         <!-- Copy button -->
-        <div style="margin-top:14px;display:flex;justify-content:flex-end;">
+        <div style="margin-top:10px;display:flex;justify-content:flex-end;">
           <button onclick="copyNRE()" style="
             background:rgba(91,191,181,.1);border:1px solid rgba(91,191,181,.25);
             color:var(--teal);font-family:var(--mono);font-size:9px;letter-spacing:.12em;
@@ -1753,6 +1839,28 @@ body.ar .letter-body::before { left: auto; right: 14px; }
           <span class="letter-sig-text" id="letter-sig-text">— Your Voice, reflected</span>
           <div class="letter-actions">
             <button class="letter-action-btn copy" id="letter-copy-btn" onclick="copyLetter()">Copy Letter</button>
+          </div>
+        </div>
+        <!-- TTS Player for Voice Letter -->
+        <div style="padding:0 20px 18px;">
+          <button class="tts-generate-btn" id="letter-tts-btn"
+            onclick="generateLetterTTS()">
+            <span>◉</span>
+            <span id="letter-tts-btn-text">Hear Your Coaching</span>
+          </button>
+          <div class="tts-player" id="letter-tts-player">
+            <div class="tts-player-row">
+              <button class="tts-play-btn" id="letter-tts-play" onclick="ttsTogglePlay('letter')">▶</button>
+              <div class="tts-progress-wrap">
+                <div class="tts-label" id="letter-tts-label">Voice Coaching</div>
+                <div class="tts-progress-bar" id="letter-tts-bar" onclick="ttsSeek(event,'letter')">
+                  <div class="tts-progress-fill" id="letter-tts-fill"></div>
+                </div>
+                <div class="tts-time" id="letter-tts-time">0:00</div>
+              </div>
+              <button class="tts-speed-btn" id="letter-tts-speed"
+                onclick="ttsCycleSpeed('letter')">1×</button>
+            </div>
           </div>
         </div>
       </div>
@@ -2136,6 +2244,7 @@ function applyLang() {
   if (guideModesLabel) guideModesLabel.textContent = isAr ? 'الأوضاع الثلاثة' : 'Three Modes';
 
   updateWelcomeLanguage();
+  updateTTSLanguage();
 
 }
 
@@ -3000,6 +3109,12 @@ function renderResult(r) {
   document.getElementById('letter-trigger-btn').style.display = 'block';
   document.getElementById('letter-trigger-btn').disabled = false;
   document.getElementById('letter-card').classList.remove('open');
+  // Reset TTS player
+  const lTtsBtn = document.getElementById('letter-tts-btn');
+  if (lTtsBtn) lTtsBtn.style.display = 'flex';
+  const lTtsPlayer = document.getElementById('letter-tts-player');
+  if (lTtsPlayer) lTtsPlayer.classList.remove('visible');
+  if (ttsAudio['letter']) { ttsAudio['letter'].pause(); ttsAudio['letter'] = null; }
   document.getElementById('letter-loading').classList.remove('show');
   letterRawText = '';
 
@@ -3471,6 +3586,12 @@ async function generateLetter() {
   const btn = document.getElementById('letter-trigger-btn');
   btn.disabled = true;
   document.getElementById('letter-card').classList.remove('open');
+  // Reset TTS player
+  const lTtsBtn = document.getElementById('letter-tts-btn');
+  if (lTtsBtn) lTtsBtn.style.display = 'flex';
+  const lTtsPlayer = document.getElementById('letter-tts-player');
+  if (lTtsPlayer) lTtsPlayer.classList.remove('visible');
+  if (ttsAudio['letter']) { ttsAudio['letter'].pause(); ttsAudio['letter'] = null; }
   document.getElementById('letter-loading').classList.add('show');
 
   const prompt = lang === 'ar'
@@ -5769,6 +5890,14 @@ function simRenderFeedback(fb) {
   // Render replay timeline with acoustic data
   renderReplayTimeline(simState.acoustics);
 
+  // Store for TTS
+  window._lastSimFeedback = fb;
+  // Reset TTS button
+  const simTtsBtn = document.getElementById('sim-tts-btn');
+  if (simTtsBtn) simTtsBtn.style.display = 'flex';
+  const simTtsPlayer = document.getElementById('sim-tts-player');
+  if (simTtsPlayer) simTtsPlayer.classList.remove('visible');
+
   card.style.display = 'block';
   card.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
@@ -6004,6 +6133,325 @@ function renderTextTimeline(acoustics) {
       `<div style="font-size:13px;color:var(--muted2);padding:8px 0;">
         ${isAr ? `الإيقاع التقريبي: ${acoustics.wpm} كلمة/دقيقة` : `Approximate pace: ${acoustics.wpm} WPM`}
       </div>`;
+  }
+}
+
+
+
+/* ══════════════════════════════════════════════════════════════
+   TTS ENGINE — Phase 1
+   OpenAI TTS via Netlify proxy (/.netlify/functions/tts-proxy)
+   Voice matched to user acoustic profile:
+   - Pitch → voice selection (low=onyx, mid=nova, high=shimmer)
+   - Pace → speed parameter (0.8–1.3)
+   - Arabic → onyx (deeper, neutral for Arabic content)
+══════════════════════════════════════════════════════════════ */
+
+const TTS_URL = '/.netlify/functions/tts-proxy';
+
+// Active audio instances per player id
+const ttsAudio   = {};   // { letter, nre, sim } → Audio object
+const ttsSpeed   = { letter: 1.0, nre: 1.0, sim: 1.0 };
+const ttsRawText = { letter: '', nre: '', sim: '' };
+
+// ── Voice selection from acoustic profile ─────────────────────
+function ttsSelectVoice(acoustics) {
+  if (lang === 'ar') return 'onyx'; // Onyx is clearest for Arabic
+  if (!acoustics) return 'nova';    // default
+  const pitch = parseFloat(acoustics.avgPitch || 150);
+  if (pitch < 130) return 'onyx';    // deep voice → onyx (authoritative)
+  if (pitch < 180) return 'nova';    // mid voice → nova (warm, clear)
+  return 'shimmer';                  // high voice → shimmer (bright)
+}
+
+// ── Speed from pace ───────────────────────────────────────────
+function ttsSelectSpeed(acoustics) {
+  if (!acoustics) return 1.0;
+  const wpm = parseFloat(acoustics.wpm || 140);
+  // Map user pace to TTS speed — slightly slower than actual for coaching feel
+  if (wpm < 110) return 0.85;
+  if (wpm < 140) return 0.9;
+  if (wpm < 170) return 1.0;
+  if (wpm < 200) return 1.1;
+  return 1.15;
+}
+
+// ── Core TTS fetch ────────────────────────────────────────────
+async function ttsFetch(text, voice, speed) {
+  const resp = await fetch(TTS_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ text, voice, speed })
+  });
+  if (!resp.ok) {
+    const err = await resp.json().catch(() => ({}));
+    throw new Error(err.error || `TTS failed: ${resp.status}`);
+  }
+  const data = await resp.json();
+  if (!data.audio) throw new Error('No audio returned');
+  // Convert base64 to blob URL
+  const bytes = atob(data.audio);
+  const buf   = new Uint8Array(bytes.length);
+  for (let i = 0; i < bytes.length; i++) buf[i] = bytes.charCodeAt(i);
+  const blob  = new Blob([buf], { type: 'audio/mp3' });
+  return URL.createObjectURL(blob);
+}
+
+// ── Setup audio player ────────────────────────────────────────
+function ttsSetupPlayer(playerId, audioUrl, labelText) {
+  // Stop any existing audio for this player
+  if (ttsAudio[playerId]) {
+    ttsAudio[playerId].pause();
+    ttsAudio[playerId] = null;
+  }
+
+  const audio = new Audio(audioUrl);
+  ttsAudio[playerId] = audio;
+
+  const playBtn  = document.getElementById(playerId + '-tts-play');
+  const fill     = document.getElementById(playerId + '-tts-fill');
+  const timeEl   = document.getElementById(playerId + '-tts-time');
+  const labelEl  = document.getElementById(playerId + '-tts-label');
+  const player   = document.getElementById(playerId + '-tts-player');
+
+  if (labelEl && labelText) labelEl.textContent = labelText;
+
+  // Progress update
+  audio.addEventListener('timeupdate', () => {
+    if (!audio.duration) return;
+    const pct = (audio.currentTime / audio.duration) * 100;
+    if (fill) fill.style.width = pct + '%';
+    const m = Math.floor(audio.currentTime / 60);
+    const s = Math.floor(audio.currentTime % 60);
+    if (timeEl) timeEl.textContent = m + ':' + String(s).padStart(2,'0');
+  });
+
+  audio.addEventListener('ended', () => {
+    if (playBtn) playBtn.textContent = '▶';
+    if (fill) fill.style.width = '0%';
+  });
+
+  audio.addEventListener('play',  () => { if (playBtn) playBtn.textContent = '⏸'; });
+  audio.addEventListener('pause', () => { if (playBtn) playBtn.textContent = '▶'; });
+
+  if (player) player.classList.add('visible');
+
+  // Auto-play
+  audio.play().catch(() => {});
+}
+
+// ── Toggle play/pause ─────────────────────────────────────────
+function ttsTogglePlay(playerId) {
+  const audio = ttsAudio[playerId];
+  if (!audio) return;
+  audio.paused ? audio.play() : audio.pause();
+}
+
+// ── Seek on progress bar click ────────────────────────────────
+function ttsSeek(event, playerId) {
+  const audio = ttsAudio[playerId];
+  if (!audio || !audio.duration) return;
+  const bar = event.currentTarget;
+  const rect = bar.getBoundingClientRect();
+  const pct  = (event.clientX - rect.left) / rect.width;
+  audio.currentTime = pct * audio.duration;
+}
+
+// ── Cycle speed: 1× → 1.25× → 1.5× → 0.75× → 1× ────────────
+function ttsCycleSpeed(playerId) {
+  const speeds  = [1.0, 1.25, 1.5, 0.75];
+  const labels  = ['1×', '1.25×', '1.5×', '0.75×'];
+  const current = ttsSpeed[playerId] || 1.0;
+  const idx     = speeds.indexOf(current);
+  const next    = (idx + 1) % speeds.length;
+  ttsSpeed[playerId] = speeds[next];
+  const btn = document.getElementById(playerId + '-tts-speed');
+  if (btn) btn.textContent = labels[next];
+  const audio = ttsAudio[playerId];
+  if (audio) audio.playbackRate = speeds[next];
+}
+
+// ── Set button loading state ──────────────────────────────────
+function ttsSetLoading(btnId, textId, loading, defaultText) {
+  const btn  = document.getElementById(btnId);
+  const text = document.getElementById(textId);
+  if (!btn) return;
+  btn.disabled = loading;
+  if (text) text.textContent = loading
+    ? (lang === 'ar' ? 'جارٍ التوليد…' : 'Generating…')
+    : defaultText;
+}
+
+// ══ LETTER TTS ════════════════════════════════════════════════
+
+async function generateLetterTTS() {
+  if (!letterRawText) return;
+
+  const isAr  = lang === 'ar';
+  const voice = ttsSelectVoice(acousticData);
+  const speed = ttsSelectSpeed(acousticData);
+
+  ttsSetLoading('letter-tts-btn', 'letter-tts-btn-text', true, '');
+
+  // Build a flowing coaching script from the letter
+  const script = isAr
+    ? buildLetterScriptAr(letterRawText)
+    : buildLetterScriptEn(letterRawText);
+
+  try {
+    const url = await ttsFetch(script, voice, speed);
+    const label = isAr ? 'رسالة صوتية' : 'Voice Letter';
+    ttsSetupPlayer('letter', url, label);
+    ttsSetLoading('letter-tts-btn', 'letter-tts-btn-text', false,
+      isAr ? '◉ إعادة توليد' : '◉ Regenerate');
+    document.getElementById('letter-tts-btn').style.display = 'none';
+  } catch(err) {
+    ttsSetLoading('letter-tts-btn', 'letter-tts-btn-text', false,
+      isAr ? '◉ اسمع تدريبك' : '◉ Hear Your Coaching');
+    console.error('[TTS Letter]', err.message);
+  }
+}
+
+function buildLetterScriptEn(raw) {
+  // Clean up the raw letter text for natural spoken delivery
+  return raw
+    .replace(/THE MIRROR\n/i, 'The Mirror. ')
+    .replace(/THE GAP\n/i, '. The Gap. ')
+    .replace(/THE INVITATION\n/i, '. The Invitation. ')
+    .replace(/\n\n/g, '. ')
+    .replace(/\n/g, ' ')
+    .replace(/— .+$/, '')
+    .trim();
+}
+
+function buildLetterScriptAr(raw) {
+  return raw
+    .replace(/المرآة\n/i, 'المرآة. ')
+    .replace(/الفجوة\n/i, '. الفجوة. ')
+    .replace(/الدعوة\n/i, '. الدعوة. ')
+    .replace(/\n\n/g, '. ')
+    .replace(/\n/g, ' ')
+    .trim();
+}
+
+// ══ NRE TTS ═══════════════════════════════════════════════════
+
+async function generateNRETTS() {
+  if (!lastNREData) return;
+
+  const isAr  = lang === 'ar';
+  const voice = ttsSelectVoice(acousticData);
+  const speed = ttsSelectSpeed(acousticData);
+
+  ttsSetLoading('nre-tts-btn', 'nre-tts-btn-text', true, '');
+
+  const script = isAr
+    ? buildNREScriptAr(lastNREData)
+    : buildNREScriptEn(lastNREData);
+
+  try {
+    const url = await ttsFetch(script, voice, speed);
+    const label = isAr ? 'استراتيجية الاستجابة' : 'Response Strategy';
+    ttsSetupPlayer('nre', url, label);
+    ttsSetLoading('nre-tts-btn', 'nre-tts-btn-text', false,
+      isAr ? '◉ إعادة توليد' : '◉ Regenerate');
+    document.getElementById('nre-tts-btn').style.display = 'none';
+  } catch(err) {
+    ttsSetLoading('nre-tts-btn', 'nre-tts-btn-text', false,
+      isAr ? '◉ اسمع الاستراتيجية' : '◉ Hear Strategy');
+    console.error('[TTS NRE]', err.message);
+  }
+}
+
+function buildNREScriptEn(nre) {
+  return [
+    `Here is your optimal response strategy.`,
+    `Tone. ${nre.tone || ''}.`,
+    `Pace. ${nre.pace || ''}.`,
+    `Authority level. ${nre.authority || ''}.`,
+    `Emotional match. ${nre.emotionalMatch || ''}.`,
+    `Suggested opening. ${nre.suggestedOpening || ''}.`,
+    `Framing. ${nre.framing || ''}.`,
+    `What to avoid. ${(nre.avoid || '').replace(/;/g, '. ')}.`,
+    `Expected effect. ${nre.expectedEffect || ''}.`
+  ].join(' ');
+}
+
+function buildNREScriptAr(nre) {
+  return [
+    `إليك استراتيجية الاستجابة المثلى.`,
+    `النبرة. ${nre.tone || ''}.`,
+    `الإيقاع. ${nre.pace || ''}.`,
+    `مستوى السلطة. ${nre.authority || ''}.`,
+    `التطابق العاطفي. ${nre.emotionalMatch || ''}.`,
+    `الافتتاحية المقترحة. ${nre.suggestedOpening || ''}.`,
+    `التأطير. ${nre.framing || ''}.`,
+    `تجنّب. ${(nre.avoid || '').replace(/;/g, '. ')}.`,
+    `التأثير المتوقع. ${nre.expectedEffect || ''}.`
+  ].join(' ');
+}
+
+// ══ SIMULATOR TTS ═════════════════════════════════════════════
+
+async function generateSimTTS() {
+  const feedback = window._lastSimFeedback;
+  if (!feedback) return;
+
+  const isAr  = lang === 'ar';
+  // Sim doesn't have user acoustics — use simState acoustics if available
+  const simAc = simState.acoustics;
+  const voice = ttsSelectVoice(simAc);
+  const speed = ttsSelectSpeed(simAc);
+
+  ttsSetLoading('sim-tts-btn', 'sim-tts-btn-text', true, '');
+
+  const script = isAr
+    ? buildSimScriptAr(feedback)
+    : buildSimScriptEn(feedback);
+
+  try {
+    const url = await ttsFetch(script, voice, speed);
+    const label = isAr ? 'تغذية راجعة التدريب' : 'Round Coaching';
+    ttsSetupPlayer('sim', url, label);
+    ttsSetLoading('sim-tts-btn', 'sim-tts-btn-text', false,
+      isAr ? '◉ إعادة توليد' : '◉ Regenerate');
+    document.getElementById('sim-tts-btn').style.display = 'none';
+  } catch(err) {
+    ttsSetLoading('sim-tts-btn', 'sim-tts-btn-text', false,
+      isAr ? '◉ اسمع التدريب' : '◉ Hear Coaching');
+    console.error('[TTS Sim]', err.message);
+  }
+}
+
+function buildSimScriptEn(fb) {
+  return [
+    `Round coaching.`,
+    `What worked. ${fb.strengths || ''}.`,
+    `What to improve. ${fb.gaps || ''}.`,
+    `A stronger alternative would be. ${fb.betterResponse || ''}.`
+  ].join(' ');
+}
+
+function buildSimScriptAr(fb) {
+  return [
+    `تغذية راجعة للجولة.`,
+    `ما نجح. ${fb.strengths || ''}.`,
+    `ما يمكن تحسينه. ${fb.gaps || ''}.`,
+    `ردٌّ أقوى سيكون. ${fb.betterResponse || ''}.`
+  ].join(' ');
+}
+
+// Translate TTS buttons when language changes
+function updateTTSLanguage() {
+  const isAr = lang === 'ar';
+  const map = {
+    'letter-tts-btn-text': isAr ? '◉ اسمع تدريبك' : '◉ Hear Your Coaching',
+    'nre-tts-btn-text':    isAr ? '◉ اسمع الاستراتيجية' : '◉ Hear Strategy',
+    'sim-tts-btn-text':    isAr ? '◉ اسمع التدريب' : '◉ Hear Coaching',
+  };
+  for (const [id, val] of Object.entries(map)) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = val;
   }
 }
 
@@ -6676,6 +7124,29 @@ function renderRapportIntelligence(result, acA, acB, nameA, nameB) {
           <!-- Key moments list -->
           <div id="sim-moments-list" style="margin-top:12px;
             display:flex;flex-direction:column;gap:6px;"></div>
+        </div>
+
+        <!-- TTS for simulator feedback -->
+        <div style="margin-bottom:14px;">
+          <button class="tts-generate-btn" id="sim-tts-btn"
+            onclick="generateSimTTS()">
+            <span>◉</span>
+            <span id="sim-tts-btn-text">Hear Coaching</span>
+          </button>
+          <div class="tts-player" id="sim-tts-player">
+            <div class="tts-player-row">
+              <button class="tts-play-btn" id="sim-tts-play" onclick="ttsTogglePlay('sim')">▶</button>
+              <div class="tts-progress-wrap">
+                <div class="tts-label" id="sim-tts-label">Round Coaching</div>
+                <div class="tts-progress-bar" id="sim-tts-bar" onclick="ttsSeek(event,'sim')">
+                  <div class="tts-progress-fill" id="sim-tts-fill"></div>
+                </div>
+                <div class="tts-time" id="sim-tts-time">0:00</div>
+              </div>
+              <button class="tts-speed-btn" id="sim-tts-speed"
+                onclick="ttsCycleSpeed('sim')">1×</button>
+            </div>
+          </div>
         </div>
 
         <!-- Action buttons -->
