@@ -1216,15 +1216,179 @@ body.ar .letter-body::before { left: auto; right: 14px; }
     </div>
 
     <div class="comp-mode-toggle">
-      <button class="comp-mode-btn active" id="comp-mode-live" onclick="setCompMode('live')">
-        Two Live Voices
-        <span class="comp-mode-btn-sub">Record both sides</span>
+      <button class="comp-mode-btn" id="comp-mode-convo" onclick="setCompMode('convo')"
+        style="border-right:1px solid rgba(255,255,255,.08);">
+        <span style="color:var(--teal);">◉</span> Live Conversation
+        <span class="comp-mode-btn-sub" style="color:rgba(103,205,195,.7);">One recording · auto-split</span>
+      </button>
+      <button class="comp-mode-btn active" id="comp-mode-live" onclick="setCompMode('live')"
+        style="border-right:1px solid rgba(255,255,255,.08);">
+        Two Turns
+        <span class="comp-mode-btn-sub">Record separately</span>
       </button>
       <button class="comp-mode-btn" id="comp-mode-reply" onclick="setCompMode('reply')">
         Reply Analysis
-        <span class="comp-mode-btn-sub">Upload their voice · Record yours</span>
+        <span class="comp-mode-btn-sub">Upload · Record</span>
       </button>
     </div>
+
+    <!-- ══ LIVE CONVERSATION PANEL ══ -->
+    <div id="convo-panel" style="display:none;">
+
+      <!-- Instruction card -->
+      <div style="background:rgba(103,205,195,.05);border:1px solid rgba(103,205,195,.2);
+        border-radius:14px;padding:18px 20px;margin-bottom:14px;">
+        <div style="font-family:var(--mono);font-size:11px;letter-spacing:.16em;
+          text-transform:uppercase;color:var(--teal);margin-bottom:10px;" id="convo-how-title">
+          How to use this mode
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;gap:10px;">
+            <span style="color:var(--teal);font-weight:700;flex-shrink:0;">1.</span>
+            <span style="font-size:15px;color:var(--muted2);line-height:1.5;" id="convo-tip1">
+              Place your device between both speakers — or use speaker mode on a call.
+            </span>
+          </div>
+          <div style="display:flex;gap:10px;">
+            <span style="color:var(--teal);font-weight:700;flex-shrink:0;">2.</span>
+            <span style="font-size:15px;color:var(--muted2);line-height:1.5;" id="convo-tip2">
+              Press record and have your conversation naturally. No switching needed.
+            </span>
+          </div>
+          <div style="display:flex;gap:10px;">
+            <span style="color:var(--teal);font-weight:700;flex-shrink:0;">3.</span>
+            <span style="font-size:15px;color:var(--muted2);line-height:1.5;" id="convo-tip3">
+              When done, press stop. The app auto-splits voices by pitch and analyses both.
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Name inputs -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+        <input class="comp-name-input" id="convo-name-a" placeholder="Speaker A name…"
+          style="border-color:rgba(169,158,232,.3);"/>
+        <input class="comp-name-input" id="convo-name-b" placeholder="Speaker B name…"
+          style="border-color:rgba(103,205,195,.3);"/>
+      </div>
+
+      <!-- Big single record button -->
+      <div style="background:var(--surface);border:1px solid var(--border2);
+        border-radius:16px;padding:24px 20px;text-align:center;margin-bottom:14px;">
+
+        <!-- Visualizer bars (waveform while recording) -->
+        <div id="convo-visualizer" style="display:flex;align-items:center;
+          justify-content:center;gap:2px;height:40px;margin-bottom:16px;opacity:.4;">
+        </div>
+
+        <!-- Record button -->
+        <button id="convo-rec-btn" onclick="toggleConvoRec()" style="
+          width:80px;height:80px;border-radius:50%;border:2px solid var(--teal);
+          background:rgba(103,205,195,.08);cursor:pointer;
+          display:inline-flex;align-items:center;justify-content:center;
+          transition:all .3s;margin-bottom:16px;">
+          <svg id="convo-icon-mic" width="28" height="28" viewBox="0 0 24 24"
+            fill="none" stroke="var(--teal)" stroke-width="1.8">
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8" stroke-linecap="round"/>
+          </svg>
+          <svg id="convo-icon-stop" width="28" height="28" viewBox="0 0 24 24"
+            fill="var(--red)" style="display:none;">
+            <rect x="5" y="5" width="14" height="14" rx="3"/>
+          </svg>
+        </button>
+
+        <div id="convo-status" style="font-family:var(--mono);font-size:11px;
+          letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+          margin-bottom:8px;" >
+          Tap to start recording
+        </div>
+        <div id="convo-timer" style="font-family:var(--mono);font-size:22px;
+          color:var(--teal);display:none;">0:00</div>
+        <div id="convo-tip-live" style="font-size:13px;color:var(--muted);
+          margin-top:8px;display:none;">
+          Speak naturally — both voices are being captured
+        </div>
+      </div>
+
+      <!-- Transcript area (auto-filled by speech recognition) -->
+      <div id="convo-transcript-section" style="display:none;margin-bottom:14px;">
+        <div style="font-family:var(--mono);font-size:11px;letter-spacing:.14em;
+          text-transform:uppercase;color:var(--muted);margin-bottom:8px;" id="convo-trans-label">
+          Conversation Transcript
+        </div>
+        <div id="convo-transcript-box" style="background:var(--surface2);
+          border:1px solid var(--border);border-radius:10px;padding:14px 16px;
+          font-size:15px;color:var(--muted2);line-height:1.75;
+          font-family:system-ui,sans-serif;min-height:80px;max-height:200px;overflow-y:auto;">
+        </div>
+        <div style="margin-top:10px;font-size:13px;color:var(--muted);
+          font-style:italic;" id="convo-split-note">
+          Voices auto-split by pitch. You can edit names and transcripts below before analysing.
+        </div>
+      </div>
+
+      <!-- Auto-split result preview -->
+      <div id="convo-split-preview" style="display:none;margin-bottom:14px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <!-- Voice A preview -->
+          <div style="background:rgba(169,158,232,.06);border:1px solid rgba(169,158,232,.2);
+            border-radius:12px;padding:14px 16px;">
+            <div style="font-family:var(--mono);font-size:10px;letter-spacing:.16em;
+              text-transform:uppercase;color:var(--purple);margin-bottom:8px;" id="convo-a-label">
+              Voice A
+            </div>
+            <div id="convo-a-pitch" style="font-family:var(--mono);font-size:13px;
+              color:var(--muted2);margin-bottom:4px;"></div>
+            <div id="convo-a-pace"  style="font-family:var(--mono);font-size:13px;
+              color:var(--muted2);margin-bottom:8px;"></div>
+            <textarea id="convo-a-text" class="comp-textarea" rows="3"
+              placeholder="Voice A transcript (auto-filled or type)…"
+              style="min-height:60px;font-size:14px;"></textarea>
+          </div>
+          <!-- Voice B preview -->
+          <div style="background:rgba(103,205,195,.05);border:1px solid rgba(103,205,195,.18);
+            border-radius:12px;padding:14px 16px;">
+            <div style="font-family:var(--mono);font-size:10px;letter-spacing:.16em;
+              text-transform:uppercase;color:var(--teal);margin-bottom:8px;" id="convo-b-label">
+              Voice B
+            </div>
+            <div id="convo-b-pitch" style="font-family:var(--mono);font-size:13px;
+              color:var(--muted2);margin-bottom:4px;"></div>
+            <div id="convo-b-pace"  style="font-family:var(--mono);font-size:13px;
+              color:var(--muted2);margin-bottom:8px;"></div>
+            <textarea id="convo-b-text" class="comp-textarea" rows="3"
+              placeholder="Voice B transcript (auto-filled or type)…"
+              style="min-height:60px;font-size:14px;"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Processing indicator -->
+      <div id="convo-processing" style="display:none;text-align:center;padding:20px;">
+        <div class="letter-dots"><span></span><span></span><span></span></div>
+        <div style="font-family:var(--mono);font-size:11px;color:var(--muted);
+          margin-top:12px;letter-spacing:.1em;" id="convo-proc-text">
+          Splitting voices by pitch…
+        </div>
+      </div>
+
+      <!-- Analyse button -->
+      <button id="convo-analyse-btn" onclick="analyseConversation()"
+        style="display:none;width:100%;padding:15px;
+        background:linear-gradient(135deg,rgba(103,205,195,.12),rgba(169,158,232,.08));
+        border:1px solid rgba(103,205,195,.3);border-radius:12px;
+        color:var(--teal);font-family:var(--mono);font-size:11px;
+        letter-spacing:.16em;text-transform:uppercase;cursor:pointer;margin-top:4px;">
+        ◈ <span id="convo-analyse-label">Analyse Both Voices</span>
+      </button>
+
+      <!-- Error -->
+      <div id="convo-error" style="display:none;margin-top:10px;padding:12px 16px;
+        background:rgba(212,107,107,.08);border:1px solid rgba(212,107,107,.2);
+        border-radius:10px;color:var(--red);font-size:14px;line-height:1.6;"></div>
+
+    </div><!-- end convo-panel -->
 
     <!-- Hidden file input for audio upload -->
     <input type="file" id="upload-audio-input"
@@ -2279,6 +2443,7 @@ function applyLang() {
 
   updateWelcomeLanguage();
   updateTTSLanguage();
+  updateConvoLanguage();
 
   // Comparison how-to translations
   const compHowtoTitle = document.getElementById('comp-howto-title');
@@ -6508,6 +6673,399 @@ function updateTTSLanguage() {
 }
 
 
+
+/* ══════════════════════════════════════════════════════════════
+   LIVE CONVERSATION MODE
+   One recording captures both voices.
+   Pitch-based segmentation splits them into Voice A / Voice B.
+   No switching — no interruption — natural conversation flow.
+══════════════════════════════════════════════════════════════ */
+
+// ── State ─────────────────────────────────────────────────────
+let convoState = {
+  isRecording:  false,
+  stream:       null,
+  audioCtx:     null,
+  analyser:     null,
+  recognition:  null,
+  mediaRecorder: null,
+  audioChunks:  [],
+  pitchTimeline: [],  // [{t, f0, rms}] per 100ms
+  transcript:   '',
+  recSecs:      0,
+  recInterval:  null,
+  vizInterval:  null,
+  splitA:       null,  // {pitches:[], words:'', avgPitch, wpm}
+  splitB:       null,
+};
+
+// Build visualizer bars
+(function buildConvoViz() {
+  const viz = document.getElementById('convo-visualizer');
+  if (!viz) return;
+  for (let i = 0; i < 32; i++) {
+    const b = document.createElement('div');
+    b.style.cssText = `width:3px;border-radius:3px;background:var(--teal);
+      transform:scaleY(.2);transform-origin:center;
+      transition:transform .1s ease;`;
+    viz.appendChild(b);
+  }
+})();
+
+// ── Toggle recording ──────────────────────────────────────────
+async function toggleConvoRec() {
+  convoState.isRecording ? convoStopRec() : await convoStartRec();
+}
+
+async function convoStartRec() {
+  try {
+    convoState.stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  } catch(e) {
+    convoShowError(lang === 'ar' ? 'تعذّر الوصول إلى الميكروفون.' : 'Microphone access denied.');
+    return;
+  }
+
+  // Audio context for pitch analysis
+  convoState.audioCtx  = new (window.AudioContext || window.webkitAudioContext)();
+  const src = convoState.audioCtx.createMediaStreamSource(convoState.stream);
+  convoState.analyser  = convoState.audioCtx.createAnalyser();
+  convoState.analyser.fftSize = 2048;
+  src.connect(convoState.analyser);
+  convoState.pitchTimeline = [];
+  convoState.audioChunks   = [];
+  convoState.recSecs = 0;
+
+  // MediaRecorder to capture audio for potential waveform
+  try {
+    convoState.mediaRecorder = new MediaRecorder(convoState.stream);
+    convoState.mediaRecorder.ondataavailable = e => {
+      if (e.data.size > 0) convoState.audioChunks.push(e.data);
+    };
+    convoState.mediaRecorder.start(100);
+  } catch(e) { /* MediaRecorder optional */ }
+
+  // Speech recognition
+  if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    convoState.recognition = new SR();
+    convoState.recognition.continuous = true;
+    convoState.recognition.interimResults = false;
+    convoState.recognition.lang = lang === 'ar' ? 'ar-SA' : 'en-US';
+    let finalTx = '';
+    convoState.recognition.onresult = e => {
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        if (e.results[i].isFinal) {
+          finalTx += e.results[i][0].transcript + ' ';
+        }
+      }
+      convoState.transcript = finalTx.trim();
+    };
+    convoState.recognition.onerror = () => {};
+    convoState.recognition.start();
+  }
+
+  convoState.isRecording = true;
+
+  // Timer + pitch sampling every 100ms
+  const startTime = Date.now();
+  convoState.recInterval = setInterval(() => {
+    convoState.recSecs++;
+    const m = Math.floor(convoState.recSecs / 60);
+    const s = convoState.recSecs % 60;
+    const timerEl = document.getElementById('convo-timer');
+    if (timerEl) timerEl.textContent = m + ':' + String(s).padStart(2, '0');
+
+    // Sample pitch
+    const buf = new Float32Array(convoState.analyser.fftSize);
+    convoState.analyser.getFloatTimeDomainData(buf);
+
+    // RMS
+    let rms = 0;
+    for (let i = 0; i < buf.length; i++) rms += buf[i] * buf[i];
+    rms = Math.sqrt(rms / buf.length);
+
+    const f0 = autoCorrelate(buf, convoState.audioCtx.sampleRate);
+    convoState.pitchTimeline.push({
+      t: convoState.recSecs,
+      f0: (f0 > 60 && f0 < 700) ? f0 : 0,
+      rms,
+      active: rms > 0.01
+    });
+  }, 1000);
+
+  // Visualizer update faster (10x/sec)
+  convoState.vizInterval = setInterval(() => {
+    const vizBars = document.querySelectorAll('#convo-visualizer > div');
+    if (!vizBars.length || !convoState.analyser) return;
+    const data = new Uint8Array(convoState.analyser.frequencyBinCount);
+    convoState.analyser.getByteTimeDomainData(data);
+    vizBars.forEach((bar, i) => {
+      const idx = Math.floor((i / vizBars.length) * data.length);
+      const val = Math.abs(data[idx] - 128) / 128;
+      bar.style.transform = `scaleY(${Math.max(.15, val * 2.5)})`;
+    });
+  }, 100);
+
+  // Update UI
+  const isAr = lang === 'ar';
+  document.getElementById('convo-icon-mic').style.display = 'none';
+  document.getElementById('convo-icon-stop').style.display = 'block';
+  document.getElementById('convo-rec-btn').style.borderColor = 'var(--red)';
+  document.getElementById('convo-rec-btn').style.background = 'rgba(212,107,107,.1)';
+  document.getElementById('convo-timer').style.display = 'block';
+  document.getElementById('convo-tip-live').style.display = 'block';
+  const viz = document.getElementById('convo-visualizer');
+  if (viz) viz.style.opacity = '1';
+  document.getElementById('convo-status').textContent = isAr ? 'جارٍ التسجيل…' : 'Recording…';
+  document.getElementById('convo-error').style.display = 'none';
+}
+
+function convoStopRec() {
+  convoState.isRecording = false;
+  clearInterval(convoState.recInterval);
+  clearInterval(convoState.vizInterval);
+
+  if (convoState.recognition)   { convoState.recognition.stop(); convoState.recognition = null; }
+  if (convoState.mediaRecorder && convoState.mediaRecorder.state !== 'inactive') {
+    convoState.mediaRecorder.stop();
+  }
+  if (convoState.stream) { convoState.stream.getTracks().forEach(t => t.stop()); convoState.stream = null; }
+  if (convoState.audioCtx) { convoState.audioCtx.close().catch(()=>{}); convoState.audioCtx = null; }
+
+  // Reset button UI
+  document.getElementById('convo-icon-mic').style.display = 'block';
+  document.getElementById('convo-icon-stop').style.display = 'none';
+  document.getElementById('convo-rec-btn').style.borderColor = 'var(--teal)';
+  document.getElementById('convo-rec-btn').style.background = 'rgba(103,205,195,.08)';
+  const viz = document.getElementById('convo-visualizer');
+  if (viz) { viz.style.opacity = '.2'; viz.querySelectorAll('div').forEach(b => b.style.transform = 'scaleY(.15)'); }
+
+  const isAr = lang === 'ar';
+  document.getElementById('convo-status').textContent = isAr ? 'تم التسجيل' : 'Recording complete';
+  document.getElementById('convo-tip-live').style.display = 'none';
+
+  if (convoState.pitchTimeline.length < 3) {
+    convoShowError(isAr ? 'التسجيل قصير جداً — يرجى التسجيل لمدة ١٠ ثوانٍ على الأقل.' : 'Recording too short — please record at least 10 seconds.');
+    return;
+  }
+
+  // Process split
+  document.getElementById('convo-processing').style.display = 'block';
+  document.getElementById('convo-proc-text').textContent = isAr ? 'يتم تحليل الأصوات…' : 'Splitting voices by pitch…';
+
+  setTimeout(() => convoProcessSplit(), 300);
+}
+
+// ── Pitch-based voice splitting ───────────────────────────────
+function convoProcessSplit() {
+  const isAr = lang === 'ar';
+  const timeline = convoState.pitchTimeline.filter(p => p.active && p.f0 > 0);
+
+  if (timeline.length < 3) {
+    document.getElementById('convo-processing').style.display = 'none';
+    convoShowError(isAr
+      ? 'لم يُكتشف صوت كافٍ — حاول التسجيل مرة أخرى في بيئة أهدأ.'
+      : 'Not enough voice detected — try recording again in a quieter environment.');
+    return;
+  }
+
+  const pitches = timeline.map(p => p.f0).sort((a,b) => a-b);
+  const median  = pitches[Math.floor(pitches.length / 2)];
+
+  // K-means style: find natural break between two pitch clusters
+  // Start with median as midpoint, iterate 3 times to converge
+  let threshold = median;
+  for (let iter = 0; iter < 5; iter++) {
+    const low  = timeline.filter(p => p.f0 <= threshold).map(p => p.f0);
+    const high = timeline.filter(p => p.f0 >  threshold).map(p => p.f0);
+    const avgLow  = low.length  ? low.reduce((a,b)=>a+b,0)/low.length   : threshold * 0.8;
+    const avgHigh = high.length ? high.reduce((a,b)=>a+b,0)/high.length : threshold * 1.2;
+    threshold = (avgLow + avgHigh) / 2;
+  }
+
+  const groupA = timeline.filter(p => p.f0 <= threshold); // lower pitch
+  const groupB = timeline.filter(p => p.f0 >  threshold); // higher pitch
+
+  const avgA = groupA.length ? Math.round(groupA.reduce((s,p)=>s+p.f0,0)/groupA.length) : 0;
+  const avgB = groupB.length ? Math.round(groupB.reduce((s,p)=>s+p.f0,0)/groupB.length) : 0;
+
+  // Duration estimate per voice
+  const durA = groupA.length;
+  const durB = groupB.length;
+
+  // Split transcript heuristically — alternate by which voice is dominant per chunk
+  const words = convoState.transcript ? convoState.transcript.split(' ').filter(w=>w) : [];
+  const midWord = Math.floor(words.length / 2);
+  // Rough: Voice A gets more words if dominant (more timeline samples)
+  const ratioA = groupA.length / Math.max(timeline.length, 1);
+  const splitAt = Math.round(words.length * ratioA);
+  const wordsA = words.slice(0, splitAt).join(' ');
+  const wordsB = words.slice(splitAt).join(' ');
+
+  // WPM estimate
+  const wpmA = durA > 0 ? Math.round((wordsA.split(' ').filter(w=>w).length / durA) * 60) : 0;
+  const wpmB = durB > 0 ? Math.round((wordsB.split(' ').filter(w=>w).length / durB) * 60) : 0;
+
+  convoState.splitA = { avgPitch: avgA, wpm: wpmA, words: wordsA, samples: groupA.length };
+  convoState.splitB = { avgPitch: avgB, wpm: wpmB, words: wordsB, samples: groupB.length };
+
+  // ── Render split preview ──────────────────────────────────────
+  const nameA = document.getElementById('convo-name-a')?.value.trim() || (isAr ? 'المتحدث أ' : 'Speaker A');
+  const nameB = document.getElementById('convo-name-b')?.value.trim() || (isAr ? 'المتحدث ب' : 'Speaker B');
+
+  document.getElementById('convo-processing').style.display = 'none';
+  document.getElementById('convo-split-preview').style.display = 'block';
+  document.getElementById('convo-analyse-btn').style.display = 'block';
+
+  // Update labels
+  document.getElementById('convo-a-label').textContent = nameA;
+  document.getElementById('convo-b-label').textContent = nameB;
+  document.getElementById('convo-a-pitch').textContent = `◉ ${isAr?'الطبقة':'Pitch'}: ${avgA} Hz · ${isAr?'إيقاع':'Pace'}: ${wpmA} WPM`;
+  document.getElementById('convo-b-pitch').textContent = `◉ ${isAr?'الطبقة':'Pitch'}: ${avgB} Hz · ${isAr?'إيقاع':'Pace'}: ${wpmB} WPM`;
+  document.getElementById('convo-a-text').value = wordsA;
+  document.getElementById('convo-b-text').value = wordsB;
+
+  // Show transcript section
+  if (convoState.transcript) {
+    document.getElementById('convo-transcript-section').style.display = 'block';
+    document.getElementById('convo-transcript-box').textContent = convoState.transcript;
+  }
+
+  // Split quality note
+  const splitGap = Math.abs(avgA - avgB);
+  let qualityNote = '';
+  if (splitGap < 30) {
+    qualityNote = isAr
+      ? '⚠ الطبقتان متقاربتان — قد يكون الفصل تقريبياً. راجع النصوص يدوياً.'
+      : '⚠ Pitches are similar — split may be approximate. Review transcripts manually.';
+  } else {
+    qualityNote = isAr
+      ? `✓ فرق الطبقة: ${splitGap} Hz — فصل جيد`
+      : `✓ Pitch gap: ${splitGap} Hz — good separation`;
+  }
+  document.getElementById('convo-split-note').textContent = qualityNote;
+
+  // Update analyse button label
+  document.getElementById('convo-analyse-label').textContent = isAr
+    ? `تحليل ${nameA} و${nameB}` : `Analyse ${nameA} & ${nameB}`;
+}
+
+// ── Trigger comparison analysis from convo mode ───────────────
+function analyseConversation() {
+  if (!convoState.splitA || !convoState.splitB) return;
+
+  const isAr  = lang === 'ar';
+  const nameA = document.getElementById('convo-name-a')?.value.trim() || (isAr?'المتحدث أ':'Speaker A');
+  const nameB = document.getElementById('convo-name-b')?.value.trim() || (isAr?'المتحدث ب':'Speaker B');
+
+  // Override comp input fields with split data
+  const aText = document.getElementById('convo-a-text')?.value.trim() || convoState.splitA.words;
+  const bText = document.getElementById('convo-b-text')?.value.trim() || convoState.splitB.words;
+
+  // Build acoustic objects matching existing getCompAcoustics format
+  const acA = {
+    avgPitch:    convoState.splitA.avgPitch,
+    wpm:         convoState.splitA.wpm,
+    pitchLabel:  convoState.splitA.avgPitch < 140 ? 'deep' : convoState.splitA.avgPitch < 200 ? 'mid' : 'high',
+    paceLabel:   convoState.splitA.wpm < 120 ? 'slow' : convoState.splitA.wpm < 170 ? 'measured' : 'fast',
+    hesitations: 0,
+    emphasizedWords: [],
+    pitchRange:  0,
+  };
+  const acB = {
+    avgPitch:    convoState.splitB.avgPitch,
+    wpm:         convoState.splitB.wpm,
+    pitchLabel:  convoState.splitB.avgPitch < 140 ? 'deep' : convoState.splitB.avgPitch < 200 ? 'mid' : 'high',
+    paceLabel:   convoState.splitB.wpm < 120 ? 'slow' : convoState.splitB.wpm < 170 ? 'measured' : 'fast',
+    hesitations: 0,
+    emphasizedWords: [],
+    pitchRange:  0,
+  };
+
+  // Disable button while running
+  const btn = document.getElementById('convo-analyse-btn');
+  btn.disabled = true;
+  btn.style.opacity = '.5';
+
+  // Call existing comparison engine directly
+  runComparisonFromConvo(nameA, aText, acA, nameB, bText, acB);
+}
+
+async function runComparisonFromConvo(nameA, textA, acA, nameB, textB, acB) {
+  const isAr = lang === 'ar';
+  document.getElementById('convo-processing').style.display = 'block';
+  document.getElementById('convo-proc-text').textContent = isAr ? 'جارٍ تحليل المحادثة…' : 'Analysing conversation…';
+  document.getElementById('convo-error').style.display = 'none';
+
+  const prompt   = isAr
+    ? buildComparisonPromptAr(nameA, textA, acA, nameB, textB, acB)
+    : buildComparisonPrompt(nameA, textA, acA, nameB, textB, acB);
+
+  try {
+    const resp = await fetch(WORKER_URL, {
+      method: 'POST',
+      signal: (() => { const c = new AbortController(); setTimeout(()=>c.abort(),45000); return c.signal; })(),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model:      'claude-haiku-4-5-20251001',
+        max_tokens: 2500,
+        system:     prompt.system,
+        messages:   [{ role:'user', content:prompt.user }],
+      })
+    });
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const data = await resp.json();
+    const raw  = (data?.content?.[0]?.text || '').replace(/```json|```/g,'').trim();
+    const result = JSON.parse(raw);
+
+    document.getElementById('convo-processing').style.display = 'none';
+    const btn = document.getElementById('convo-analyse-btn');
+    btn.disabled = false; btn.style.opacity = '1';
+
+    // Render using existing comparison renderer
+    renderComparison(result, nameA, nameB, acA, acB);
+    document.getElementById('comp-results').scrollIntoView({ behavior:'smooth', block:'start' });
+
+  } catch(err) {
+    document.getElementById('convo-processing').style.display = 'none';
+    const btn = document.getElementById('convo-analyse-btn');
+    btn.disabled = false; btn.style.opacity = '1';
+    convoShowError(isAr ? 'فشل التحليل — حاول مرة أخرى.' : 'Analysis failed — please try again.');
+  }
+}
+
+function convoShowError(msg) {
+  const el = document.getElementById('convo-error');
+  if (el) { el.textContent = msg; el.style.display = 'block'; }
+}
+
+// ── Arabic labels for convo panel ────────────────────────────
+function updateConvoLanguage() {
+  const isAr = lang === 'ar';
+  const map = {
+    'convo-how-title':    isAr ? 'كيفية استخدام هذا الوضع' : 'How to use this mode',
+    'convo-tip1':         isAr ? 'ضع الجهاز بين المتحدثين — أو استخدم مكبّر الصوت في المكالمة.' : 'Place your device between both speakers — or use speaker mode on a call.',
+    'convo-tip2':         isAr ? 'اضغط تسجيل وتحدّث بشكل طبيعي. لا حاجة للتبديل.' : 'Press record and have your conversation naturally. No switching needed.',
+    'convo-tip3':         isAr ? 'عند الانتهاء، اضغط إيقاف. يُقسّم التطبيق الأصوات تلقائياً بالطبقة.' : 'When done, press stop. The app auto-splits voices by pitch and analyses both.',
+    'convo-status':       isAr ? 'اضغط لبدء التسجيل' : 'Tap to start recording',
+    'convo-tip-live':     isAr ? 'تحدّث بشكل طبيعي — كلا الصوتين يُسجَّلان' : 'Speak naturally — both voices are being captured',
+    'convo-trans-label':  isAr ? 'نصّ المحادثة' : 'Conversation Transcript',
+    'convo-analyse-label':isAr ? 'تحليل كلا الصوتين' : 'Analyse Both Voices',
+    'convo-name-a':       null, // placeholder only
+    'convo-name-b':       null,
+  };
+  for (const [id, val] of Object.entries(map)) {
+    if (!val) continue;
+    const el = document.getElementById(id);
+    if (el) el.textContent = val;
+  }
+  const nameA = document.getElementById('convo-name-a');
+  const nameB = document.getElementById('convo-name-b');
+  if (nameA) nameA.placeholder = isAr ? 'اسم المتحدث أ…' : 'Speaker A name…';
+  if (nameB) nameB.placeholder = isAr ? 'اسم المتحدث ب…' : 'Speaker B name…';
+}
+
+
 /* ── Init ── */
 lang = S.get('lang') || 'en';
 applyLang();
@@ -6530,13 +7088,17 @@ let uploadedAudioCtx  = null;
 
 function setCompMode(mode) {
   compMode = mode;
+  const convBtn  = document.getElementById('comp-mode-convo');
   const livBtn   = document.getElementById('comp-mode-live');
   const repBtn   = document.getElementById('comp-mode-reply');
+  const convoPanel= document.getElementById('convo-panel');
   const livePanel= document.getElementById('live-voices-panel');
   const repPanel = document.getElementById('reply-upload-panel');
 
+  if (convBtn) convBtn.classList.toggle('active', mode === 'convo');
   livBtn.classList.toggle('active', mode === 'live');
   repBtn.classList.toggle('active', mode === 'reply');
+  if (convoPanel) convoPanel.style.display = mode === 'convo' ? 'block' : 'none';
   livePanel.style.display = mode === 'live'  ? 'grid' : 'none';
   repPanel.style.display  = mode === 'reply' ? 'block' : 'none';
 
