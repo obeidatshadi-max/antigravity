@@ -36,23 +36,23 @@
    DESIGN TOKENS
 ═══════════════════════════════════════════════════ */
 :root {
-  --bg:         #13141e;
-  --surface:    #1a1b28;
-  --surface2:   #202134;
-  --surface3:   #26273e;
-  --border:     rgba(255,255,255,.10);
-  --border2:    rgba(255,255,255,.18);
-  --text:       #e8e4d8;
-  --muted:      #807c74;
-  --muted2:     #b4b0a8;
-  --gold:       #c8a96e;
-  --gold-dim:   rgba(200,169,110,.18);
-  --gold-glow:  rgba(200,169,110,.07);
-  --purple:     #9b8fe0;
-  --teal:       #5bbfb5;
-  --red:        #d46b6b;
-  --amber:      #e8a84a;
-  --blue:       #6ba4d4;
+  --bg:         #0f1018;
+  --surface:    #181924;
+  --surface2:   #1e1f2e;
+  --surface3:   #252638;
+  --border:     rgba(255,255,255,.13);
+  --border2:    rgba(255,255,255,.22);
+  --text:       #eeebe0;
+  --muted:      #9e9a91;
+  --muted2:     #cac6bc;
+  --gold:       #d4b070;
+  --gold-dim:   rgba(212,176,112,.22);
+  --gold-glow:  rgba(212,176,112,.09);
+  --purple:     #a99ee8;
+  --teal:       #67cdc3;
+  --red:        #e07878;
+  --amber:      #f0b454;
+  --blue:       #78b4e0;
   --r:          14px;
   --r-sm:       10px;
   --serif:      'Cormorant Garamond', Georgia, serif;
@@ -71,7 +71,7 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--serif);
-  font-size: 16px;
+  font-size: 17px;
   line-height: 1.8;
   padding: 20px 16px 120px;
   -webkit-font-smoothing: antialiased;
@@ -173,7 +173,7 @@ body.ar .journal-note-input {
 .eyebrow {
   text-align: center;
   font-family: var(--mono);
-  font-size: 9px; letter-spacing: .28em; text-transform: uppercase;
+  font-size: 11px; letter-spacing: .28em; text-transform: uppercase;
   color: var(--gold); margin-bottom: 16px; opacity: .8;
 }
 h1 {
@@ -203,7 +203,7 @@ h1 {
 .top-btn {
   background: none; border: 1px solid var(--border2);
   border-radius: 20px; padding: 8px 16px;
-  font-size: 12px; cursor: pointer; transition: all .2s;
+  font-size: 14px; cursor: pointer; transition: all .2s;
   color: var(--text); font-family: var(--mono);
   letter-spacing: .04em; min-height: 44px;
   display: flex; align-items: center;
@@ -231,7 +231,7 @@ h1 {
   padding: 11px 6px;
   border: none; background: none;
   border-radius: 10px; cursor: pointer; transition: all .2s;
-  font-family: var(--mono); font-size: 10px;
+  font-family: var(--mono); font-size: 14px;
   letter-spacing: 0; text-transform: uppercase;
   color: var(--muted); line-height: 1.4; text-align: center;
   min-height: 52px;
@@ -241,7 +241,7 @@ h1 {
   box-shadow: 0 1px 8px rgba(0,0,0,.3);
 }
 .mode-btn-sub {
-  display: block; font-size: 8px; color: var(--muted);
+  display: block; font-size: 11px; color: var(--muted2);
   margin-top: 3px; text-transform: uppercase;
 }
 .mode-btn.active .mode-btn-sub { color: var(--muted2); }
@@ -250,8 +250,8 @@ h1 {
    CARDS — BASE
 ═══════════════════════════════════════════════════ */
 .card {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--r); padding: 20px 16px; margin-bottom: 14px;
+  background: var(--surface); border: 1px solid var(--border2);
+  border-radius: var(--r); padding: 22px 18px; margin-bottom: 16px;
 }
 .card-gold {
   background: var(--surface); border: 1px solid rgba(200,169,110,.22);
@@ -259,13 +259,13 @@ h1 {
   box-shadow: 0 0 40px rgba(200,169,110,.04);
 }
 .card-tag {
-  font-family: var(--mono); font-size: 9px; letter-spacing: .2em;
+  font-family: var(--mono); font-size: 11px; letter-spacing: .2em;
   text-transform: uppercase; color: var(--gold);
   margin-bottom: 12px; display: block;
 }
 .card-title { font-size: 20px; font-weight: 300; font-style: italic; margin-bottom: 8px; }
 .card-body {
-  font-size: 14px; line-height: 1.85; color: var(--muted2);
+  font-size: 14px; line-height: 1.95; color: var(--muted2);
   font-family: system-ui, sans-serif; font-weight: 300;
 }
 
@@ -273,11 +273,11 @@ h1 {
    INPUT
 ═══════════════════════════════════════════════════ */
 .input-card {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--r); padding: 20px 16px; margin-bottom: 14px;
+  background: var(--surface); border: 1px solid var(--border2);
+  border-radius: var(--r); padding: 22px 18px; margin-bottom: 16px;
 }
 .input-label {
-  font-family: var(--mono); font-size: 9px; letter-spacing: .2em;
+  font-family: var(--mono); font-size: 11px; letter-spacing: .2em;
   text-transform: uppercase; color: var(--muted);
   margin-bottom: 10px; display: block;
 }
@@ -292,7 +292,7 @@ textarea {
 }
 textarea:focus { border-color: var(--gold-dim); }
 textarea::placeholder { color: var(--muted); }
-.hint { font-size: 12px; color: var(--muted); margin-top: 8px; font-style: italic; font-family: system-ui, sans-serif; }
+.hint { font-size: 14px; color: var(--muted); margin-top: 8px; font-style: italic; font-family: system-ui, sans-serif; }
 
 /* ═══════════════════════════════════════════════════
    VOICE SECTION
@@ -305,7 +305,7 @@ textarea::placeholder { color: var(--muted); }
   display: flex; align-items: center; gap: 12px; margin-bottom: 14px;
 }
 .voice-or {
-  font-family: var(--mono); font-size: 9px; letter-spacing: .2em;
+  font-family: var(--mono); font-size: 11px; letter-spacing: .2em;
   text-transform: uppercase; color: var(--muted);
 }
 .record-btn {
@@ -322,23 +322,23 @@ textarea::placeholder { color: var(--muted); }
   animation: pulse-ring 1.5s ease infinite;
 }
 @keyframes pulse-ring {
-  0%   { transform:scale(1); opacity:.6; }
+  0%   { transform:scale(1); opacity:.8; }
   70%  { transform:scale(1.35); opacity:0; }
   100% { transform:scale(1.35); opacity:0; }
 }
 .record-btn svg { width: 22px; height: 22px; }
 .voice-meta { flex: 1; min-width: 0; }
 .voice-status {
-  font-family: var(--mono); font-size: 10px; letter-spacing: .12em;
+  font-family: var(--mono); font-size: 14px; letter-spacing: .12em;
   text-transform: uppercase; color: var(--muted); margin-bottom: 3px;
 }
-.voice-timer { font-family: var(--mono); font-size: 13px; color: var(--gold); display: none; flex-shrink: 0; }
-.voice-transcript { font-size: 13px; color: var(--muted2); line-height: 1.5; font-family: system-ui, sans-serif; max-height: 44px; overflow: hidden; }
+.voice-timer { font-family: var(--mono); font-size: 15px; color: var(--gold); display: none; flex-shrink: 0; }
+.voice-transcript { font-size: 15px; color: var(--muted2); line-height: 1.5; font-family: system-ui, sans-serif; max-height: 44px; overflow: hidden; }
 
 /* Waveform */
 .waveform-wrap { display: none; height: 44px; background: var(--surface3); border-radius: 8px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 10px; }
 .waveform-overlay { position: relative; height: 100%; display: flex; align-items: center; padding: 0 12px; gap: 3px; }
-.wbar { width: 3px; background: var(--gold); border-radius: 2px; height: 4px; animation: wb .7s ease-in-out infinite; opacity: .7; }
+.wbar { width: 3px; background: var(--gold); border-radius: 2px; height: 4px; animation: wb .7s ease-in-out infinite; opacity: .85; }
 .wbar:nth-child(1){animation-delay:0s;}.wbar:nth-child(2){animation-delay:.08s;}.wbar:nth-child(3){animation-delay:.16s;}
 .wbar:nth-child(4){animation-delay:.24s;}.wbar:nth-child(5){animation-delay:.32s;}.wbar:nth-child(6){animation-delay:.24s;}
 .wbar:nth-child(7){animation-delay:.16s;}.wbar:nth-child(8){animation-delay:.08s;}.wbar:nth-child(9){animation-delay:0s;}
@@ -348,23 +348,23 @@ textarea::placeholder { color: var(--muted); }
    ACOUSTIC PANEL
 ═══════════════════════════════════════════════════ */
 .acoustic-panel { display: none; background: var(--surface3); border-radius: var(--r-sm); border: 1px solid var(--border); padding: 14px; margin-top: 4px; }
-.acoustic-title { font-family: var(--mono); font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; opacity: .8; }
+.acoustic-title { font-family: var(--mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; opacity: .8; }
 .acoustic-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
 .acoustic-item { text-align: center; }
 .acoustic-val { font-family: var(--mono); font-size: 17px; font-weight: 500; line-height: 1; margin-bottom: 4px; }
 .acoustic-lbl { font-family: var(--mono); font-size: 8px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
-.acoustic-badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 9px; font-family: var(--mono); margin-top: 4px; }
+.acoustic-badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-family: var(--mono); margin-top: 4px; }
 .tonal-map { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
-.tonal-map-title { font-family: var(--mono); font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+.tonal-map-title { font-family: var(--mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
 .tonal-words { display: flex; flex-wrap: wrap; gap: 5px; line-height: 1; }
-.tword { font-family: system-ui, sans-serif; font-size: 12px; padding: 3px 9px; border-radius: 20px; cursor: default; transition: all .15s; position: relative; }
+.tword { font-family: system-ui, sans-serif; font-size: 14px; padding: 3px 9px; border-radius: 20px; cursor: default; transition: all .15s; position: relative; }
 .tword.high  { background:rgba(200,169,110,.15); color:var(--gold); border:1px solid rgba(200,169,110,.25); }
 .tword.mid   { background:rgba(91,191,181,.1);   color:var(--teal); border:1px solid rgba(91,191,181,.2); }
 .tword.low   { background:rgba(107,164,212,.1);  color:var(--blue); border:1px solid rgba(107,164,212,.2); }
 .tword.pause { background:rgba(212,107,107,.1);  color:var(--red);  border:1px solid rgba(212,107,107,.2); font-style:italic; }
-.hesitation-line { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-size: 12px; color: var(--muted2); font-family: system-ui, sans-serif; }
+.hesitation-line { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-size: 14px; color: var(--muted2); font-family: system-ui, sans-serif; }
 .hesi-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-#stmt-analysis { font-size: 12px; color: var(--muted2); font-family: system-ui, sans-serif; line-height: 1.65; }
+#stmt-analysis { font-size: 14px; color: var(--muted2); font-family: system-ui, sans-serif; line-height: 1.65; }
 
 /* ═══════════════════════════════════════════════════
    BUTTONS
@@ -395,23 +395,23 @@ textarea::placeholder { color: var(--muted); }
 /* ═══════════════════════════════════════════════════
    ERROR
 ═══════════════════════════════════════════════════ */
-.error-box { background: rgba(212,107,107,.07); border: 1px solid rgba(212,107,107,.2); border-radius: var(--r-sm); padding: 14px 16px; color: var(--red); font-size: 13px; margin-bottom: 18px; font-family: system-ui, sans-serif; line-height: 1.6; }
+.error-box { background: rgba(212,107,107,.07); border: 1px solid rgba(212,107,107,.2); border-radius: var(--r-sm); padding: 14px 16px; color: var(--red); font-size: 15px; margin-bottom: 18px; font-family: system-ui, sans-serif; line-height: 1.6; }
 
 /* ═══════════════════════════════════════════════════
    RESULTS
 ═══════════════════════════════════════════════════ */
-.results-header { text-align: center; font-size: 13px; font-style: italic; color: var(--muted); margin-bottom: 22px; font-family: var(--serif); }
+.results-header { text-align: center; font-size: 15px; font-style: italic; color: var(--muted); margin-bottom: 22px; font-family: var(--serif); }
 .pattern-grid { display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 14px; }
 /* Metaprogram Profile */
 .mp-section { margin: 14px 0; border: 1px solid rgba(200,169,110,.15); border-radius: 12px; overflow: hidden; }
 .mp-header { padding: 11px 16px 9px; background: rgba(200,169,110,.04); border-bottom: 1px solid rgba(200,169,110,.08); }
-.mp-eyebrow { font-family: var(--mono); font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); opacity: .7; margin-bottom: 2px; }
-.mp-subtitle { font-size: 12px; font-style: italic; color: var(--muted2); opacity: .7; }
+.mp-eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); opacity: .85; margin-bottom: 2px; }
+.mp-subtitle { font-size: 14px; font-style: italic; color: var(--muted2); opacity: .85; }
 .mp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 12px 14px 14px; }
 .mp-axis { padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,.06); background: rgba(255,255,255,.02); }
-.mp-axis-name { font-family: var(--mono); font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+.mp-axis-name { font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
 .mp-pole-row { display: flex; justify-content: space-between; align-items: center; gap: 6px; margin-bottom: 4px; }
-.mp-pole { font-size: 12px; color: var(--muted2); }
+.mp-pole { font-size: 14px; color: var(--muted2); }
 .mp-pole.active { font-weight: 600; }
 .mp-pole.active.toward { color: #6bbc8a; }
 .mp-pole.active.away   { color: #e89a6b; }
@@ -425,23 +425,23 @@ textarea::placeholder { color: var(--muted); }
 .mp-pole.active.mis    { color: #e89a6b; }
 .mp-bar-track { height: 3px; background: rgba(255,255,255,.07); border-radius: 2px; overflow: hidden; margin-top: 6px; }
 .mp-bar-fill  { height: 100%; border-radius: 2px; transition: width .8s ease; }
-.mp-insight { padding: 10px 14px 12px; border-top: 1px solid rgba(255,255,255,.05); font-size: 13px; font-style: italic; color: var(--muted2); line-height: 1.65; }
+.mp-insight { padding: 10px 14px 12px; border-top: 1px solid rgba(255,255,255,.05); font-size: 15px; font-style: italic; color: var(--muted2); line-height: 1.65; }
 @media (max-width: 599px) { .mp-grid { grid-template-columns: 1fr; } }
 .pattern-item { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px; }
-.pattern-label { font-family: var(--mono); font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
-.pattern-value { font-size: 13px; color: var(--text); line-height: 1.5; font-family: system-ui, sans-serif; margin-bottom: 8px; }
-.badge { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 10px; font-family: var(--mono); }
+.pattern-label { font-family: var(--mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+.pattern-value { font-size: 15px; color: var(--text); line-height: 1.5; font-family: system-ui, sans-serif; margin-bottom: 8px; }
+.badge { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 14px; font-family: var(--mono); }
 .voice-sig-card { background: linear-gradient(135deg,rgba(155,143,224,.07),rgba(91,191,181,.04)); border: 1px solid rgba(155,143,224,.18); border-radius: var(--r); padding: 20px 16px; margin-bottom: 14px; }
-.voice-sig-tag { font-family: var(--mono); font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--purple); margin-bottom: 12px; display: block; }
+.voice-sig-tag { font-family: var(--mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--purple); margin-bottom: 12px; display: block; }
 .voice-sig-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
 .vsig-item { text-align: center; padding: 12px 6px; background: rgba(0,0,0,.25); border-radius: 10px; border: 1px solid rgba(255,255,255,.05); }
 .vsig-val { font-family: var(--mono); font-size: 18px; font-weight: 500; line-height: 1; margin-bottom: 4px; }
 .vsig-lbl { font-family: var(--mono); font-size: 8px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
-.vsig-interp { font-size: 13px; color: var(--muted2); line-height: 1.75; font-family: system-ui, sans-serif; }
-.enneagram-box { background: linear-gradient(135deg,rgba(155,143,224,.07),rgba(91,191,181,.04)); border: 1px solid rgba(155,143,224,.15); border-radius: 12px; padding: 16px; margin-bottom: 14px; font-size: 13px; line-height: 1.75; color: var(--muted2); font-family: system-ui, sans-serif; }
-.enneagram-label { font-family: var(--mono); font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--purple); display: block; margin-bottom: 8px; }
-.intervention-item { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; color: var(--muted2); line-height: 1.65; padding: 12px 14px; background: var(--surface2); border-radius: 8px; border: 1px solid var(--border); margin-bottom: 8px; font-family: system-ui, sans-serif; }
-.intervention-icon { color: var(--gold); flex-shrink: 0; opacity: .7; }
+.vsig-interp { font-size: 15px; color: var(--muted2); line-height: 1.75; font-family: system-ui, sans-serif; }
+.enneagram-box { background: linear-gradient(135deg,rgba(155,143,224,.07),rgba(91,191,181,.04)); border: 1px solid rgba(155,143,224,.15); border-radius: 12px; padding: 16px; margin-bottom: 14px; font-size: 15px; line-height: 1.75; color: var(--muted2); font-family: system-ui, sans-serif; }
+.enneagram-label { font-family: var(--mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--purple); display: block; margin-bottom: 8px; }
+.intervention-item { display: flex; gap: 10px; align-items: flex-start; font-size: 15px; color: var(--muted2); line-height: 1.65; padding: 12px 14px; background: var(--surface2); border-radius: 8px; border: 1px solid var(--border); margin-bottom: 8px; font-family: system-ui, sans-serif; }
+.intervention-icon { color: var(--gold); flex-shrink: 0; opacity: .85; }
 .quote-box { text-align: center; padding: 22px 16px; font-style: italic; font-size: 17px; color: var(--muted2); line-height: 1.8; border-top: 1px solid var(--border); margin-top: 4px; font-family: var(--serif); }
 
 /* ═══════════════════════════════════════════════════
@@ -450,7 +450,7 @@ textarea::placeholder { color: var(--muted); }
 .mask-card { background: var(--surface); border: 1px solid rgba(232,168,74,.2); border-radius: var(--r); padding: 20px 16px; margin-bottom: 14px; position: relative; overflow: hidden; }
 .mask-card::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% -20%,rgba(232,168,74,.06) 0%,transparent 65%); pointer-events: none; }
 .mask-card > * { position: relative; z-index: 1; }
-.mask-tag { font-family: var(--mono); font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--amber); margin-bottom: 16px; display: block; }
+.mask-tag { font-family: var(--mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--amber); margin-bottom: 16px; display: block; }
 .mask-top { display: flex; flex-direction: column; align-items: center; gap: 16px; margin-bottom: 18px; }
 .mask-dial-wrap { flex-shrink: 0; text-align: center; }
 .mask-dial { width: 90px; height: 90px; position: relative; display: inline-block; }
@@ -458,22 +458,22 @@ textarea::placeholder { color: var(--muted); }
 .mask-dial-score { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
 .mask-dial-num { font-family: var(--mono); font-size: 26px; font-weight: 500; line-height: 1; }
 .mask-dial-label { font-family: var(--mono); font-size: 8px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-top: 3px; }
-.mask-dial-verdict { font-family: var(--mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; margin-top: 8px; padding: 4px 12px; border-radius: 20px; display: inline-block; }
+.mask-dial-verdict { font-family: var(--mono); font-size: 14px; letter-spacing: .08em; text-transform: uppercase; margin-top: 8px; padding: 4px 12px; border-radius: 20px; display: inline-block; }
 .mask-radar-wrap { width: 100%; display: flex; align-items: center; justify-content: center; }
 .mask-radar-wrap svg { width: 150px; height: 130px; overflow: visible; }
 .mask-axes { display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 18px; }
 .mask-axis-item { padding: 13px 14px; background: var(--surface2); border-radius: 10px; border: 1px solid var(--border); }
 .mask-axis-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
-.mask-axis-name { font-family: var(--mono); font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted2); }
-.mask-axis-val { font-family: var(--mono); font-size: 13px; font-weight: 500; }
+.mask-axis-name { font-family: var(--mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted2); }
+.mask-axis-val { font-family: var(--mono); font-size: 15px; font-weight: 500; }
 .mask-axis-bar { height: 3px; background: var(--border2); border-radius: 2px; overflow: hidden; margin-bottom: 8px; }
 .mask-axis-fill { height: 100%; border-radius: 2px; transition: width .8s cubic-bezier(.4,0,.2,1); }
 .mask-axis-reading { font-size: 14px; color: var(--muted2); line-height: 1.65; font-family: system-ui, sans-serif; }
-.mask-synthesis { padding: 14px 16px; background: linear-gradient(135deg,rgba(232,168,74,.07),rgba(155,143,224,.04)); border-radius: 10px; border: 1px solid rgba(232,168,74,.15); font-size: 13px; line-height: 1.8; color: var(--text); font-family: var(--serif); font-style: italic; }
+.mask-synthesis { padding: 14px 16px; background: linear-gradient(135deg,rgba(232,168,74,.07),rgba(155,143,224,.04)); border-radius: 10px; border: 1px solid rgba(232,168,74,.15); font-size: 15px; line-height: 1.8; color: var(--text); font-family: var(--serif); font-style: italic; }
 .mask-evidence { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
-.mask-evidence-title { font-family: var(--mono); font-size: 9px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
-.mask-quote { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 8px; font-size: 12px; font-family: system-ui, sans-serif; color: var(--muted2); line-height: 1.6; }
-.mask-quote-icon { flex-shrink: 0; opacity: .5; font-size: 11px; padding-top: 2px; }
+.mask-evidence-title { font-family: var(--mono); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+.mask-quote { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 8px; font-size: 14px; font-family: system-ui, sans-serif; color: var(--muted2); line-height: 1.6; }
+.mask-quote-icon { flex-shrink: 0; opacity: .75; font-size: 11px; padding-top: 2px; }
 
 /* ═══════════════════════════════════════════════════
    GRAVITY SCORE
@@ -481,8 +481,8 @@ textarea::placeholder { color: var(--muted); }
 .gravity-card { background: var(--surface); border: 1px solid rgba(155,143,224,.2); border-radius: var(--r); padding: 20px 16px; margin-bottom: 14px; position: relative; overflow: hidden; }
 .gravity-card::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at 50% 110%,rgba(155,143,224,.07) 0%,transparent 60%); pointer-events:none; }
 .gravity-card > * { position: relative; z-index: 1; }
-.gravity-tag { font-family: var(--mono); font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--purple); margin-bottom: 4px; display: block; }
-.gravity-subtitle { font-size: 12px; color: var(--muted); font-family: system-ui, sans-serif; margin-bottom: 18px; line-height: 1.55; }
+.gravity-tag { font-family: var(--mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--purple); margin-bottom: 4px; display: block; }
+.gravity-subtitle { font-size: 14px; color: var(--muted); font-family: system-ui, sans-serif; margin-bottom: 18px; line-height: 1.55; }
 .gravity-orbital { display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
 .gravity-orbital-svg { width: 180px; height: 180px; flex-shrink: 0; }
 .gravity-domains { display: flex; flex-direction: column; gap: 12px; margin-bottom: 18px; }
@@ -490,29 +490,29 @@ textarea::placeholder { color: var(--muted); }
 .gravity-domain.heaviest { border-color: rgba(155,143,224,.3); }
 .gravity-domain-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
 .gravity-domain-left { display: flex; align-items: center; gap: 8px; }
-.gravity-domain-icon { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0; }
-.gravity-domain-name { font-family: var(--mono); font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted2); }
+.gravity-domain-icon { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+.gravity-domain-name { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted2); }
 .gravity-domain-score { font-family: var(--mono); font-size: 18px; font-weight: 500; line-height: 1; }
 .gravity-bar-wrap { height: 4px; background: var(--border2); border-radius: 3px; overflow: hidden; margin-bottom: 8px; }
 .gravity-bar-fill { height: 100%; border-radius: 3px; transition: width 1s cubic-bezier(.4,0,.2,1); }
 .gravity-domain-signals { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 6px; }
 .gravity-signal { font-family: var(--mono); font-size: 8px; letter-spacing: .08em; text-transform: uppercase; padding: 2px 7px; border-radius: 10px; border: 1px solid var(--border2); color: var(--muted); }
 .gravity-signal.active { color: inherit; }
-.gravity-domain-read { font-size: 13px; line-height: 1.65; color: var(--muted2); font-family: system-ui, sans-serif; }
+.gravity-domain-read { font-size: 15px; line-height: 1.65; color: var(--muted2); font-family: system-ui, sans-serif; }
 .gravity-balance { background: linear-gradient(135deg,rgba(155,143,224,.08),rgba(200,169,110,.04)); border: 1px solid rgba(155,143,224,.15); border-radius: 12px; padding: 14px 16px; margin-bottom: 14px; }
 .gravity-balance-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
-.gravity-balance-title { font-family: var(--mono); font-size: 9px; letter-spacing: .18em; text-transform: uppercase; color: var(--purple); opacity: .8; }
-.gravity-balance-index { font-family: var(--mono); font-size: 13px; font-weight: 500; }
-.gravity-balance-read { font-size: 13px; color: var(--muted2); line-height: 1.7; font-family: system-ui, sans-serif; }
+.gravity-balance-title { font-family: var(--mono); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--purple); opacity: .8; }
+.gravity-balance-index { font-family: var(--mono); font-size: 15px; font-weight: 500; }
+.gravity-balance-read { font-size: 15px; color: var(--muted2); line-height: 1.7; font-family: system-ui, sans-serif; }
 .gravity-trigger { display: flex; align-items: center; gap: 12px; background: var(--surface2); border-radius: 10px; border: 1px solid var(--border); padding: 13px 14px; margin-bottom: 14px; }
 .gravity-trigger-dial { flex-shrink: 0; width: 48px; height: 48px; position: relative; }
 .gravity-trigger-dial svg { width: 100%; height: 100%; }
 .gravity-trigger-pct { position: absolute; inset:0; display:flex; align-items:center; justify-content:center; font-family: var(--mono); font-size: 11px; font-weight:500; color: var(--teal); }
 .gravity-trigger-text { flex: 1; }
-.gravity-trigger-label { font-family: var(--mono); font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
-.gravity-trigger-read { font-size: 13px; color: var(--muted2); line-height: 1.55; font-family: system-ui, sans-serif; }
-.gravity-framework { display: flex; align-items: flex-start; gap: 10px; padding: 13px 14px; border-radius: 10px; background: rgba(200,169,110,.05); border: 1px solid rgba(200,169,110,.15); font-size: 13px; color: var(--muted); line-height: 1.65; font-family: system-ui, sans-serif; }
-.gravity-framework-icon { color: var(--gold); flex-shrink: 0; opacity: .7; margin-top: 1px; }
+.gravity-trigger-label { font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+.gravity-trigger-read { font-size: 15px; color: var(--muted2); line-height: 1.55; font-family: system-ui, sans-serif; }
+.gravity-framework { display: flex; align-items: flex-start; gap: 10px; padding: 13px 14px; border-radius: 10px; background: rgba(200,169,110,.05); border: 1px solid rgba(200,169,110,.15); font-size: 15px; color: var(--muted); line-height: 1.65; font-family: system-ui, sans-serif; }
+.gravity-framework-icon { color: var(--gold); flex-shrink: 0; opacity: .85; margin-top: 1px; }
 
 /* ═══════════════════════════════════════════════════
    VOICE LETTER
@@ -521,19 +521,19 @@ textarea::placeholder { color: var(--muted); }
 .letter-trigger-btn { display: block; width: 100%; padding: 20px 18px; background: linear-gradient(135deg,rgba(155,143,224,.12),rgba(91,191,181,.06)); border: 1px solid rgba(155,143,224,.3); border-radius: 14px; color: var(--purple); font-family: var(--serif); font-size: 17px; font-style: italic; font-weight: 300; cursor: pointer; transition: all .25s; line-height: 1.4; min-height: 72px; }
 .letter-trigger-btn:hover:not(:disabled) { background: linear-gradient(135deg,rgba(155,143,224,.18),rgba(91,191,181,.1)); }
 .letter-trigger-btn:disabled { opacity: .4; cursor: not-allowed; }
-.letter-trigger-sub { display: block; font-family: var(--mono); font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin-top: 5px; font-style: normal; }
+.letter-trigger-sub { display: block; font-family: var(--mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin-top: 5px; font-style: normal; }
 .letter-card { display: none; background: var(--surface); border: 1px solid rgba(155,143,224,.22); border-radius: var(--r); overflow: hidden; animation: letterReveal .6s ease forwards; }
 @keyframes letterReveal { from{opacity:0;transform:translateY(12px);} to{opacity:1;transform:translateY(0);} }
 .letter-card.open { display: block; }
 .letter-header { padding: 18px 20px 14px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: linear-gradient(135deg,rgba(155,143,224,.06),transparent); }
-.letter-from { font-family: var(--mono); font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--purple); opacity: .8; }
-.letter-date { font-family: var(--mono); font-size: 9px; color: var(--muted); letter-spacing: .08em; }
+.letter-from { font-family: var(--mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--purple); opacity: .8; }
+.letter-date { font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: .08em; }
 .letter-body { padding: 24px 20px 20px; position: relative; }
 .letter-body::before { content: ''; position: absolute; left: 14px; top: 24px; bottom: 20px; width: 2px; background: linear-gradient(to bottom,rgba(155,143,224,.3),rgba(200,169,110,.15),transparent); border-radius: 2px; }
 body.ar .letter-body::before { left: auto; right: 14px; }
 .letter-movement { margin-bottom: 24px; }
 .letter-movement:last-child { margin-bottom: 0; }
-.letter-movement-tag { font-family: var(--mono); font-size: 8px; letter-spacing: .22em; text-transform: uppercase; margin-bottom: 8px; display: block; opacity: .6; }
+.letter-movement-tag { font-family: var(--mono); font-size: 8px; letter-spacing: .22em; text-transform: uppercase; margin-bottom: 8px; display: block; opacity: .8; }
 .letter-movement-tag.mirror { color: var(--teal); }
 .letter-movement-tag.gap    { color: var(--gold); }
 .letter-movement-tag.invite { color: var(--purple); }
@@ -542,7 +542,7 @@ body.ar .letter-body::before { left: auto; right: 14px; }
 .letter-sig { padding: 16px 20px 20px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
 .letter-sig-text { font-family: var(--serif); font-style: italic; font-size: 14px; color: var(--muted2); }
 .letter-actions { display: flex; gap: 8px; }
-.letter-action-btn { padding: 9px 16px; border-radius: 20px; font-family: var(--mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; cursor: pointer; transition: all .2s; background: none; min-height: 44px; }
+.letter-action-btn { padding: 9px 16px; border-radius: 20px; font-family: var(--mono); font-size: 14px; letter-spacing: .1em; text-transform: uppercase; cursor: pointer; transition: all .2s; background: none; min-height: 44px; }
 .letter-action-btn.copy { border: 1px solid var(--border2); color: var(--muted2); }
 .letter-action-btn.copy:hover { border-color: var(--gold); color: var(--gold); }
 .letter-action-btn.copy.copied { border-color: var(--teal); color: var(--teal); }
@@ -560,41 +560,41 @@ body.ar .letter-body::before { left: auto; right: 14px; }
 .comp-voices { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 14px; }
 /* ── Reply Analysis mode toggle ── */
 .comp-mode-toggle { display: flex; gap: 0; margin-bottom: 16px; border: 1px solid rgba(255,255,255,.08); border-radius: 6px; overflow: hidden; }
-.comp-mode-btn { flex: 1; padding: 10px 8px; background: none; border: none; cursor: pointer; font-family: var(--mono); font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); transition: all .2s; text-align: center; }
+.comp-mode-btn { flex: 1; padding: 10px 8px; background: none; border: none; cursor: pointer; font-family: var(--mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); transition: all .2s; text-align: center; }
 .comp-mode-btn.active { background: rgba(200,169,110,.1); color: var(--gold); }
-.comp-mode-btn-sub { display: block; font-size: 9px; letter-spacing: .06em; text-transform: none; opacity: .6; margin-top: 2px; font-family: system-ui, sans-serif; }
+.comp-mode-btn-sub { display: block; font-size: 11px; letter-spacing: .06em; text-transform: none; opacity: .8; margin-top: 2px; font-family: system-ui, sans-serif; }
 /* ── Upload card ── */
 .upload-card { border: 1px dashed rgba(155,143,224,.3); border-radius: 10px; padding: 18px 16px; background: rgba(155,143,224,.03); text-align: center; cursor: pointer; transition: all .22s; }
 .upload-card:hover { border-color: rgba(155,143,224,.6); background: rgba(155,143,224,.06); }
 .upload-card.has-file { border-style: solid; border-color: rgba(155,143,224,.4); background: rgba(155,143,224,.06); }
 .upload-icon { font-size: 22px; margin-bottom: 6px; }
-.upload-lbl { font-family: var(--mono); font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--purple); margin-bottom: 4px; }
-.upload-hint { font-size: 12px; color: var(--muted2); font-style: italic; }
-.upload-filename { font-size: 12px; color: var(--purple); margin-top: 6px; opacity: .8; }
+.upload-lbl { font-family: var(--mono); font-size: 14px; letter-spacing: .18em; text-transform: uppercase; color: var(--purple); margin-bottom: 4px; }
+.upload-hint { font-size: 14px; color: var(--muted2); font-style: italic; }
+.upload-filename { font-size: 14px; color: var(--purple); margin-top: 6px; opacity: .8; }
 .upload-acoustic { margin-top: 10px; padding: 8px 12px; background: rgba(155,143,224,.08); border-radius: 6px; }
 .upload-acoustic-row { display: flex; justify-content: space-between; gap: 8px; }
 .upload-acoustic-item { text-align: center; flex: 1; }
-.upload-acoustic-val { font-family: var(--mono); font-size: 13px; color: var(--purple); }
+.upload-acoustic-val { font-family: var(--mono); font-size: 15px; color: var(--purple); }
 .upload-acoustic-lbl { font-family: var(--mono); font-size: 8px; text-transform: uppercase; color: var(--muted); letter-spacing: .1em; }
 /* ── Rapport Intelligence section ── */
 .rapport-card { margin-top: 14px; border: 1px solid rgba(91,191,181,.22); border-radius: 12px; overflow: hidden; background: linear-gradient(135deg, rgba(91,191,181,.05), transparent); }
 .rapport-header { padding: 12px 16px 10px; border-bottom: 1px solid rgba(91,191,181,.12); }
-.rapport-eyebrow { font-family: var(--mono); font-size: 9px; letter-spacing: .22em; text-transform: uppercase; color: var(--teal); opacity: .8; margin-bottom: 3px; }
+.rapport-eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--teal); opacity: .8; margin-bottom: 3px; }
 .rapport-title { font-size: 15px; font-weight: 300; color: var(--text); }
 .rapport-body { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 12px; }
 .rapport-axis { padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,.06); background: rgba(255,255,255,.02); }
-.rapport-axis-name { font-family: var(--mono); font-size: 9px; letter-spacing: .16em; text-transform: uppercase; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; }
+.rapport-axis-name { font-family: var(--mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; }
 .rapport-axis-gap { font-family: var(--mono); font-size: 11px; padding: 2px 8px; border-radius: 10px; }
 .rapport-bar-row { display: flex; gap: 8px; align-items: center; margin-bottom: 6px; }
 .rapport-bar-a { height: 4px; background: var(--purple); border-radius: 2px; transition: width .8s ease; }
 .rapport-bar-b { height: 4px; background: var(--teal); border-radius: 2px; transition: width .8s ease; }
 .rapport-bar-track { flex: 1; height: 4px; background: rgba(255,255,255,.06); border-radius: 2px; overflow: hidden; display: flex; gap: 1px; }
-.rapport-tip { font-size: 13px; color: var(--muted2); line-height: 1.6; font-style: italic; }
+.rapport-tip { font-size: 15px; color: var(--muted2); line-height: 1.6; font-style: italic; }
 .rapport-action { margin-top: 12px; padding: 12px 14px; border-left: 2px solid var(--teal); background: rgba(91,191,181,.04); border-radius: 0 8px 8px 0; font-size: 14px; line-height: 1.7; color: var(--text); }
 .comp-voice-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 18px 16px; }
 .comp-voice-card.voice-a { border-color: rgba(155,143,224,.2); }
 .comp-voice-card.voice-b { border-color: rgba(91,191,181,.2); }
-.comp-voice-label { font-family: var(--mono); font-size: 9px; letter-spacing: .2em; text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+.comp-voice-label { font-family: var(--mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
 .comp-voice-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
 .comp-name-input { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: system-ui, sans-serif; font-size: 14px; padding: 10px 14px; outline: none; margin-bottom: 10px; transition: border-color .2s; min-height: 44px; -webkit-appearance: none; }
 .comp-name-input:focus { border-color: var(--gold-dim); }
@@ -606,21 +606,21 @@ body.ar .letter-body::before { left: auto; right: 14px; }
 .comp-rec-btn:hover { background: rgba(200,169,110,.14); border-color: var(--gold); }
 .comp-rec-btn.recording { background: rgba(212,107,107,.13); border-color: var(--red); }
 .comp-rec-btn svg { width: 18px; height: 18px; }
-.comp-voice-status { font-family: var(--mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.comp-voice-status { font-family: var(--mono); font-size: 14px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
 .comp-results { display: none; }
-.comp-results-header { text-align: center; font-size: 13px; font-style: italic; color: var(--muted); margin-bottom: 22px; font-family: var(--serif); }
+.comp-results-header { text-align: center; font-size: 15px; font-style: italic; color: var(--muted); margin-bottom: 22px; font-family: var(--serif); }
 .comp-profiles { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 14px; }
 .comp-profile-card { border-radius: var(--r); padding: 18px 16px; background: var(--surface); }
 .comp-profile-card.ca { border: 1px solid rgba(155,143,224,.22); }
 .comp-profile-card.cb { border: 1px solid rgba(91,191,181,.22); }
-.comp-profile-who { font-family: var(--mono); font-size: 9px; letter-spacing: .18em; text-transform: uppercase; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+.comp-profile-who { font-family: var(--mono); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
 .comp-profile-title { font-size: 17px; font-weight: 300; font-style: italic; margin-bottom: 8px; line-height: 1.2; }
 .comp-profile-summary { font-size: 14px; line-height: 1.7; color: var(--muted2); font-family: system-ui, sans-serif; }
 .comp-orbitals { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 20px 16px; margin-bottom: 14px; }
-.comp-orbitals-title { font-family: var(--mono); font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--purple); margin-bottom: 16px; }
+.comp-orbitals-title { font-family: var(--mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--purple); margin-bottom: 16px; }
 .comp-orbital-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: center; margin-bottom: 14px; }
 .comp-orbital-item { text-align: center; }
-.comp-orbital-name { font-family: var(--mono); font-size: 9px; letter-spacing: .14em; text-transform: uppercase; margin-bottom: 8px; }
+.comp-orbital-name { font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; margin-bottom: 8px; }
 .comp-orbit-scores { display: flex; justify-content: center; gap: 12px; margin-top: 8px; flex-wrap: wrap; }
 .comp-orbit-score { text-align: center; }
 .comp-orbit-score-val { font-family: var(--mono); font-size: 14px; font-weight: 500; }
@@ -631,35 +631,35 @@ body.ar .letter-body::before { left: auto; right: 14px; }
 .comp-adaptor      { border: 1px solid rgba(200,169,110,.18); }
 .comp-hotspots     { border: 1px solid rgba(212,107,107,.18); }
 .comp-synthesis-card { background: linear-gradient(135deg,rgba(91,191,181,.07),rgba(155,143,224,.04)); border: 1px solid rgba(91,191,181,.18); }
-.comp-conv-title     { font-family: var(--mono); font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--teal); margin-bottom: 14px; }
-.comp-power-title    { font-family: var(--mono); font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--amber); margin-bottom: 14px; }
-.comp-adaptor-title  { font-family: var(--mono); font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; }
-.comp-hotspots-title { font-family: var(--mono); font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--red); margin-bottom: 12px; }
-.comp-synthesis-title{ font-family: var(--mono); font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--teal); margin-bottom: 10px; }
+.comp-conv-title     { font-family: var(--mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--teal); margin-bottom: 14px; }
+.comp-power-title    { font-family: var(--mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--amber); margin-bottom: 14px; }
+.comp-adaptor-title  { font-family: var(--mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; }
+.comp-hotspots-title { font-family: var(--mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--red); margin-bottom: 12px; }
+.comp-synthesis-title{ font-family: var(--mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--teal); margin-bottom: 10px; }
 .comp-conv-bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-.comp-conv-label { font-family: var(--mono); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted2); width: 90px; flex-shrink: 0; }
+.comp-conv-label { font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted2); width: 90px; flex-shrink: 0; }
 .comp-conv-track { flex: 1; height: 6px; background: var(--border2); border-radius: 3px; overflow: hidden; }
 .comp-conv-fill { height: 100%; border-radius: 3px; transition: width 1s cubic-bezier(.4,0,.2,1); }
-.comp-conv-pct { font-family: var(--mono); font-size: 10px; color: var(--muted2); width: 32px; flex-shrink: 0; text-align: end; }
+.comp-conv-pct { font-family: var(--mono); font-size: 14px; color: var(--muted2); width: 32px; flex-shrink: 0; text-align: end; }
 .comp-conv-read { font-size: 14px; line-height: 1.7; color: var(--muted2); font-family: system-ui, sans-serif; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
 .comp-power-spectrum { position: relative; height: 30px; margin-bottom: 12px; }
 .comp-power-track { position: absolute; top:50%; left:0; right:0; height:3px; background: linear-gradient(to right,var(--purple),rgba(255,255,255,.1),var(--teal)); transform: translateY(-50%); border-radius: 2px; }
 .comp-power-indicator { position: absolute; top:50%; width:12px; height:12px; border-radius:50%; background:var(--amber); border:2px solid var(--bg); transform:translate(-50%,-50%); transition:left 1s cubic-bezier(.4,0,.2,1) .3s; box-shadow:0 0 12px rgba(232,168,74,.4); }
 .comp-power-labels { display:flex; justify-content:space-between; font-family:var(--mono); font-size:8px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }
 .comp-power-axes { display: grid; grid-template-columns: 1fr; gap: 6px; margin-bottom: 12px; }
-.comp-power-axis { padding: 10px 12px; background: var(--surface2); border-radius: 8px; border: 1px solid var(--border); font-size: 12px; line-height: 1.5; }
+.comp-power-axis { padding: 10px 12px; background: var(--surface2); border-radius: 8px; border: 1px solid var(--border); font-size: 14px; line-height: 1.5; }
 .comp-power-axis-lbl { font-family: var(--mono); font-size: 8px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
 .comp-power-read { font-size: 14px; line-height: 1.7; color: var(--muted2); font-family: system-ui, sans-serif; }
 .comp-adaptor-visual { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; flex-wrap: wrap; }
 .comp-adaptor-name { font-size: 17px; font-weight: 300; font-style: italic; color: var(--text); flex: 1; min-width: 70px; text-align: center; }
-.comp-adaptor-arrow { font-family: var(--mono); font-size: 20px; color: var(--gold); flex-shrink: 0; opacity: .7; }
-.comp-adaptor-cost { font-family: var(--mono); font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); text-align: center; display: block; margin-top: 3px; }
+.comp-adaptor-arrow { font-family: var(--mono); font-size: 20px; color: var(--gold); flex-shrink: 0; opacity: .85; }
+.comp-adaptor-cost { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); text-align: center; display: block; margin-top: 3px; }
 .comp-adaptor-read { font-size: 14px; line-height: 1.7; color: var(--muted2); font-family: system-ui, sans-serif; }
 .comp-hotspot-item { display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; background: var(--surface2); border-radius: 8px; border: 1px solid var(--border); margin-bottom: 8px; }
-.comp-hotspot-icon { color: var(--red); flex-shrink: 0; opacity: .6; font-size: 11px; margin-top: 2px; }
+.comp-hotspot-icon { color: var(--red); flex-shrink: 0; opacity: .8; font-size: 11px; margin-top: 2px; }
 .comp-hotspot-body { flex: 1; }
-.comp-hotspot-topic { font-family: var(--mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--red); opacity: .8; margin-bottom: 4px; }
-.comp-hotspot-desc { font-size: 13px; line-height: 1.6; color: var(--muted2); font-family: system-ui, sans-serif; }
+.comp-hotspot-topic { font-family: var(--mono); font-size: 14px; letter-spacing: .08em; text-transform: uppercase; color: var(--red); opacity: .8; margin-bottom: 4px; }
+.comp-hotspot-desc { font-size: 15px; line-height: 1.6; color: var(--muted2); font-family: system-ui, sans-serif; }
 .comp-synthesis-text { font-family: var(--serif); font-style: italic; font-size: 16px; line-height: 1.85; color: var(--text); }
 
 /* ═══════════════════════════════════════════════════
@@ -671,7 +671,7 @@ body.ar .letter-body::before { left: auto; right: 14px; }
 .journal-stat-val { font-family: var(--mono); font-size: 20px; font-weight: 500; line-height: 1; margin-bottom: 4px; }
 .journal-stat-lbl { font-family: var(--mono); font-size: 8px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
 .journal-checkin { background: var(--surface); border: 1px solid rgba(155,143,224,.2); border-radius: var(--r); padding: 20px 16px; margin-bottom: 14px; }
-.journal-checkin-tag { font-family: var(--mono); font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--purple); margin-bottom: 12px; display: block; }
+.journal-checkin-tag { font-family: var(--mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--purple); margin-bottom: 12px; display: block; }
 .journal-record-row { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
 .journal-rec-btn { width: 58px; height: 58px; border-radius: 50%; flex-shrink: 0; background: rgba(155,143,224,.1); border: 1px solid rgba(155,143,224,.25); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .22s; position: relative; }
 .journal-rec-btn:hover { background: rgba(155,143,224,.18); }
@@ -679,9 +679,9 @@ body.ar .letter-body::before { left: auto; right: 14px; }
 .journal-rec-btn.recording::before { content:''; position:absolute; inset:-7px; border-radius:50%; border:2px solid var(--red); opacity:0; animation:pulse-ring 1.5s ease infinite; }
 .journal-rec-btn svg { width: 22px; height: 22px; }
 .journal-rec-info { flex: 1; }
-.journal-rec-status { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 3px; }
+.journal-rec-status { font-family: var(--mono); font-size: 14px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 3px; }
 .journal-rec-timer { font-family: var(--mono); font-size: 20px; color: var(--purple); line-height: 1; }
-.journal-rec-transcript { font-size: 12px; color: var(--muted2); line-height: 1.5; font-family: system-ui, sans-serif; margin-top: 4px; max-height: 36px; overflow: hidden; }
+.journal-rec-transcript { font-size: 14px; color: var(--muted2); line-height: 1.5; font-family: system-ui, sans-serif; margin-top: 4px; max-height: 36px; overflow: hidden; }
 .journal-progress-wrap { height: 2px; background: var(--border2); border-radius: 1px; overflow: hidden; margin-bottom: 12px; display: none; }
 .journal-progress-fill { height: 100%; border-radius: 1px; background: var(--purple); transition: width .5s linear; }
 .journal-note-input { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: system-ui, sans-serif; font-size: 14px; padding: 11px 14px; outline: none; margin-bottom: 12px; transition: border-color .2s; min-height: 44px; -webkit-appearance: none; }
@@ -691,28 +691,28 @@ body.ar .letter-body::before { left: auto; right: 14px; }
 .btn-journal-save:hover:not(:disabled) { background: rgba(155,143,224,.2); }
 .btn-journal-save:disabled { opacity: .4; cursor: not-allowed; }
 .journal-insight { background: linear-gradient(135deg,rgba(155,143,224,.07),rgba(200,169,110,.04)); border: 1px solid rgba(155,143,224,.15); border-radius: 10px; padding: 14px 16px; margin-top: 12px; display: none; }
-.journal-insight-tag { font-family: var(--mono); font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: var(--purple); opacity: .7; margin-bottom: 8px; display: block; }
+.journal-insight-tag { font-family: var(--mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--purple); opacity: .85; margin-bottom: 8px; display: block; }
 .journal-insight-text { font-family: var(--serif); font-style: italic; font-size: 16px; line-height: 1.8; color: var(--text); }
 .journal-charts { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 20px 16px; margin-bottom: 14px; }
-.journal-chart-title { font-family: var(--mono); font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 5px; }
+.journal-chart-title { font-family: var(--mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 5px; }
 .journal-chart-sub { font-size: 11px; color: var(--muted); font-family: system-ui, sans-serif; margin-bottom: 14px; line-height: 1.5; }
 .chart-wrap { width: 100%; overflow: hidden; margin-bottom: 20px; }
 .chart-canvas { width: 100%; display: block; }
 .chart-legend { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 6px; }
-.chart-legend-item { display: flex; align-items: center; gap: 5px; font-family: var(--mono); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.chart-legend-item { display: flex; align-items: center; gap: 5px; font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 .chart-legend-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
 .journal-history { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 20px 16px; margin-bottom: 14px; }
-.journal-history-title { font-family: var(--mono); font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted2); margin-bottom: 12px; }
+.journal-history-title { font-family: var(--mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted2); margin-bottom: 12px; }
 .journal-entry-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); cursor: pointer; min-height: 44px; }
 .journal-entry-row:last-child { border-bottom: none; }
-.journal-entry-date { font-family: var(--mono); font-size: 10px; color: var(--muted); flex-shrink: 0; width: 70px; letter-spacing: .04em; }
+.journal-entry-date { font-family: var(--mono); font-size: 14px; color: var(--muted); flex-shrink: 0; width: 70px; letter-spacing: .04em; }
 .journal-entry-scores { display: flex; gap: 5px; flex-shrink: 0; }
-.journal-entry-score { font-family: var(--mono); font-size: 10px; padding: 2px 6px; border-radius: 8px; font-weight: 500; }
-.journal-entry-insight { font-size: 12px; color: var(--muted2); font-family: var(--serif); font-style: italic; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.journal-entry-score { font-family: var(--mono); font-size: 14px; padding: 2px 6px; border-radius: 8px; font-weight: 500; }
+.journal-entry-insight { font-size: 14px; color: var(--muted2); font-family: var(--serif); font-style: italic; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .journal-weekly { background: linear-gradient(135deg,rgba(200,169,110,.07),rgba(155,143,224,.04)); border: 1px solid rgba(200,169,110,.2); border-radius: var(--r); padding: 20px 16px; margin-bottom: 14px; }
-.journal-weekly-tag { font-family: var(--mono); font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; display: block; }
+.journal-weekly-tag { font-family: var(--mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; display: block; }
 .journal-weekly-text { font-family: var(--serif); font-style: italic; font-size: 17px; line-height: 1.9; color: var(--text); }
-.btn-weekly-portrait { display: block; width: 100%; padding: 13px; background: none; border: 1px solid rgba(200,169,110,.25); border-radius: 8px; color: var(--gold); font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; cursor: pointer; margin-top: 14px; transition: all .2s; min-height: 44px; }
+.btn-weekly-portrait { display: block; width: 100%; padding: 13px; background: none; border: 1px solid rgba(200,169,110,.25); border-radius: 8px; color: var(--gold); font-family: var(--mono); font-size: 14px; letter-spacing: .14em; text-transform: uppercase; cursor: pointer; margin-top: 14px; transition: all .2s; min-height: 44px; }
 .btn-weekly-portrait:hover:not(:disabled) { background: var(--gold-glow); }
 .btn-weekly-portrait:disabled { opacity: .4; cursor: not-allowed; }
 .journal-empty { text-align: center; padding: 48px 16px; color: var(--muted); font-family: var(--serif); font-style: italic; font-size: 15px; line-height: 1.8; }
@@ -724,26 +724,26 @@ body.ar .letter-body::before { left: auto; right: 14px; }
 .modal-overlay { position: fixed; inset: 0; z-index: 999; background: rgba(8,8,12,.96); backdrop-filter: blur(16px); display: none; align-items: center; justify-content: center; padding: 20px; }
 .modal-overlay.open { display: flex; }
 .modal-box { background: var(--surface); border: 1px solid rgba(200,169,110,.2); border-radius: var(--r); padding: 24px 20px; max-width: 420px; width: 100%; }
-.modal-tag { font-family: var(--mono); font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); opacity: .7; margin-bottom: 8px; }
+.modal-tag { font-family: var(--mono); font-size: 14px; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); opacity: .85; margin-bottom: 8px; }
 .modal-title { font-size: 20px; font-weight: 300; font-style: italic; margin-bottom: 8px; }
-.modal-body { font-size: 13px; color: var(--muted2); line-height: 1.65; margin-bottom: 18px; font-family: system-ui, sans-serif; }
-.modal-steps { background: #0c0c14; border-radius: 10px; padding: 13px 15px; margin-bottom: 14px; border: 1px solid var(--border); font-size: 13px; color: var(--muted2); line-height: 1.8; font-family: system-ui, sans-serif; }
-.modal-steps-label { font-family: var(--mono); font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; display: block; }
-.modal-input { width: 100%; background: #0c0c14; border: 1px solid var(--border2); border-radius: 8px; color: var(--text); font-family: var(--mono); font-size: 13px; padding: 13px 14px; outline: none; margin-bottom: 6px; transition: border-color .2s; min-height: 48px; -webkit-appearance: none; }
+.modal-body { font-size: 15px; color: var(--muted2); line-height: 1.65; margin-bottom: 18px; font-family: system-ui, sans-serif; }
+.modal-steps { background: #0c0c14; border-radius: 10px; padding: 13px 15px; margin-bottom: 14px; border: 1px solid var(--border); font-size: 15px; color: var(--muted2); line-height: 1.8; font-family: system-ui, sans-serif; }
+.modal-steps-label { font-family: var(--mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; display: block; }
+.modal-input { width: 100%; background: #0c0c14; border: 1px solid var(--border2); border-radius: 8px; color: var(--text); font-family: var(--mono); font-size: 15px; padding: 13px 14px; outline: none; margin-bottom: 6px; transition: border-color .2s; min-height: 48px; -webkit-appearance: none; }
 .modal-input:focus { border-color: var(--gold-dim); }
-.modal-error { font-size: 12px; color: var(--red); min-height: 18px; margin-bottom: 12px; font-family: var(--mono); }
+.modal-error { font-size: 14px; color: var(--red); min-height: 18px; margin-bottom: 12px; font-family: var(--mono); }
 .modal-actions { display: flex; flex-direction: column; gap: 8px; }
-.btn-save-key { padding: 14px; background: var(--gold); border: none; border-radius: 8px; color: #08080c; font-family: var(--mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; cursor: pointer; font-weight: 500; transition: all .2s; min-height: 48px; }
+.btn-save-key { padding: 14px; background: var(--gold); border: none; border-radius: 8px; color: #08080c; font-family: var(--mono); font-size: 14px; letter-spacing: .1em; text-transform: uppercase; cursor: pointer; font-weight: 500; transition: all .2s; min-height: 48px; }
 .btn-save-key:hover { opacity: .9; }
-.btn-cancel-key { padding: 13px 18px; background: transparent; border: 1px solid var(--border2); border-radius: 8px; color: var(--muted); font-family: var(--mono); font-size: 12px; cursor: pointer; min-height: 48px; }
+.btn-cancel-key { padding: 13px 18px; background: transparent; border: 1px solid var(--border2); border-radius: 8px; color: var(--muted); font-family: var(--mono); font-size: 14px; cursor: pointer; min-height: 48px; }
 .modal-note { font-size: 11px; color: #3a3830; margin-top: 12px; text-align: center; line-height: 1.6; font-family: system-ui, sans-serif; }
 
 /* ═══════════════════════════════════════════════════
    BOTTOM BAR
 ═══════════════════════════════════════════════════ */
 .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; z-index: 100; background: rgba(8,8,12,.97); border-top: 1px solid var(--border); padding: 10px 16px; padding-bottom: calc(10px + env(safe-area-inset-bottom)); display: flex; align-items: center; justify-content: center; gap: 10px; backdrop-filter: blur(16px); }
-#footer-label { font-family: var(--mono); font-size: 9px; color: var(--muted); letter-spacing: .1em; }
-.voice-mode-badge { font-family: var(--mono); font-size: 9px; letter-spacing: .12em; text-transform: uppercase; padding: 4px 10px; border-radius: 12px; background: rgba(155,143,224,.12); color: var(--purple); border: 1px solid rgba(155,143,224,.2); }
+#footer-label { font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: .1em; }
+.voice-mode-badge { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; padding: 4px 10px; border-radius: 12px; background: rgba(155,143,224,.12); color: var(--purple); border: 1px solid rgba(155,143,224,.2); }
 
 /* ═══════════════════════════════════════════════════
    TABLET + DESKTOP SCALE-UP
@@ -752,7 +752,7 @@ body.ar .letter-body::before { left: auto; right: 14px; }
   body { padding: 40px 24px 120px; font-size: 16px; }
   h1 { font-size: clamp(38px, 6vw, 60px); }
   .subtitle { font-size: 15px; }
-  .mode-btn { font-size: 10px; letter-spacing: .12em; padding: 10px 8px; }
+  .mode-btn { font-size: 14px; letter-spacing: .12em; padding: 10px 8px; }
   .mode-btn-sub { font-size: 8px; letter-spacing: .08em; }
   .card, .card-gold, .input-card, .mask-card, .gravity-card,
   .voice-sig-card, .journal-checkin, .journal-charts,
@@ -815,12 +815,12 @@ body.ar .letter-body::before { left: auto; right: 14px; }
       flex-shrink: 0; transition: all .2s; font-size: 14px;
     }
     .tts-play-btn:hover { background: rgba(155,143,224,.25); }
-    .tts-play-btn.loading { opacity: .5; cursor: wait; }
+    .tts-play-btn.loading { opacity: .75; cursor: wait; }
     .tts-progress-wrap {
       flex: 1; display: flex; flex-direction: column; gap: 4px;
     }
     .tts-label {
-      font-family: var(--mono); font-size: 9px; letter-spacing: .14em;
+      font-family: var(--mono); font-size: 11px; letter-spacing: .14em;
       text-transform: uppercase; color: var(--purple); opacity: .8;
     }
     .tts-progress-bar {
@@ -832,11 +832,11 @@ body.ar .letter-body::before { left: auto; right: 14px; }
       border-radius: 2px; transition: width .1s linear;
     }
     .tts-time {
-      font-family: var(--mono); font-size: 9px;
+      font-family: var(--mono); font-size: 11px;
       color: var(--muted); letter-spacing: .08em;
     }
     .tts-speed-btn {
-      font-family: var(--mono); font-size: 9px; letter-spacing: .1em;
+      font-family: var(--mono); font-size: 11px; letter-spacing: .1em;
       padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,.1);
       background: none; color: var(--muted); cursor: pointer;
       transition: all .15s; flex-shrink: 0;
@@ -846,7 +846,7 @@ body.ar .letter-body::before { left: auto; right: 14px; }
       width: 100%; padding: 11px; margin-top: 10px;
       background: rgba(155,143,224,.08);
       border: 1px solid rgba(155,143,224,.25); border-radius: 10px;
-      color: var(--purple); font-family: var(--mono); font-size: 9px;
+      color: var(--purple); font-family: var(--mono); font-size: 11px;
       letter-spacing: .14em; text-transform: uppercase; cursor: pointer;
       transition: all .2s; display: flex; align-items: center;
       justify-content: center; gap: 8px;
@@ -865,12 +865,12 @@ body.ar .letter-body::before { left: auto; right: 14px; }
   <div style="display:flex;align-items:center;gap:10px;flex:1;">
     <span style="font-size:16px;">✦</span>
     <div>
-      <span style="font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);">Demo Mode</span>
+      <span style="font-family:var(--mono);font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);">Demo Mode</span>
       <span style="font-size:13px;color:var(--muted2);margin-left:10px;">A shared key is active — try everything freely.</span>
     </div>
-    <a href="https://console.anthropic.com" target="_blank" style="font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);text-decoration:none;border:1px solid rgba(200,169,110,.35);padding:4px 10px;border-radius:4px;white-space:nowrap;">Get your own key →</a>
+    <a href="https://console.anthropic.com" target="_blank" style="font-family:var(--mono);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);text-decoration:none;border:1px solid rgba(200,169,110,.35);padding:4px 10px;border-radius:4px;white-space:nowrap;">Get your own key →</a>
   </div>
-  <button onclick="document.getElementById('demo-banner').style.display='none'" style="background:none;border:none;color:var(--gold);font-size:18px;cursor:pointer;padding:0 4px;opacity:.6;flex-shrink:0;">×</button>
+  <button onclick="document.getElementById('demo-banner').style.display='none'" style="background:none;border:none;color:var(--gold);font-size:18px;cursor:pointer;padding:0 4px;opacity:.8;flex-shrink:0;">×</button>
 </div>
 
 <div class="modal-overlay" id="api-modal">
@@ -898,7 +898,7 @@ body.ar .letter-body::before { left: auto; right: 14px; }
 
   <!-- Top bar -->
   <div class="top-bar">
-    <button class="top-btn" id="back-btn" onclick="goHome()" style="display:none;opacity:.7;">← <span id="back-btn-label">Home</span></button>
+    <button class="top-btn" id="back-btn" onclick="goHome()" style="display:none;opacity:.85;">← <span id="back-btn-label">Home</span></button>
     <button class="top-btn" onclick="toggleGuide()" id="guide-btn">Guide</button>
     <button class="top-btn" id="lang-btn" onclick="toggleLang()">عربي</button>
   </div>
@@ -906,30 +906,30 @@ body.ar .letter-body::before { left: auto; right: 14px; }
   <!-- ══ GUIDE PANEL (collapsible) ══ -->
   <div id="guide-panel" style="display:none;margin-bottom:20px;">
     <div style="background:var(--surface);border:1px solid rgba(200,169,110,.2);border-radius:14px;padding:22px 20px;">
-      <div id="guide-heading" style="font-family:var(--mono);font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);opacity:.7;margin-bottom:16px;">How to Use Verbal Mirror</div>
+      <div id="guide-heading" style="font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);opacity:.85;margin-bottom:16px;">How to Use Verbal Mirror</div>
 
       <!-- What it does -->
       <p id="guide-intro" style="font-size:15px;line-height:1.8;color:var(--muted2);margin-bottom:18px;font-family:system-ui,sans-serif;">Verbal Mirror combines <strong style="color:var(--text);">real voice acoustics</strong> (pitch, pace, hesitation) with <strong style="color:var(--text);">verbal pattern analysis</strong> to produce a complete psychological portrait — including a Gravity Score, Mask Score™, and a Voice Letter written in your own linguistic fingerprint.</p>
 
       <!-- Three modes -->
-      <div id="guide-modes-label" style="font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);opacity:.65;margin-bottom:10px;">Three Modes</div>
+      <div id="guide-modes-label" style="font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);opacity:.65;margin-bottom:10px;">Three Modes</div>
       <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px;">
         <div style="padding:12px 14px;border-radius:10px;border:1px solid rgba(200,169,110,.15);background:rgba(200,169,110,.04);">
-          <div style="font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:5px;">Solo Analysis</div>
+          <div style="font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:5px;">Solo Analysis</div>
           <div style="font-size:14px;color:var(--muted2);line-height:1.6;font-family:system-ui,sans-serif;">Speak or type 3–10 sentences about any situation. The app measures your acoustic profile and returns a full personality portrait: Gravity Score (Thinking / Emotional / Behavioral-Physical), Mask Score™, and a Voice Letter.</div>
         </div>
         <div style="padding:12px 14px;border-radius:10px;border:1px solid rgba(91,191,181,.15);background:rgba(91,191,181,.04);">
-          <div style="font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin-bottom:5px;">Conversation Comparison</div>
+          <div style="font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin-bottom:5px;">Conversation Comparison</div>
           <div style="font-size:14px;color:var(--muted2);line-height:1.6;font-family:system-ui,sans-serif;">Enter samples from two people. See side-by-side orbital maps, who is adapting to whom, power dynamics, and where dissonance hotspots live in the conversation.</div>
         </div>
         <div style="padding:12px 14px;border-radius:10px;border:1px solid rgba(155,143,224,.15);background:rgba(155,143,224,.04);">
-          <div style="font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--purple);margin-bottom:5px;">Voice Journal</div>
+          <div style="font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--purple);margin-bottom:5px;">Voice Journal</div>
           <div style="font-size:14px;color:var(--muted2);line-height:1.6;font-family:system-ui,sans-serif;">60-second daily voice check-in. Tracks your Gravity Score drift over time, pitch trends, and streak. After 7 entries, generates a Weekly Portrait of how your inner state has been moving.</div>
         </div>
       </div>
 
       <!-- Key outputs explained -->
-      <div style="font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);opacity:.65;margin-bottom:10px;">Key Outputs</div>
+      <div style="font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);opacity:.65;margin-bottom:10px;">Key Outputs</div>
       <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:18px;">
         <div style="font-size:14px;color:var(--muted2);line-height:1.65;font-family:system-ui,sans-serif;padding:10px 13px;background:rgba(155,143,224,.05);border-radius:8px;border-left:2px solid var(--purple);">
           <strong style="color:var(--text);">Gravity Score</strong> — Three domains scored 0–10: Thinking (cognitive mass), Emotional (feeling patterns), Behavioral/Physical (action habits). Based on Shadi Obeidat's Antigravity framework.
@@ -943,7 +943,7 @@ body.ar .letter-body::before { left: auto; right: 14px; }
       </div>
 
       <!-- Tips -->
-      <div style="font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);opacity:.65;margin-bottom:10px;">Tips for Best Results</div>
+      <div style="font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);opacity:.65;margin-bottom:10px;">Tips for Best Results</div>
       <div style="font-size:14px;color:var(--muted2);line-height:1.8;font-family:system-ui,sans-serif;">
         → <strong style="color:var(--text);">Record voice</strong> rather than typing — acoustics are only measured from live recording<br>
         → Speak naturally for <strong style="color:var(--text);">30–90 seconds</strong> about a real situation, not a prepared speech<br>
@@ -955,16 +955,16 @@ body.ar .letter-body::before { left: auto; right: 14px; }
 
   <!-- ══ ORBIT iOS BRIDGE BANNER ══ -->
   <div id="orbit-bridge-banner" style="display:none;background:linear-gradient(135deg,rgba(155,143,224,.12),rgba(200,169,110,.06));border:1px solid rgba(155,143,224,.3);border-radius:14px;padding:14px 18px;margin-bottom:18px;position:relative;">
-    <div style="font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--purple);opacity:.75;margin-bottom:6px;" id="orbit-banner-label">From ORBIT iOS</div>
+    <div style="font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--purple);opacity:.75;margin-bottom:6px;" id="orbit-banner-label">From ORBIT iOS</div>
     <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
       <div style="font-size:13px;color:var(--muted2);font-family:system-ui,sans-serif;line-height:1.55;flex:1;" id="orbit-banner-body">—</div>
-      <span style="font-family:var(--mono);font-size:9px;color:var(--muted);padding:2px 8px;border-radius:10px;background:rgba(155,143,224,.1);border:1px solid rgba(155,143,224,.2);" id="orbit-banner-tag">context loaded</span>
+      <span style="font-family:var(--mono);font-size:11px;color:var(--muted);padding:2px 8px;border-radius:10px;background:rgba(155,143,224,.1);border:1px solid rgba(155,143,224,.2);" id="orbit-banner-tag">context loaded</span>
     </div>
     <div style="font-size:12px;color:var(--muted);font-family:system-ui,sans-serif;margin-top:6px;" id="orbit-banner-sub">This persona profile is being used to inform your Gravity Score analysis.</div>
     <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;" id="orbit-banner-actions">
-      <button onclick="history.back()" style="padding:7px 14px;border-radius:8px;border:1px solid rgba(155,143,224,.3);background:none;color:var(--purple);font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s;min-height:36px;" onmouseover="this.style.background='rgba(155,143,224,.1)'" onmouseout="this.style.background='none'">← Back to ORBIT</button>
+      <button onclick="history.back()" style="padding:7px 14px;border-radius:8px;border:1px solid rgba(155,143,224,.3);background:none;color:var(--purple);font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s;min-height:36px;" onmouseover="this.style.background='rgba(155,143,224,.1)'" onmouseout="this.style.background='none'">← Back to ORBIT</button>
     </div>
-    <button onclick="document.getElementById('orbit-bridge-banner').style.display='none'" style="position:absolute;top:10px;right:12px;background:none;border:none;color:var(--muted);cursor:pointer;font-size:15px;line-height:1;opacity:.6;">✕</button>
+    <button onclick="document.getElementById('orbit-bridge-banner').style.display='none'" style="position:absolute;top:10px;right:12px;background:none;border:none;color:var(--muted);cursor:pointer;font-size:15px;line-height:1;opacity:.8;">✕</button>
   </div>
 
 
@@ -975,8 +975,8 @@ body.ar .letter-body::before { left: auto; right: 14px; }
     animation: fadeUp .6s ease both;
   ">
     <div style="
-      font-family: var(--mono); font-size: 9px; letter-spacing: .22em;
-      text-transform: uppercase; color: var(--gold); opacity: .7;
+      font-family: var(--mono); font-size: 11px; letter-spacing: .22em;
+      text-transform: uppercase; color: var(--gold); opacity: .85;
       margin-bottom: 20px;
     ">Acoustic · Verbal · Psychological Intelligence</div>
 
@@ -1000,7 +1000,7 @@ body.ar .letter-body::before { left: auto; right: 14px; }
         transition: all .2s; width:100%;
       " onmouseover="this.style.background='rgba(200,169,110,.12)'"
          onmouseout="this.style.background='rgba(200,169,110,.06)'">
-        <div style="font-family:var(--mono);font-size:9px;letter-spacing:.15em;
+        <div style="font-family:var(--mono);font-size:11px;letter-spacing:.15em;
           text-transform:uppercase;color:var(--gold);margin-bottom:6px;" id="wc-solo-tag">Solo Analysis</div>
         <div style="font-size:14px;color:var(--muted2);line-height:1.6;
           font-family:system-ui,sans-serif;" id="wc-solo-desc">Speak 3–10 sentences. Get your Gravity Score, Mask Score™, and a Voice Letter.</div>
@@ -1012,7 +1012,7 @@ body.ar .letter-body::before { left: auto; right: 14px; }
         transition: all .2s; width:100%;
       " onmouseover="this.style.background='rgba(91,191,181,.1)'"
          onmouseout="this.style.background='rgba(91,191,181,.05)'">
-        <div style="font-family:var(--mono);font-size:9px;letter-spacing:.15em;
+        <div style="font-family:var(--mono);font-size:11px;letter-spacing:.15em;
           text-transform:uppercase;color:var(--teal);margin-bottom:6px;" id="wc-comp-tag">Conversation Comparison</div>
         <div style="font-size:14px;color:var(--muted2);line-height:1.6;
           font-family:system-ui,sans-serif;" id="wc-comp-desc">Compare two voices. See power dynamics, rapport score, and who adapts to whom.</div>
@@ -1024,7 +1024,7 @@ body.ar .letter-body::before { left: auto; right: 14px; }
         transition: all .2s; width:100%;
       " onmouseover="this.style.background='rgba(155,143,224,.1)'"
          onmouseout="this.style.background='rgba(155,143,224,.05)'">
-        <div style="font-family:var(--mono);font-size:9px;letter-spacing:.15em;
+        <div style="font-family:var(--mono);font-size:11px;letter-spacing:.15em;
           text-transform:uppercase;color:var(--purple);margin-bottom:6px;" id="wc-jour-tag">Voice Journal</div>
         <div style="font-size:14px;color:var(--muted2);line-height:1.6;
           font-family:system-ui,sans-serif;" id="wc-jour-desc">60-second daily check-in. Track how your inner state drifts over time.</div>
@@ -1036,7 +1036,7 @@ body.ar .letter-body::before { left: auto; right: 14px; }
         transition: all .2s; width:100%;
       " onmouseover="this.style.background='rgba(91,191,181,.09)'"
          onmouseout="this.style.background='rgba(91,191,181,.04)'">
-        <div style="font-family:var(--mono);font-size:9px;letter-spacing:.15em;
+        <div style="font-family:var(--mono);font-size:11px;letter-spacing:.15em;
           text-transform:uppercase;color:var(--teal);margin-bottom:6px;" id="wc-sim-tag">Conversation Simulator</div>
         <div style="font-size:14px;color:var(--muted2);line-height:1.6;
           font-family:system-ui,sans-serif;" id="wc-sim-desc">Practice high-stakes conversations. Get scored and coached in real time.</div>
@@ -1044,7 +1044,7 @@ body.ar .letter-body::before { left: auto; right: 14px; }
     </div>
 
     <p style="font-size:12px;color:var(--muted);font-family:var(--mono);
-      letter-spacing:.08em;opacity:.6;" id="welcome-footer">
+      letter-spacing:.08em;opacity:.8;" id="welcome-footer">
       No account needed · Works in Arabic & English
     </p>
   </div>
@@ -1182,6 +1182,39 @@ body.ar .letter-body::before { left: auto; right: 14px; }
   <div id="comparison-panel">
 
     <!-- Mode toggle: Two Live Voices vs Reply Analysis -->
+    <!-- Comparison How-To Banner -->
+    <div id="comp-howto" style="background:rgba(91,191,181,.05);border:1px solid rgba(91,191,181,.2);
+      border-radius:12px;padding:16px 18px;margin-bottom:14px;">
+      <div style="font-family:var(--mono);font-size:11px;letter-spacing:.16em;
+        text-transform:uppercase;color:var(--teal);margin-bottom:10px;" id="comp-howto-title">
+        How Comparison Mode Works
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <span style="color:var(--teal);font-weight:700;flex-shrink:0;margin-top:1px;">1.</span>
+          <span style="font-size:15px;color:var(--muted2);line-height:1.5;" id="comp-step1">
+            <strong style="color:var(--text);">Two Live Voices</strong> — Record Voice A (you or Person 1), then record Voice B (Person 2). Use in the same room, or record separately and paste transcripts.
+          </span>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <span style="color:var(--teal);font-weight:700;flex-shrink:0;margin-top:1px;">2.</span>
+          <span style="font-size:15px;color:var(--muted2);line-height:1.5;" id="comp-step2">
+            <strong style="color:var(--text);">Reply Analysis</strong> — Upload an audio file of the other person (a meeting recording, a voice note, a call), then record your own reply voice below it.
+          </span>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <span style="color:var(--teal);font-weight:700;flex-shrink:0;margin-top:1px;">✓</span>
+          <span style="font-size:15px;color:var(--muted2);line-height:1.5;" id="comp-step3">
+            The app maps <strong style="color:var(--text);">Rapport Score</strong>, acoustic gap, who adapts to whom, power dynamics, and dissonance hotspots.
+          </span>
+        </div>
+      </div>
+      <button onclick="document.getElementById('comp-howto').style.display='none'"
+        style="margin-top:10px;background:none;border:none;color:var(--muted);
+        font-family:var(--mono);font-size:11px;cursor:pointer;letter-spacing:.1em;"
+        id="comp-howto-dismiss">Got it — hide this</button>
+    </div>
+
     <div class="comp-mode-toggle">
       <button class="comp-mode-btn active" id="comp-mode-live" onclick="setCompMode('live')">
         Two Live Voices
@@ -1194,8 +1227,9 @@ body.ar .letter-body::before { left: auto; right: 14px; }
     </div>
 
     <!-- Hidden file input for audio upload -->
-    <input type="file" id="upload-audio-input" accept="audio/*" style="display:none"
-           onchange="handleAudioUpload(event)">
+    <input type="file" id="upload-audio-input"
+           accept="audio/*,audio/mp3,audio/mpeg,audio/mp4,audio/m4a,audio/wav,audio/ogg,audio/webm,video/mp4"
+           style="display:none" onchange="handleAudioUpload(event)">
 
     <!-- Reply Analysis upload panel (hidden by default) -->
     <div id="reply-upload-panel" style="display:none;margin-bottom:12px;">
@@ -1214,7 +1248,7 @@ body.ar .letter-body::before { left: auto; right: 14px; }
         </div>
         <div id="upload-acoustic-display" style="display:none;">
           <div class="upload-acoustic">
-            <div style="font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--purple);opacity:.7;margin-bottom:8px;">Acoustic Profile Extracted</div>
+            <div style="font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--purple);opacity:.85;margin-bottom:8px;">Acoustic Profile Extracted</div>
             <div class="upload-acoustic-row">
               <div class="upload-acoustic-item">
                 <div class="upload-acoustic-val" id="up-pitch">—</div>
@@ -1235,7 +1269,7 @@ body.ar .letter-body::before { left: auto; right: 14px; }
             </div>
           </div>
           <div style="margin-top:8px;">
-            <div style="font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">What they said (optional — type key points)</div>
+            <div style="font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">What they said (optional — type key points)</div>
             <textarea class="comp-textarea" id="upload-text"
               placeholder="Type what they said, or leave blank for acoustic-only comparison…"
               oninput="onCompInput('a')" style="min-height:70px;"></textarea>
@@ -1540,7 +1574,7 @@ body.ar .letter-body::before { left: auto; right: 14px; }
       padding: 20px 20px; margin-bottom: 20px; position: relative;
       animation: fadeUp .5s ease both;
     ">
-      <div style="font-family:var(--mono);font-size:9px;letter-spacing:.2em;
+      <div style="font-family:var(--mono);font-size:11px;letter-spacing:.2em;
         text-transform:uppercase;color:var(--gold);opacity:.8;margin-bottom:14px;"
         id="sum-eyebrow">◆ Your Portrait At a Glance</div>
 
@@ -1548,9 +1582,9 @@ body.ar .letter-body::before { left: auto; right: 14px; }
         <!-- Gravity -->
         <div style="text-align:center;padding:12px 8px;background:rgba(155,143,224,.08);
           border-radius:10px;border:1px solid rgba(155,143,224,.2);">
-          <div id="sum-gravity-val" style="font-family:var(--mono);font-size:22px;
+          <div id="sum-gravity-val" style="font-family:var(--mono);font-size:26px;
             font-weight:700;color:var(--purple);margin-bottom:4px;">—</div>
-          <div style="font-size:10px;color:var(--muted);letter-spacing:.1em;
+          <div style="font-size:12px;color:var(--muted);letter-spacing:.1em;
             text-transform:uppercase;font-family:var(--mono);" id="sum-gravity-lbl">Gravity</div>
           <div id="sum-gravity-interp" style="font-size:11px;color:var(--muted2);
             margin-top:4px;line-height:1.4;"></div>
@@ -1558,9 +1592,9 @@ body.ar .letter-body::before { left: auto; right: 14px; }
         <!-- Mask -->
         <div style="text-align:center;padding:12px 8px;background:rgba(232,168,74,.07);
           border-radius:10px;border:1px solid rgba(232,168,74,.2);">
-          <div id="sum-mask-val" style="font-family:var(--mono);font-size:22px;
+          <div id="sum-mask-val" style="font-family:var(--mono);font-size:26px;
             font-weight:700;color:var(--amber);margin-bottom:4px;">—</div>
-          <div style="font-size:10px;color:var(--muted);letter-spacing:.1em;
+          <div style="font-size:12px;color:var(--muted);letter-spacing:.1em;
             text-transform:uppercase;font-family:var(--mono);" id="sum-mask-lbl">Mask Score</div>
           <div id="sum-mask-interp" style="font-size:11px;color:var(--muted2);
             margin-top:4px;line-height:1.4;"></div>
@@ -1570,7 +1604,7 @@ body.ar .letter-body::before { left: auto; right: 14px; }
           border-radius:10px;border:1px solid rgba(91,191,181,.2);">
           <div id="sum-pattern-val" style="font-family:var(--mono);font-size:11px;
             font-weight:700;color:var(--teal);margin-bottom:4px;line-height:1.3;">—</div>
-          <div style="font-size:10px;color:var(--muted);letter-spacing:.1em;
+          <div style="font-size:12px;color:var(--muted);letter-spacing:.1em;
             text-transform:uppercase;font-family:var(--mono);" id="sum-pattern-lbl">Dominant Pattern</div>
         </div>
       </div>
@@ -1578,7 +1612,7 @@ body.ar .letter-body::before { left: auto; right: 14px; }
       <!-- One-line invitation -->
       <div style="background:rgba(255,255,255,.03);border-radius:10px;
         padding:12px 14px;border-left:3px solid var(--gold);">
-        <div style="font-size:10px;color:var(--gold);letter-spacing:.12em;
+        <div style="font-size:12px;color:var(--gold);letter-spacing:.12em;
           text-transform:uppercase;font-family:var(--mono);margin-bottom:6px;"
           id="sum-inv-label">Your Invitation</div>
         <div id="sum-invitation" style="font-size:14px;color:var(--muted2);
@@ -1743,7 +1777,7 @@ body.ar .letter-body::before { left: auto; right: 14px; }
         <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px;">
           <div style="width:6px;height:6px;border-radius:50%;background:var(--teal);
             box-shadow:0 0 8px var(--teal);"></div>
-          <span id="nre-eyebrow" style="font-family:var(--mono);font-size:9px;
+          <span id="nre-eyebrow" style="font-family:var(--mono);font-size:11px;
             letter-spacing:.22em;text-transform:uppercase;color:var(--teal);opacity:.9;">
             ◈ Optimal Next Response
           </span>
@@ -1756,9 +1790,9 @@ body.ar .letter-body::before { left: auto; right: 14px; }
         <div id="nre-opening-wrap" style="background:rgba(91,191,181,.06);
           border:1px solid rgba(91,191,181,.2);border-radius:12px;
           padding:14px 16px;margin-bottom:14px;">
-          <div id="nre-opening-label" style="font-family:var(--mono);font-size:9px;
+          <div id="nre-opening-label" style="font-family:var(--mono);font-size:11px;
             letter-spacing:.18em;text-transform:uppercase;color:var(--teal);
-            opacity:.7;margin-bottom:8px;">Suggested Opening</div>
+            opacity:.85;margin-bottom:8px;">Suggested Opening</div>
           <div id="nre-opening" style="font-size:15px;color:var(--text);
             line-height:1.7;font-style:italic;font-family:var(--serif);"></div>
         </div>
@@ -1767,17 +1801,17 @@ body.ar .letter-body::before { left: auto; right: 14px; }
         <div id="nre-avoid-wrap" style="background:rgba(212,107,107,.05);
           border:1px solid rgba(212,107,107,.18);border-radius:12px;
           padding:14px 16px;margin-bottom:14px;">
-          <div id="nre-avoid-label" style="font-family:var(--mono);font-size:9px;
+          <div id="nre-avoid-label" style="font-family:var(--mono);font-size:11px;
             letter-spacing:.18em;text-transform:uppercase;color:var(--red);
-            opacity:.7;margin-bottom:8px;">Avoid</div>
+            opacity:.85;margin-bottom:8px;">Avoid</div>
           <div id="nre-avoid" style="font-size:13px;color:var(--muted2);line-height:1.7;"></div>
         </div>
 
         <!-- Expected effect -->
         <div style="border-top:1px solid rgba(255,255,255,.06);padding-top:14px;">
-          <div id="nre-effect-label" style="font-family:var(--mono);font-size:9px;
+          <div id="nre-effect-label" style="font-family:var(--mono);font-size:11px;
             letter-spacing:.18em;text-transform:uppercase;color:var(--muted);
-            opacity:.7;margin-bottom:8px;">Expected Effect</div>
+            opacity:.85;margin-bottom:8px;">Expected Effect</div>
           <div id="nre-effect" style="font-size:13px;color:var(--muted2);line-height:1.7;font-style:italic;"></div>
         </div>
 
@@ -1808,7 +1842,7 @@ body.ar .letter-body::before { left: auto; right: 14px; }
         <div style="margin-top:10px;display:flex;justify-content:flex-end;">
           <button onclick="copyNRE()" style="
             background:rgba(91,191,181,.1);border:1px solid rgba(91,191,181,.25);
-            color:var(--teal);font-family:var(--mono);font-size:9px;letter-spacing:.12em;
+            color:var(--teal);font-family:var(--mono);font-size:11px;letter-spacing:.12em;
             text-transform:uppercase;padding:8px 16px;border-radius:8px;cursor:pointer;">
             <span id="nre-copy-btn">Copy Strategy</span>
           </button>
@@ -1998,7 +2032,7 @@ body.ar .letter-body::before { left: auto; right: 14px; }
 
 <!-- Bottom bar -->
 <div class="bottom-bar">
-  <span id="footer-label" style="font-family:var(--font-mono);font-size:9px;color:var(--muted);letter-spacing:.12em;">VERBAL MIRROR · ANTIGRAVITY · ACOUSTIC INTELLIGENCE</span>
+  <span id="footer-label" style="font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:.12em;">VERBAL MIRROR · ANTIGRAVITY · ACOUSTIC INTELLIGENCE</span>
   <span class="voice-mode-badge" id="voice-mode-badge" style="display:none;">◈ Acoustic Mode</span>
 </div>
 
@@ -2245,6 +2279,24 @@ function applyLang() {
 
   updateWelcomeLanguage();
   updateTTSLanguage();
+
+  // Comparison how-to translations
+  const compHowtoTitle = document.getElementById('comp-howto-title');
+  const compStep1 = document.getElementById('comp-step1');
+  const compStep2 = document.getElementById('comp-step2');
+  const compStep3 = document.getElementById('comp-step3');
+  const compDismiss = document.getElementById('comp-howto-dismiss');
+  if (compHowtoTitle) compHowtoTitle.textContent = isAr ? 'كيف يعمل وضع المقارنة' : 'How Comparison Mode Works';
+  if (compStep1) compStep1.innerHTML = isAr
+    ? '<strong style="color:var(--text);">صوتان مباشران</strong> — سجّل الصوت أ (أنت أو الشخص الأول)، ثم الصوت ب (الشخص الثاني). يمكن التسجيل في نفس الغرفة أو لصق النصوص.'
+    : '<strong style="color:var(--text);">Two Live Voices</strong> — Record Voice A (you or Person 1), then Voice B (Person 2). Record in the same room, or paste transcripts.';
+  if (compStep2) compStep2.innerHTML = isAr
+    ? '<strong style="color:var(--text);">تحليل الرد</strong> — ارفع ملف صوتي للطرف الآخر (تسجيل اجتماع، رسالة صوتية)، ثم سجّل ردّك.'
+    : '<strong style="color:var(--text);">Reply Analysis</strong> — Upload an audio file of the other person, then record your own reply voice below.';
+  if (compStep3) compStep3.innerHTML = isAr
+    ? 'يرسم التطبيق <strong style="color:var(--text);">درجة التناغم</strong>، والفجوة الصوتية، ومن يتكيّف مع الآخر، وديناميكيات القوة.'
+    : 'The app maps <strong style="color:var(--text);">Rapport Score</strong>, acoustic gap, who adapts to whom, power dynamics, and dissonance hotspots.';
+  if (compDismiss) compDismiss.textContent = isAr ? 'فهمت — أخفِ هذا' : 'Got it — hide this';
 
 }
 
@@ -3452,7 +3504,7 @@ function renderMaskScore(m) {
   document.getElementById('mask-evidence-items').innerHTML = allEvidence.map(({e, type}) =>
     `<div class="mask-quote">
       <span class="mask-quote-icon">◈</span>
-      <span><strong style="color:${verdictColor};opacity:.7;font-size:10px;font-family:var(--font-mono);letter-spacing:.1em;text-transform:uppercase;">${typeLabel[type]}</strong> — ${e}</span>
+      <span><strong style="color:${verdictColor};opacity:.85;font-size:12px;font-family:var(--font-mono);letter-spacing:.1em;text-transform:uppercase;">${typeLabel[type]}</strong> — ${e}</span>
     </div>`
   ).join('');
 
@@ -3460,7 +3512,7 @@ function renderMaskScore(m) {
   if (m.coachingNote) {
     const coachEl = document.createElement('div');
     coachEl.style.cssText = 'margin-top:14px;padding-top:14px;border-top:1px solid var(--border);font-size:12px;color:var(--muted2);font-family:system-ui,sans-serif;font-style:italic;line-height:1.6;';
-    coachEl.innerHTML = `<span style="font-family:var(--font-mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px;">${lang==='ar'?'السؤال التدريبي الأقوى':'Coaching Entry'}</span>${m.coachingNote}`;
+    coachEl.innerHTML = `<span style="font-family:var(--font-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px;">${lang==='ar'?'السؤال التدريبي الأقوى':'Coaching Entry'}</span>${m.coachingNote}`;
     document.getElementById('mask-card').appendChild(coachEl);
   }
 
@@ -4363,7 +4415,7 @@ function renderComparison(r, nameA, nameB, acA, acB) {
       </div>
       <span class="comp-conv-pct">${pct}%</span>
     </div>
-    <div style="font-size:11px;color:var(--muted);font-family:system-ui;line-height:1.5;margin:-4px 0 10px 112px;padding-right:44px">${d.note||''}</div>`;
+    <div style="font-size:13px;color:var(--muted);font-family:system-ui;line-height:1.5;margin:-4px 0 10px 112px;padding-right:44px">${d.note||''}</div>`;
   }).join('');
   // Animate bars after render
   setTimeout(() => {
@@ -4386,8 +4438,8 @@ function renderComparison(r, nameA, nameB, acA, acB) {
     const holderName  = ax.holder === 'A' ? nameA : nameB;
     return `<div class="comp-power-axis">
       <div class="comp-power-axis-lbl">${ax.label||''}</div>
-      <span style="color:${holderColor};font-family:var(--font-mono);font-size:10px;font-weight:500">${holderName}</span>
-      <span style="font-size:11px;color:var(--muted);margin-left:6px">${ax.evidence||''}</span>
+      <span style="color:${holderColor};font-family:var(--font-mono);font-size:12px;font-weight:500">${holderName}</span>
+      <span style="font-size:13px;color:var(--muted);margin-left:6px">${ax.evidence||''}</span>
     </div>`;
   }).join('');
   document.getElementById('comp-power-read').textContent = pd.reading || '';
@@ -5343,7 +5395,7 @@ function renderNRE(nre) {
   document.getElementById('nre-tiles').innerHTML = tileData.map(t => `
     <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);
       border-radius:10px;padding:12px 14px;">
-      <div style="font-family:var(--mono);font-size:9px;letter-spacing:.14em;
+      <div style="font-family:var(--mono);font-size:11px;letter-spacing:.14em;
         text-transform:uppercase;color:${t.color};opacity:.8;margin-bottom:6px;">${t.label}</div>
       <div style="font-size:13px;color:var(--muted2);line-height:1.5;">${t.val || '—'}</div>
     </div>
@@ -5544,7 +5596,7 @@ function simRenderScenarios(industry) {
       padding:16px 18px;cursor:pointer;transition:all .2s;"
       onmouseover="this.style.background='rgba(155,143,224,.1)'"
       onmouseout="this.style.background='rgba(155,143,224,.04)'">
-      <div style="font-family:var(--mono);font-size:9px;letter-spacing:.14em;
+      <div style="font-family:var(--mono);font-size:11px;letter-spacing:.14em;
         text-transform:uppercase;color:var(--purple);margin-bottom:6px;">${s.title}</div>
       <div style="font-size:13px;color:var(--muted2);line-height:1.5;">${s.desc}</div>
     </button>
@@ -5868,7 +5920,7 @@ function simRenderFeedback(fb) {
       border-radius:10px;border:1px solid rgba(255,255,255,.07);">
       <div style="font-family:var(--mono);font-size:20px;font-weight:700;
         color:${s.color};margin-bottom:4px;">${s.val}</div>
-      <div style="font-family:var(--mono);font-size:9px;letter-spacing:.1em;
+      <div style="font-family:var(--mono);font-size:11px;letter-spacing:.1em;
         text-transform:uppercase;color:var(--muted);opacity:.8;">${s.label}</div>
       <!-- Progress bar -->
       <div style="height:3px;background:rgba(255,255,255,.06);border-radius:2px;
@@ -6038,7 +6090,7 @@ function renderReplayTimeline(acoustics) {
   document.getElementById('sim-timeline-annotations').innerHTML = annotations.map(a =>
     `<div style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;
       background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
-      border-radius:20px;font-family:var(--mono);font-size:9px;
+      border-radius:20px;font-family:var(--mono);font-size:11px;
       letter-spacing:.1em;color:${a.color};">
       <span>${a.icon}</span><span>${a.label}</span>
     </div>`
@@ -6544,7 +6596,26 @@ async function handleAudioUpload(event) {
 
   } catch(err) {
     document.getElementById('upload-processing').style.display = 'none';
-    showCompError('Could not process audio file: ' + err.message);
+    const isAr = lang === 'ar';
+    // Provide helpful error with format guidance
+    let msg = isAr
+      ? `تعذّر معالجة الملف الصوتي. تأكد أن الملف بصيغة MP3 أو M4A أو WAV. (${err.message})`
+      : `Could not process audio file. Please ensure it is MP3, M4A, WAV, or OGG format. (${err.message})`;
+    // iOS-specific guidance
+    if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
+      msg += isAr
+        ? ' على iOS: استخدم ملفات M4A أو MP3 فقط.'
+        : ' On iOS: use M4A or MP3 files only.';
+    }
+    showCompError(msg);
+    // Still allow manual transcript entry
+    document.getElementById('upload-acoustic-display').style.display = 'block';
+    document.getElementById('upload-processing').style.display = 'none';
+    uploadedAcoustics = { avgPitch: 0, wpm: 0, pitchRange: 0, hesitations: 0, failed: true };
+    document.getElementById('up-pitch').textContent = isAr ? 'لم يُكتشف' : 'Not detected';
+    document.getElementById('up-pace').textContent  = isAr ? 'لم يُكتشف' : 'Not detected';
+    document.getElementById('up-range').textContent = isAr ? 'لم يُكتشف' : 'Not detected';
+    document.getElementById('up-hes').textContent   = '—';
   }
 
   // Reset file input so same file can be re-selected
@@ -6860,25 +6931,25 @@ function renderRapportIntelligence(result, acA, acB, nameA, nameB) {
           <span class="rapport-axis-gap" style="background:${bg};color:${col};">${gap} gap</span>
         </div>
         <div class="rapport-bar-row">
-          <div style="font-family:var(--mono);font-size:9px;color:var(--purple);min-width:30px;">${nameA.slice(0,4)}</div>
+          <div style="font-family:var(--mono);font-size:11px;color:var(--purple);min-width:30px;">${nameA.slice(0,4)}</div>
           <div class="rapport-bar-track">
             <div class="rapport-bar-a" style="width:${themPct}%"></div>
           </div>
-          <div style="font-family:var(--mono);font-size:10px;color:var(--purple);min-width:60px;text-align:right;">${ax.them} ${ax.unit}</div>
+          <div style="font-family:var(--mono);font-size:12px;color:var(--purple);min-width:60px;text-align:right;">${ax.them} ${ax.unit}</div>
         </div>
         <div class="rapport-bar-row">
-          <div style="font-family:var(--mono);font-size:9px;color:var(--teal);min-width:30px;">${nameB.slice(0,4)}</div>
+          <div style="font-family:var(--mono);font-size:11px;color:var(--teal);min-width:30px;">${nameB.slice(0,4)}</div>
           <div class="rapport-bar-track">
             <div class="rapport-bar-b" style="width:${youPct}%"></div>
           </div>
-          <div style="font-family:var(--mono);font-size:10px;color:var(--teal);min-width:60px;text-align:right;">${ax.you} ${ax.unit}</div>
+          <div style="font-family:var(--mono);font-size:12px;color:var(--teal);min-width:60px;text-align:right;">${ax.you} ${ax.unit}</div>
         </div>
         <div class="rapport-tip">${ax.tip || ''}</div>
       </div>`;
     }).join('')}
 
     <div class="rapport-action">
-      <span style="font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--teal);display:block;margin-bottom:6px;">Next Reply — One Action</span>
+      <span style="font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--teal);display:block;margin-bottom:6px;">Next Reply — One Action</span>
       ${ri.actionSentence || ''}
     </div>
   `;
@@ -6907,7 +6978,7 @@ function renderRapportIntelligence(result, acA, acB, nameA, nameB) {
 
     <!-- Header -->
     <div style="text-align:center;padding:24px 0 20px;">
-      <div style="font-family:var(--mono);font-size:9px;letter-spacing:.22em;
+      <div style="font-family:var(--mono);font-size:11px;letter-spacing:.22em;
         text-transform:uppercase;color:var(--purple);opacity:.8;margin-bottom:10px;"
         id="sim-eyebrow">Conversation Simulator</div>
       <p style="font-size:14px;color:var(--muted2);line-height:1.7;max-width:400px;
@@ -6923,23 +6994,23 @@ function renderRapportIntelligence(result, acA, acB, nameA, nameB) {
       <!-- Industry tabs -->
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;">
         <button class="sim-industry-btn active" onclick="simSelectIndustry('sales')" id="sim-ind-sales"
-          style="font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+          style="font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
           padding:7px 14px;border-radius:20px;border:1px solid rgba(200,169,110,.4);
           background:rgba(200,169,110,.1);color:var(--gold);cursor:pointer;">Sales</button>
         <button class="sim-industry-btn" onclick="simSelectIndustry('leadership')" id="sim-ind-leadership"
-          style="font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+          style="font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
           padding:7px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.1);
           background:none;color:var(--muted);cursor:pointer;">Leadership</button>
         <button class="sim-industry-btn" onclick="simSelectIndustry('negotiation')" id="sim-ind-negotiation"
-          style="font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+          style="font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
           padding:7px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.1);
           background:none;color:var(--muted);cursor:pointer;">Negotiation</button>
         <button class="sim-industry-btn" onclick="simSelectIndustry('interview')" id="sim-ind-interview"
-          style="font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+          style="font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
           padding:7px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.1);
           background:none;color:var(--muted);cursor:pointer;">Interview</button>
         <button class="sim-industry-btn" onclick="simSelectIndustry('pharma')" id="sim-ind-pharma"
-          style="font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+          style="font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
           padding:7px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.1);
           background:none;color:var(--muted);cursor:pointer;">Pharma</button>
       </div>
@@ -6950,7 +7021,7 @@ function renderRapportIntelligence(result, acA, acB, nameA, nameB) {
       <!-- Custom scenario -->
       <div style="margin-top:16px;padding:16px;background:rgba(155,143,224,.05);
         border:1px solid rgba(155,143,224,.2);border-radius:14px;">
-        <div style="font-family:var(--mono);font-size:9px;letter-spacing:.15em;
+        <div style="font-family:var(--mono);font-size:11px;letter-spacing:.15em;
           text-transform:uppercase;color:var(--purple);margin-bottom:10px;" id="sim-custom-label">
           Custom Scenario
         </div>
@@ -6961,7 +7032,7 @@ function renderRapportIntelligence(result, acA, acB, nameA, nameB) {
           placeholder="Describe your scenario — e.g. A skeptical client who has used a competitor for 5 years..."></textarea>
         <button onclick="simStartCustom()" style="margin-top:10px;width:100%;
           padding:11px;background:rgba(155,143,224,.12);border:1px solid rgba(155,143,224,.3);
-          border-radius:8px;color:var(--purple);font-family:var(--mono);font-size:9px;
+          border-radius:8px;color:var(--purple);font-family:var(--mono);font-size:11px;
           letter-spacing:.12em;text-transform:uppercase;cursor:pointer;" id="sim-custom-btn">
           Start Custom Simulation
         </button>
@@ -6978,7 +7049,7 @@ function renderRapportIntelligence(result, acA, acB, nameA, nameB) {
         padding:20px;margin-bottom:16px;">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;">
           <div>
-            <div style="font-family:var(--mono);font-size:9px;letter-spacing:.18em;
+            <div style="font-family:var(--mono);font-size:11px;letter-spacing:.18em;
               text-transform:uppercase;color:var(--purple);opacity:.8;margin-bottom:6px;"
               id="sim-char-role-tag">AI Character</div>
             <div style="font-size:17px;font-weight:600;color:var(--text);
@@ -6986,7 +7057,7 @@ function renderRapportIntelligence(result, acA, acB, nameA, nameB) {
             <div style="font-size:12px;color:var(--muted2);" id="sim-char-desc">—</div>
           </div>
           <div id="sim-round-badge" style="
-            font-family:var(--mono);font-size:10px;color:var(--purple);
+            font-family:var(--mono);font-size:12px;color:var(--purple);
             background:rgba(155,143,224,.1);border:1px solid rgba(155,143,224,.2);
             border-radius:20px;padding:4px 12px;white-space:nowrap;">
             Round 1
@@ -6996,8 +7067,8 @@ function renderRapportIntelligence(result, acA, acB, nameA, nameB) {
         <!-- Character says -->
         <div style="background:rgba(255,255,255,.03);border-radius:10px;
           padding:14px 16px;border-left:3px solid var(--purple);">
-          <div style="font-family:var(--mono);font-size:9px;letter-spacing:.14em;
-            text-transform:uppercase;color:var(--purple);opacity:.7;margin-bottom:8px;"
+          <div style="font-family:var(--mono);font-size:11px;letter-spacing:.14em;
+            text-transform:uppercase;color:var(--purple);opacity:.85;margin-bottom:8px;"
             id="sim-char-says-label">They say</div>
           <div id="sim-char-statement" style="font-size:14px;color:var(--text);
             line-height:1.75;font-family:system-ui,sans-serif;font-style:italic;">—</div>
@@ -7007,7 +7078,7 @@ function renderRapportIntelligence(result, acA, acB, nameA, nameB) {
       <!-- User response section -->
       <div style="background:rgba(13,20,32,.8);border:1px solid rgba(255,255,255,.08);
         border-radius:14px;padding:18px;margin-bottom:14px;">
-        <div style="font-family:var(--mono);font-size:9px;letter-spacing:.16em;
+        <div style="font-family:var(--mono);font-size:11px;letter-spacing:.16em;
           text-transform:uppercase;color:var(--muted);margin-bottom:12px;" id="sim-your-turn-label">
           Your Response
         </div>
@@ -7047,7 +7118,7 @@ function renderRapportIntelligence(result, acA, acB, nameA, nameB) {
           width:100%;margin-top:12px;padding:13px;
           background:rgba(155,143,224,.1);border:1px solid rgba(155,143,224,.3);
           border-radius:10px;color:var(--purple);font-family:var(--mono);
-          font-size:9px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;">
+          font-size:11px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;">
           ◈ Analyse My Response
         </button>
       </div>
@@ -7073,7 +7144,7 @@ function renderRapportIntelligence(result, acA, acB, nameA, nameB) {
 
         <!-- Strengths -->
         <div style="margin-bottom:14px;">
-          <div style="font-family:var(--mono);font-size:9px;letter-spacing:.16em;
+          <div style="font-family:var(--mono);font-size:11px;letter-spacing:.16em;
             text-transform:uppercase;color:var(--teal);margin-bottom:8px;"
             id="sim-strengths-label">What Worked</div>
           <div id="sim-strengths" style="font-size:13px;color:var(--muted2);line-height:1.7;"></div>
@@ -7081,7 +7152,7 @@ function renderRapportIntelligence(result, acA, acB, nameA, nameB) {
 
         <!-- Gaps -->
         <div style="margin-bottom:14px;">
-          <div style="font-family:var(--mono);font-size:9px;letter-spacing:.16em;
+          <div style="font-family:var(--mono);font-size:11px;letter-spacing:.16em;
             text-transform:uppercase;color:var(--amber);margin-bottom:8px;"
             id="sim-gaps-label">What to Improve</div>
           <div id="sim-gaps" style="font-size:13px;color:var(--muted2);line-height:1.7;"></div>
@@ -7090,7 +7161,7 @@ function renderRapportIntelligence(result, acA, acB, nameA, nameB) {
         <!-- Better response -->
         <div style="background:rgba(91,191,181,.05);border:1px solid rgba(91,191,181,.18);
           border-radius:12px;padding:14px 16px;margin-bottom:14px;">
-          <div style="font-family:var(--mono);font-size:9px;letter-spacing:.16em;
+          <div style="font-family:var(--mono);font-size:11px;letter-spacing:.16em;
             text-transform:uppercase;color:var(--teal);margin-bottom:8px;"
             id="sim-better-label">Stronger Alternative</div>
           <div id="sim-better-response" style="font-size:14px;color:var(--text);
@@ -7099,7 +7170,7 @@ function renderRapportIntelligence(result, acA, acB, nameA, nameB) {
 
         <!-- ══ REPLAY TIMELINE ══ -->
         <div id="sim-replay-section" style="margin-bottom:16px;">
-          <div style="font-family:var(--mono);font-size:9px;letter-spacing:.16em;
+          <div style="font-family:var(--mono);font-size:11px;letter-spacing:.16em;
             text-transform:uppercase;color:var(--muted);margin-bottom:10px;"
             id="sim-replay-label">Response Replay</div>
 
@@ -7114,7 +7185,7 @@ function renderRapportIntelligence(result, acA, acB, nameA, nameB) {
 
             <!-- Time markers -->
             <div id="sim-timeline-markers" style="display:flex;justify-content:space-between;
-              font-family:var(--mono);font-size:9px;color:var(--muted);opacity:.6;"></div>
+              font-family:var(--mono);font-size:11px;color:var(--muted);opacity:.8;"></div>
 
             <!-- Annotation badges -->
             <div id="sim-timeline-annotations" style="margin-top:10px;
@@ -7154,13 +7225,13 @@ function renderRapportIntelligence(result, acA, acB, nameA, nameB) {
           <button onclick="simNextRound()" style="
             flex:1;padding:12px;background:rgba(155,143,224,.1);
             border:1px solid rgba(155,143,224,.3);border-radius:10px;
-            color:var(--purple);font-family:var(--mono);font-size:9px;
+            color:var(--purple);font-family:var(--mono);font-size:11px;
             letter-spacing:.12em;text-transform:uppercase;cursor:pointer;"
             id="sim-next-btn">Next Round →</button>
           <button onclick="simRestart()" style="
             flex:1;padding:12px;background:none;
             border:1px solid rgba(255,255,255,.1);border-radius:10px;
-            color:var(--muted);font-family:var(--mono);font-size:9px;
+            color:var(--muted);font-family:var(--mono);font-size:11px;
             letter-spacing:.12em;text-transform:uppercase;cursor:pointer;"
             id="sim-restart-btn">New Scenario</button>
         </div>
@@ -7229,7 +7300,7 @@ function renderAuthBadge() {
   badge.id = 'sb-auth-badge';
   badge.style.cssText = `
     display:flex;align-items:center;gap:5px;
-    font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;
+    font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;
     padding:4px 10px;border-radius:6px;border:1px solid rgba(255,255,255,.12);
     background:none;color:var(--muted2);cursor:pointer;
   `;
@@ -7250,7 +7321,7 @@ function openAuthModal() {
   overlay.style.cssText = `position:fixed;inset:0;background:rgba(0,0,0,.75);display:flex;align-items:center;justify-content:center;z-index:9999;`;
   overlay.innerHTML = `
     <div style="background:var(--surface);border:1px solid rgba(200,169,110,.25);border-radius:16px;padding:28px 24px;width:300px;max-width:90vw;position:relative;">
-      <div style="font-family:var(--mono);font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);opacity:.8;margin-bottom:18px;">Sign in to sync your data</div>
+      <div style="font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);opacity:.8;margin-bottom:18px;">Sign in to sync your data</div>
       <input id="sb-email" type="email" placeholder="Email" style="width:100%;margin-bottom:10px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:14px;box-sizing:border-box;"/>
       <input id="sb-pass" type="password" placeholder="Password" style="width:100%;margin-bottom:16px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:14px;box-sizing:border-box;"/>
       <button id="sb-signin-btn" style="width:100%;padding:11px;background:var(--gold);color:#13141e;border:none;border-radius:8px;font-weight:600;cursor:pointer;font-size:14px;margin-bottom:8px;">Sign In</button>
