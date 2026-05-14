@@ -400,7 +400,7 @@ textarea::placeholder { color: var(--muted); }
 /* ═══════════════════════════════════════════════════
    RESULTS
 ═══════════════════════════════════════════════════ */
-.results-header { text-align: center; font-size: 15px; font-style: italic; color: var(--muted); margin-bottom: 22px; font-family: var(--serif); }
+.results-header { text-align: center; font-size: 18px; font-style: normal; font-family: var(--mono); letter-spacing: .18em; text-transform: uppercase; color: var(--gold); margin-bottom: 22px; opacity: .9; }
 .pattern-grid { display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 14px; }
 /* Metaprogram Profile */
 .mp-section { margin: 14px 0; border: 1px solid rgba(200,169,110,.15); border-radius: 12px; overflow: hidden; }
@@ -1096,7 +1096,7 @@ body.ar .letter-body::before { left: auto; right: 14px; }
 
     <!-- Daily check-in -->
     <div class="journal-checkin">
-      <span class="journal-checkin-tag" id="ui-j-checkin-tag">◉ Today's Check-in</span>
+      <span class="journal-checkin-tag" id="ui-j-checkin-tag">◉ How Are You Sounding Today?</span>
 
       <div class="journal-record-row">
         <button class="journal-rec-btn" id="j-rec-btn" onclick="toggleJournalRec()">
@@ -1252,7 +1252,7 @@ body.ar .letter-body::before { left: auto; right: 14px; }
           <div style="display:flex;gap:10px;">
             <span style="color:var(--teal);font-weight:700;flex-shrink:0;">2.</span>
             <span style="font-size:15px;color:var(--muted2);line-height:1.5;" id="convo-tip2">
-              Press record and have your conversation naturally. No switching needed.
+              Press record and speak naturally. <strong style="color:var(--text);">At least 30 seconds</strong> gives better results.
             </span>
           </div>
           <div style="display:flex;gap:10px;">
@@ -1322,9 +1322,16 @@ body.ar .letter-body::before { left: auto; right: 14px; }
           font-size:15px;color:var(--muted2);line-height:1.75;
           font-family:system-ui,sans-serif;min-height:80px;max-height:200px;overflow-y:auto;">
         </div>
-        <div style="margin-top:10px;font-size:13px;color:var(--muted);
-          font-style:italic;" id="convo-split-note">
+        <div style="margin-top:10px;font-size:13px;color:var(--muted2);
+          font-style:italic;line-height:1.6;" id="convo-split-note">
           Voices auto-split by pitch. You can edit names and transcripts below before analysing.
+        </div>
+        <div style="margin-top:8px;padding:10px 14px;background:rgba(103,205,195,.06);
+          border:1px solid rgba(103,205,195,.2);border-radius:8px;font-size:13px;
+          color:var(--muted2);line-height:1.6;" id="convo-manual-hint">
+          💡 <strong style="color:var(--teal);">Too few words?</strong>
+          You can type or paste what each person said directly into the boxes above —
+          the acoustic data (pitch, pace) is already captured.
         </div>
       </div>
 
@@ -1729,7 +1736,35 @@ body.ar .letter-body::before { left: auto; right: 14px; }
 
   <!-- Results -->
   <div id="results" style="display:none;">
-    <p class="results-header" id="ui-results-header">— Coaching Diagnostic Report —</p>
+    <p class="results-header" id="ui-results-header">Your Voice Portrait · Signals</p>
+
+    <!-- Reading pathway guide -->
+    <div id="reading-pathway" style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:16px 18px;margin-bottom:16px;">
+      <div style="font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;" id="pathway-title">◆ How to Read Your Report</div>
+      <div style="display:flex;flex-direction:column;gap:8px;" id="pathway-steps">
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <span style="background:var(--purple);color:white;border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;flex-shrink:0;margin-top:1px;">1</span>
+          <span style="font-size:15px;color:var(--muted2);line-height:1.5;" id="pw-step1"><strong style="color:var(--text);">Glance at the Summary card</strong> — three numbers. Notice what stands out, without analysing yet.</span>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <span style="background:var(--teal);color:white;border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;flex-shrink:0;margin-top:1px;">2</span>
+          <span style="font-size:15px;color:var(--muted2);line-height:1.5;" id="pw-step2"><strong style="color:var(--text);">Read the Profile Summary</strong> — the current pattern portrait in your own context.</span>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <span style="background:var(--gold);color:#0a0b12;border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;flex-shrink:0;margin-top:1px;">3</span>
+          <span style="font-size:15px;color:var(--muted2);line-height:1.5;" id="pw-step3"><strong style="color:var(--text);">Explore the Gravity Score</strong> — which domain is heaviest, and what that means for you specifically.</span>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <span style="background:var(--amber);color:#0a0b12;border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;flex-shrink:0;margin-top:1px;">4</span>
+          <span style="font-size:15px;color:var(--muted2);line-height:1.5;" id="pw-step4"><strong style="color:var(--text);">Request your Voice Letter</strong> — the most personal output. Read it once, slowly, without analysis.</span>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <span style="background:var(--muted);color:white;border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;flex-shrink:0;margin-top:1px;">5</span>
+          <span style="font-size:15px;color:var(--muted2);line-height:1.5;" id="pw-step5"><strong style="color:var(--text);">Then go deeper</strong> — Mask Score, patterns, interventions. These add layers to what you have already understood.</span>
+        </div>
+      </div>
+      <button onclick="document.getElementById('reading-pathway').style.display='none'" style="margin-top:12px;background:none;border:none;color:var(--muted);font-family:var(--mono);font-size:11px;cursor:pointer;letter-spacing:.1em;" id="pw-dismiss">Got it — hide this guide</button>
+    </div>
 
     <!-- ══ SUMMARY CARD (top of results) ══ -->
     <div id="summary-card" style="
@@ -1752,6 +1787,13 @@ body.ar .letter-body::before { left: auto; right: 14px; }
             text-transform:uppercase;font-family:var(--mono);" id="sum-gravity-lbl">Gravity</div>
           <div id="sum-gravity-interp" style="font-size:11px;color:var(--muted2);
             margin-top:4px;line-height:1.4;"></div>
+        </div>
+        <!-- Domain imbalance insight spans full width -->
+        <div id="sum-gravity-imbalance" style="grid-column:1/-1;margin-top:8px;
+          padding:10px 14px;background:rgba(169,158,232,.08);
+          border:1px solid rgba(169,158,232,.2);border-radius:10px;
+          font-size:13px;color:var(--muted2);line-height:1.6;font-style:italic;
+          display:none;">
         </div>
         <!-- Mask -->
         <div style="text-align:center;padding:12px 8px;background:rgba(232,168,74,.07);
@@ -1787,14 +1829,14 @@ body.ar .letter-body::before { left: auto; right: 14px; }
 
     <!-- Personality profile -->
     <div class="card-gold">
-      <span class="card-tag" id="ui-tag-profile">◆ Personality Profile</span>
+      <span class="card-tag" id="ui-tag-profile">◆ Who Your Voice Suggests You Are</span>
       <h2 class="card-title" id="res-profile-title"></h2>
       <p class="card-body" id="res-profile-summary"></p>
     </div>
 
     <!-- Voice signature (only if acoustic data available) -->
     <div class="voice-sig-card" id="voice-sig-section" style="display:none;">
-      <span class="voice-sig-tag" id="ui-tag-voice-sig">◈ Voice Signature Analysis</span>
+      <span class="voice-sig-tag" id="ui-tag-voice-sig">◈ How Your Voice Sounds to Others</span>
       <div class="voice-sig-grid" id="vsig-grid"></div>
       <div class="vsig-interp" id="vsig-interp"></div>
     </div>
@@ -1805,8 +1847,8 @@ body.ar .letter-body::before { left: auto; right: 14px; }
     <!-- METAPROGRAM PROFILE -->
     <div class="mp-section" id="mp-section" style="display:none;">
       <div class="mp-header">
-        <div class="mp-eyebrow">Metaprogram Profile</div>
-        <div class="mp-subtitle">The direction your attention habitually moves</div>
+        <div class="mp-eyebrow" id="mp-eyebrow-label">Where Your Attention Naturally Goes</div>
+        <div class="mp-subtitle" id="mp-subtitle-label">The invisible signal behind your choices and reactions</div>
       </div>
       <div class="mp-grid" id="mp-grid"></div>
       <div class="mp-insight" id="mp-insight" style="display:none;"></div>
@@ -1814,7 +1856,7 @@ body.ar .letter-body::before { left: auto; right: 14px; }
 
     <!-- MASK SCORE -->
     <div class="mask-card" id="mask-card" style="display:none;">
-      <span class="mask-tag" id="ui-tag-mask">◈ The Mask Score™ — Authenticity Architecture</span>
+      <span class="mask-tag" id="ui-tag-mask">◈ The Gap Between Your Words and Your Voice · Mask Signal</span>
       <div class="mask-top">
         <!-- Composite dial -->
         <div class="mask-dial-wrap">
@@ -1837,6 +1879,11 @@ body.ar .letter-body::before { left: auto; right: 14px; }
             </div>
           </div>
           <div class="mask-dial-verdict" id="mask-verdict"></div>
+          <div id="mask-plain-meaning" style="display:none;margin-top:10px;
+            font-size:14px;color:var(--muted2);line-height:1.6;font-style:italic;
+            text-align:center;padding:8px 12px;background:rgba(255,255,255,.03);
+            border-radius:8px;border-left:3px solid var(--amber);text-align:left;">
+          </div>
         </div>
         <!-- Radar triangle -->
         <div class="mask-radar-wrap">
@@ -1905,13 +1952,14 @@ body.ar .letter-body::before { left: auto; right: 14px; }
 
     <!-- Enneagram -->
     <div class="enneagram-box">
-      <span class="enneagram-label" id="ui-tag-enn">Enneagram Signal</span>
+      <span class="enneagram-label" id="ui-tag-enn">◈ Pattern Echo · Type Signals</span>
       <div id="res-enneagram"></div>
     </div>
 
     <!-- Interventions -->
     <div class="card">
-      <span class="card-tag" id="ui-tag-int">◆ Coaching Entry Points</span>
+      <span class="card-tag" id="ui-tag-int">◆ One Place to Begin</span>
+      <p id="interv-context" style="font-size:14px;color:var(--muted2);font-style:italic;line-height:1.7;margin-bottom:14px;padding:10px 14px;background:rgba(255,255,255,.03);border-radius:8px;border-left:2px solid rgba(200,169,110,.3);">One signal. One shift. Pick what resonates and sit with it for a week — before reaching for another.</p>
       <div id="res-interventions"></div>
     </div>
 
@@ -1922,8 +1970,8 @@ body.ar .letter-body::before { left: auto; right: 14px; }
         background: linear-gradient(135deg, rgba(91,191,181,.08), rgba(91,191,181,.04));
         border-color: rgba(91,191,181,.35);
       ">
-        ◈ Generate Optimal Next Response
-        <span class="letter-trigger-sub" id="nre-trigger-sub">How to respond to this person — tone, pace, framing, exact language</span>
+        ◈ How to Respond to This Person
+        <span class="letter-trigger-sub" id="nre-trigger-sub">Tone · Pace · Framing · Opening — tailored to what your voice reveals</span>
       </button>
 
       <div class="letter-loading" id="nre-loading" style="display:none;">
@@ -2020,8 +2068,8 @@ body.ar .letter-body::before { left: auto; right: 14px; }
     <!-- ══ THE VOICE LETTER ══ -->
     <div class="letter-section" id="letter-section" style="margin-top:24px;">
       <button class="letter-trigger-btn" id="letter-trigger-btn" onclick="generateLetter()">
-        ✦ Write Me a Voice Letter
-        <span class="letter-trigger-sub" id="ui-letter-sub">A letter written in your own psychological voice — back to you</span>
+        ✦ Hear What Your Voice Is Carrying
+        <span class="letter-trigger-sub" id="ui-letter-sub">A letter written in your own psychological voice — Mirror · Gap · Invitation</span>
       </button>
       <div class="letter-loading" id="letter-loading">
         <div class="letter-dots"><span></span><span></span><span></span></div>
@@ -2066,7 +2114,7 @@ body.ar .letter-body::before { left: auto; right: 14px; }
 
     <!-- ══ THE GRAVITY SCORE ══ -->
     <div class="gravity-card" id="gravity-card" style="display:none; margin-top:8px;">
-      <span class="gravity-tag" id="ui-tag-gravity">◉ The Gravity Score™ — Antigravity Framework</span>
+      <span class="gravity-tag" id="ui-tag-gravity">◉ Where Your Psychological Weight Lives · Gravity Signal</span>
       <p class="gravity-subtitle" id="gravity-subtitle">Psychological mass mapped across the three habit domains. The heaviest domain is where change costs the most — and matters most.</p>
 
       <!-- Orbital visual -->
@@ -2116,7 +2164,7 @@ body.ar .letter-body::before { left: auto; right: 14px; }
             <div class="gravity-domain-left">
               <div class="gravity-domain-icon" style="background:rgba(155,143,224,.12);color:var(--purple)">◈</div>
               <div>
-                <div class="gravity-domain-name" id="ui-g-thinking">Thinking Gravity</div>
+                <div class="gravity-domain-name" id="ui-g-thinking">Thinking Signal</div>
                 <div class="gravity-domain-signals" id="gsigs-thinking"></div>
               </div>
             </div>
@@ -2130,7 +2178,7 @@ body.ar .letter-body::before { left: auto; right: 14px; }
             <div class="gravity-domain-left">
               <div class="gravity-domain-icon" style="background:rgba(200,169,110,.12);color:var(--gold)">◆</div>
               <div>
-                <div class="gravity-domain-name" id="ui-g-emotional">Emotional Gravity</div>
+                <div class="gravity-domain-name" id="ui-g-emotional">Emotional Signal</div>
                 <div class="gravity-domain-signals" id="gsigs-emotional"></div>
               </div>
             </div>
@@ -2144,7 +2192,7 @@ body.ar .letter-body::before { left: auto; right: 14px; }
             <div class="gravity-domain-left">
               <div class="gravity-domain-icon" style="background:rgba(91,191,181,.1);color:var(--teal)">→</div>
               <div>
-                <div class="gravity-domain-name" id="ui-g-behavioral">Behavioral / Physical Gravity</div>
+                <div class="gravity-domain-name" id="ui-g-behavioral">Behavioral Signal</div>
                 <div class="gravity-domain-signals" id="gsigs-behavioral"></div>
               </div>
             </div>
@@ -2186,7 +2234,7 @@ body.ar .letter-body::before { left: auto; right: 14px; }
       <!-- Framework callout -->
       <div class="gravity-framework">
         <span class="gravity-framework-icon">✦</span>
-        <span id="g-framework-text">Based on the <em>Antigravity</em> framework by Shadi Obeidat — accredited by AIBP &amp; IAPCM, endorsed by Marshall Goldsmith. The Gravity Score maps psychological mass across habit domains to show where change requires the most force — and where momentum is already available.</span>
+        <span id="g-framework-text">Your Voice Portrait · Gravity Signal — based on the <em>Antigravity</em> framework by Dr. Shadi Obeidat (AIBP · IAPCM accredited). Three habit domains mapped from your voice: where weight accumulates, where energy converts, where momentum is already available.</span>
       </div>
     </div><!-- /gravity-card -->
 
@@ -2238,11 +2286,11 @@ const T = {
     voiceDone:'✓ Acoustic data captured — tap Analyze',
     btnAnalyse:'Analyze Verbal + Acoustic Patterns',
     btnAnalysing:'Reading all patterns…',
-    resultsHeader:'— Communication Pattern Report —',
-    tagProfile:'◆ Personality Profile',
-    tagVoiceSig:'◈ Voice Signature Analysis',
-    tagEnn:'Enneagram Signal',
-    tagInt:'◆ Growth Entry Points',
+    resultsHeader:'Your Voice Portrait · Signals',
+    tagProfile:'◆ Who Your Voice Suggests You Are',
+    tagVoiceSig:'◈ How Your Voice Sounds to Others',
+    tagEnn:'◈ Pattern Echo · Type Signals',
+    tagInt:'◆ One Place to Begin',
     apiTag:'API KEY REQUIRED',apiTitle:'Connect to Claude AI',
     apiBody:'Verbal Mirror uses the Anthropic Claude API. Your key is stored only on your device.',
     apiHow:'HOW TO GET YOUR KEY',
@@ -2269,11 +2317,11 @@ const T = {
     voiceDone:'✓ البيانات الصوتية جاهزة — اضغط تحليل',
     btnAnalyse:'تحليل الأنماط اللفظية والصوتية',
     btnAnalysing:'جارٍ قراءة الأنماط…',
-    resultsHeader:'— تقرير التشخيص التدريبي —',
-    tagProfile:'◆ الملف الشخصي',
-    tagVoiceSig:'◈ تحليل البصمة الصوتية',
-    tagEnn:'إشارة الإنياغرام',
-    tagInt:'◆ نقاط التدخل التدريبي',
+    resultsHeader:'صورتك الصوتية · الإشارات',
+    tagProfile:'◆ ما يقترحه صوتك عنك',
+    tagVoiceSig:'◈ كيف يبدو صوتك للآخرين',
+    tagEnn:'◈ صدى النمط · إشارات النوع',
+    tagInt:'◆ ابدأ من هنا',
     apiTag:'مفتاح API مطلوب',apiTitle:'الاتصال بـ Claude AI',
     apiBody:'تستخدم المرآة اللفظية واجهة برمجة Anthropic. مفتاحك محفوظ على جهازك فقط.',
     apiHow:'كيف تحصل على مفتاحك',
@@ -2290,7 +2338,7 @@ const T = {
     jTotal:'إجمالي التسجيلات',
     jAvgPitch:'متوسط طبقة الصوت',
     jHeaviest:'النطاق الأثقل',
-    jCheckin:'◉ تسجيل اليوم',
+    jCheckin:'◉ كيف يبدو صوتك اليوم؟',
     jRecStatus:'اضغط للتسجيل — ٦٠ ثانية',
     jNoteHolder:'ملاحظة اختيارية — سياق اليوم (مثل: بعد عرض، بعد رياضة، صباح صعب)…',
     jSaveBtn:'◈ تحليل وحفظ التسجيل',
@@ -2396,7 +2444,7 @@ function applyLang() {
     "journal-stat-lbl-total":   isAr ? t("jTotal")        : "Total Entries",
     "journal-stat-lbl-pitch":   isAr ? t("jAvgPitch")     : "Avg Pitch",
     "journal-stat-lbl-heavy":   isAr ? t("jHeaviest")     : "Heaviest Domain",
-    "ui-j-checkin-tag":         isAr ? t("jCheckin")      : "◉ Today's Check-in",
+    "ui-j-checkin-tag":         isAr ? t("jCheckin")      : "◉ How Are You Sounding Today?",
     "ui-btn-journal-save":      isAr ? t("jSaveBtn")      : "◈ Analyse & Save Entry",
     "ui-j-insight-tag":         isAr ? t("jInsightTag")   : "Today's Voice Insight",
     "ui-j-gravity-title":       isAr ? t("jGravityTitle") : "◉ Gravity Drift — Domain Trends",
@@ -2444,6 +2492,7 @@ function applyLang() {
   updateWelcomeLanguage();
   updateTTSLanguage();
   updateConvoLanguage();
+  updatePathwayLanguage();
 
   // Comparison how-to translations
   const compHowtoTitle = document.getElementById('comp-howto-title');
@@ -3263,6 +3312,35 @@ function renderResult(r) {
                     gravTotal >= 4 ? (lang==='ar' ? 'معتدل' : 'Moderate') :
                                      (lang==='ar' ? 'خفيف' : 'Light');
     document.getElementById('sum-gravity-interp').textContent = gInterp;
+
+    // Domain imbalance insight
+    const gt = r.gravityScore?.thinking  ?? 0;
+    const ge = r.gravityScore?.emotional ?? 0;
+    const gp = r.gravityScore?.physical  ?? 0;
+    const domScores = [
+      { name: lang==='ar'?'التفكير':'Thinking',  val:gt, nameAr:'التفكير' },
+      { name: lang==='ar'?'العاطفة':'Emotional', val:ge, nameAr:'العاطفة' },
+      { name: lang==='ar'?'السلوك':'Behavioral', val:gp, nameAr:'السلوك'  },
+    ];
+    const heaviest = domScores.reduce((a,b) => a.val>b.val?a:b);
+    const lightest = domScores.reduce((a,b) => a.val<b.val?a:b);
+    const imbalance = heaviest.val - lightest.val;
+    let imbalanceText = '';
+    if (imbalance >= 3) {
+      imbalanceText = lang === 'ar'
+        ? `${heaviest.name} أثقل بكثير من ${lightest.name} — الطاقة تتركّز دون أن تتحوّل`
+        : `${heaviest.name} is carrying ${imbalance.toFixed(1)}× more than ${lightest.name} — energy concentrating without converting`;
+    } else if (imbalance >= 1.5) {
+      imbalanceText = lang === 'ar'
+        ? `${heaviest.name} يحمل أكثر من ${lightest.name} — اختلال طفيف`
+        : `${heaviest.name} leads over ${lightest.name} — mild imbalance`;
+    } else {
+      imbalanceText = lang === 'ar'
+        ? 'النطاقات الثلاثة متوازنة نسبياً'
+        : 'Three domains are relatively balanced';
+    }
+    const imbalEl = document.getElementById('sum-gravity-imbalance');
+    if (imbalEl) { imbalEl.textContent = imbalanceText; imbalEl.style.display = 'block'; }
   }
 
   if (maskScore !== null) {
@@ -3287,7 +3365,7 @@ function renderResult(r) {
 
   // Arabic labels
   if (lang === 'ar') {
-    document.getElementById('sum-eyebrow').textContent   = '◆ صورتك في لمحة';
+    document.getElementById('sum-eyebrow').textContent   = '◆ صورتك الصوتية · الإشارات الرئيسية';
     document.getElementById('sum-gravity-lbl').textContent = 'الثقالة';
     document.getElementById('sum-mask-lbl').textContent    = 'درجة القناع';
     document.getElementById('sum-pattern-lbl').textContent = 'النمط السائد';
@@ -3304,7 +3382,7 @@ function renderResult(r) {
   if (!confNote) {
     confNote = document.createElement('div');
     confNote.id = 'confidence-note';
-    confNote.style.cssText = 'margin-top:10px;padding:10px 14px;background:rgba(255,255,255,.03);border-radius:8px;border-left:2px solid rgba(200,169,110,.3);font-size:12px;color:var(--muted);font-style:italic;line-height:1.6;';
+    confNote.style.cssText = 'margin-top:14px;padding:12px 16px;background:rgba(255,255,255,.04);border-radius:10px;border-left:3px solid rgba(200,169,110,.5);font-size:14px;color:var(--muted2);font-style:italic;line-height:1.7;';
     const profileCard = document.querySelector('.card-gold');
     if (profileCard) profileCard.appendChild(confNote);
   }
@@ -3582,6 +3660,34 @@ function renderMaskScore(m) {
   // Verdict badge
   const vEl = document.getElementById('mask-verdict');
   vEl.textContent = verdictLabel[m.verdict] || m.verdict || '';
+
+  // Plain-language mask meaning
+  const maskMeanEl = document.getElementById('mask-plain-meaning');
+  if (maskMeanEl) {
+    const isArMx = lang === 'ar';
+    const mComp  = m.composite || 0;
+    let mMeaning = '';
+    if (mComp >= 75) {
+      mMeaning = isArMx
+        ? 'صوتك يعكس شيئاً مختلفاً عمّا تقوله الكلمات — هناك طبقة داخلية ظاهرة للآخرين حتى دون أن يسمّوها.'
+        : 'Your voice is delivering a different message than your words — an inner layer others can sense, even if they cannot name it.';
+    } else if (mComp >= 50) {
+      mMeaning = isArMx
+        ? 'بعض التناقض بين نبرتك ومضمون كلامك — قد لا يلتقطه الجميع، لكنه حاضر في اللحظات الحساسة.'
+        : 'Some divergence between your tone and your words — not everyone picks it up, but it is present in sensitive interactions.';
+    } else if (mComp >= 25) {
+      mMeaning = isArMx
+        ? 'تناقض طفيف بين ما تقوله وكيف تقوله — بشكل عام أنت متوافق مع نفسك.'
+        : 'Mild gap between what you say and how you say it — broadly congruent overall.';
+    } else {
+      mMeaning = isArMx
+        ? 'صوتك وكلماتك في توافق واضح — ما تقوله يُحسّ بأنه حقيقي وأصيل.'
+        : 'Your voice and words are clearly congruent — what you say lands as genuine.';
+    }
+    maskMeanEl.textContent = mMeaning;
+    maskMeanEl.style.display = 'block';
+  }
+
   vEl.style.background = verdictColor.replace('var(','rgba(').replace(')',', .12)');
   vEl.style.color = verdictColor;
   vEl.style.border = `1px solid ${verdictColor.replace('var(','rgba(').replace(')',', .3)')}`;
@@ -3931,13 +4037,13 @@ function copyLetter() {
 /* ── Update translations for letter UI ── */
 const letterTranslations = {
   en: {
-    letterTrigger: '✦ Write Me a Voice Letter',
+    letterTrigger: '✦ Hear What Your Voice Is Carrying',
     letterSub: 'A letter written in your own psychological voice — back to you',
     letterLoading: 'Listening to your patterns. Writing your letter…',
     letterCopy: 'Copy Letter',
   },
   ar: {
-    letterTrigger: '✦ اكتب لي رسالة صوتية',
+    letterTrigger: '✦ ما الذي يحمله صوتك',
     letterSub: 'رسالة مكتوبة بصوتك النفسي الخاص — إليك أنت',
     letterLoading: 'أستمع إلى أنماطك. أكتب رسالتك…',
     letterCopy: 'نسخ الرسالة',
@@ -4101,6 +4207,30 @@ async function generateGravityScore() {
   }
 }
 
+// What each domain level means for the user
+function gravityDomainMeaning(domain, score, isAr) {
+  const s = parseFloat(score);
+  const meanings = {
+    thinking: {
+      high:   isAr ? 'عقلك يعمل بجد شديد — التحليل والتفكير يستنزفان طاقتك' : 'Your mind is working very hard — analysis and thinking are consuming your energy',
+      mid:    isAr ? 'نشاط معرفي معتدل — التحليل موجود دون أن يطغى' : 'Moderate cognitive activity — thinking present but not overwhelming',
+      low:    isAr ? 'التفكير خفيف ومتدفق — طاقة ذهنية متاحة للعمل' : 'Thinking flows lightly — mental energy available for action',
+    },
+    emotional: {
+      high:   isAr ? 'ثقل عاطفي مرتفع — المشاعر تشغل مساحة كبيرة داخلك' : 'Heavy emotional weight — feelings are occupying significant inner space',
+      mid:    isAr ? 'تعبير عاطفي معتدل — متوازن ومدار' : 'Moderate emotional expression — balanced and managed',
+      low:    isAr ? 'هدوء عاطفي — منخفض التحميل' : 'Emotionally calm — low emotional load',
+    },
+    physical: {
+      high:   isAr ? 'ميل للتفاعل أو التجنب السلوكي — الجسد في حالة تأهب' : 'Tendency toward reactivity or behavioral avoidance — body on alert',
+      mid:    isAr ? 'سلوك متوازن — يتحرك ويتوقف بشكل معتدل' : 'Balanced behavior — moving and pausing in moderation',
+      low:    isAr ? 'هادئ جسدياً — طاقة سلوكية متاحة للتحرك' : 'Physically calm — behavioral energy available for movement',
+    }
+  };
+  const bucket = s >= 7 ? 'high' : s >= 4 ? 'mid' : 'low';
+  return (meanings[domain] || {})[bucket] || '';
+}
+
 function renderGravityScore(g) {
   const card = document.getElementById('gravity-card');
   card.style.display = 'block';
@@ -4128,8 +4258,14 @@ function renderGravityScore(g) {
     document.getElementById('gscore-' + d.key).textContent = d.score + '/10';
     const fill = document.getElementById('gbar-' + d.key);
     setTimeout(() => { fill.style.width = (d.score * 10) + '%'; }, 200);
-    document.getElementById('gread-' + d.key).textContent =
-      g[d.key]?.reading || '';
+    const greadDomEl = document.getElementById('gread-' + d.key);
+    if (greadDomEl) {
+      const domRead = g[d.key]?.reading || '';
+      const domScore = g[d.key]?.score ?? 0;
+      const domMean  = gravityDomainMeaning(d.key, domScore, lang === 'ar');
+      greadDomEl.innerHTML = (domRead ? `<span>${domRead}</span>` : '') +
+        (domMean ? `<div style="margin-top:8px;padding:8px 12px;background:rgba(255,255,255,.04);border-radius:8px;border-left:2px solid rgba(255,255,255,.1);font-size:14px;color:var(--muted2);font-style:italic;line-height:1.6;">${domMean}</div>` : '');
+    }
 
     // Signal tags
     const sigsEl = document.getElementById('gsigs-' + d.key);
@@ -5545,8 +5681,8 @@ function renderNRE(nre) {
   document.getElementById('nre-effect-label').textContent  = isAr ? 'التأثير المتوقع' : 'Expected Effect';
   document.getElementById('nre-copy-btn').textContent      = isAr ? 'نسخ الاستراتيجية' : 'Copy Strategy';
   document.getElementById('nre-trigger-sub').textContent   = isAr
-    ? 'كيفية الرد على هذا الشخص — النبرة والإيقاع والتأطير واللغة'
-    : 'How to respond to this person — tone, pace, framing, exact language';
+    ? 'النبرة · الإيقاع · التأطير · الافتتاحية — مصمّم بناءً على ما يكشفه صوتك'
+    : 'Tone · Pace · Framing · Opening — tailored to what your voice reveals';
 
   // 5 strategy tiles
   const tileData = [
@@ -6945,6 +7081,21 @@ function convoProcessSplit() {
   }
   document.getElementById('convo-split-note').textContent = qualityNote;
 
+  // Word count warning
+  const manualHint = document.getElementById('convo-manual-hint');
+  if (manualHint) {
+    const aWc = wordsA ? wordsA.split(' ').filter(w=>w.length>1).length : 0;
+    const bWc = wordsB ? wordsB.split(' ').filter(w=>w.length>1).length : 0;
+    if (aWc < 8 || bWc < 8) {
+      manualHint.style.display = 'block';
+      manualHint.innerHTML = isAr
+        ? `⚠ <strong style="color:var(--teal);">النص قليل جداً</strong> — ${nameA}: ${aWc} كلمات، ${nameB}: ${bWc} كلمات.<br>الحد الأدنى ٨ كلمات لكل متحدث. اكتب ما قيل يدوياً في الحقول أعلاه أو سجّل محادثة أطول.`
+        : `⚠ <strong style="color:var(--teal);">Very few words detected</strong> — ${nameA}: ${aWc} words, ${nameB}: ${bWc} words.<br>Need at least 8 words per speaker. Type what was said in the boxes above, or record a longer conversation.`;
+    } else {
+      manualHint.style.display = 'none';
+    }
+  }
+
   // Update analyse button label
   document.getElementById('convo-analyse-label').textContent = isAr
     ? `تحليل ${nameA} و${nameB}` : `Analyse ${nameA} & ${nameB}`;
@@ -6958,9 +7109,39 @@ function analyseConversation() {
   const nameA = document.getElementById('convo-name-a')?.value.trim() || (isAr?'المتحدث أ':'Speaker A');
   const nameB = document.getElementById('convo-name-b')?.value.trim() || (isAr?'المتحدث ب':'Speaker B');
 
-  // Override comp input fields with split data
+  // Get text (user may have edited the auto-filled boxes)
   const aText = document.getElementById('convo-a-text')?.value.trim() || convoState.splitA.words;
   const bText = document.getElementById('convo-b-text')?.value.trim() || convoState.splitB.words;
+
+  // ── Minimum content validation ─────────────────────────────────────
+  const aWords = aText.split(' ').filter(w => w.length > 1).length;
+  const bWords = bText.split(' ').filter(w => w.length > 1).length;
+  const minWords = 8;
+
+  if (aWords < minWords || bWords < minWords) {
+    const errEl = document.getElementById('convo-error');
+    if (errEl) {
+      errEl.innerHTML = isAr
+        ? `<strong>النص قصير جداً للتحليل.</strong><br><br>
+           يحتاج كل متحدث إلى <strong>٨ كلمات على الأقل</strong> لبناء تحليل مفيد.<br><br>
+           <strong>ماذا تفعل:</strong><br>
+           • سجّل محادثة أطول — <strong>٣٠ ثانية على الأقل</strong><br>
+           • أو اكتب يدوياً ما قاله كل متحدث في الحقول أدناه<br>
+           • تأكد من أن المايكروفون يسمع كلا الصوتين بوضوح`
+        : `<strong>Not enough text to analyse.</strong><br><br>
+           Each speaker needs at least <strong>8 words</strong> to build a meaningful analysis.<br><br>
+           <strong>What to do:</strong><br>
+           • Record a longer conversation — <strong>at least 30 seconds</strong><br>
+           • Or type what each person said directly into the boxes above<br>
+           • Make sure the microphone can clearly hear both voices`;
+      errEl.style.display = 'block';
+    }
+    return;
+  }
+
+  // Clear any previous error
+  const errEl = document.getElementById('convo-error');
+  if (errEl) errEl.style.display = 'none';
 
   // Build acoustic objects matching existing getCompAcoustics format
   const acA = {
@@ -7030,7 +7211,10 @@ async function runComparisonFromConvo(nameA, textA, acA, nameB, textB, acB) {
     document.getElementById('convo-processing').style.display = 'none';
     const btn = document.getElementById('convo-analyse-btn');
     btn.disabled = false; btn.style.opacity = '1';
-    convoShowError(isAr ? 'فشل التحليل — حاول مرة أخرى.' : 'Analysis failed — please try again.');
+    const isArErr2 = lang === 'ar';
+    convoShowError(isArErr2
+      ? 'فشل التحليل. تحقق من اتصالك وحاول مرة أخرى. إذا استمر الخطأ، اكتب النص يدوياً في حقول المتحدثين أعلاه.'
+      : 'Analysis failed. Check your connection and try again. If it continues, type what each person said directly into the speaker text boxes above.');
   }
 }
 
@@ -7040,12 +7224,40 @@ function convoShowError(msg) {
 }
 
 // ── Arabic labels for convo panel ────────────────────────────
+function updatePathwayLanguage() {
+  const isAr = lang === 'ar';
+  const map = {
+    'pathway-title': isAr ? '◆ دليل قراءة إشاراتك' : '◆ Your Signal Reading Guide',
+    'pw-step1': isAr
+      ? '<strong style="color:var(--text);">ألقِ نظرة على بطاقة الملخص</strong> — أرقامك الثلاثة الرئيسية. لا تحلّل بعد، فقط لاحظ ما يلفت انتباهك.'
+      : '<strong style="color:var(--text);">Glance at the At a Glance card</strong> — your three key numbers. Don\'t analyse yet, just notice what stands out.',
+    'pw-step2': isAr
+      ? '<strong style="color:var(--text);">اقرأ ملخص ملفك الشخصي</strong> — الصورة النفسية للأنماط الحالية.'
+      : '<strong style="color:var(--text);">Read your Profile Summary</strong> — the psychological portrait of current patterns.',
+    'pw-step3': isAr
+      ? '<strong style="color:var(--text);">استكشف درجة الثقالة</strong> — اكتشف أي نطاق يحمل أكثر، وماذا يعني ذلك لك تحديداً.'
+      : '<strong style="color:var(--text);">Explore the Gravity Score</strong> — see which domain is carrying the most weight, and what that means for you specifically.',
+    'pw-step4': isAr
+      ? '<strong style="color:var(--text);">اطلب رسالتك الصوتية</strong> — أعمق مخرجات التطبيق. اقرأها ببطء. مرة واحدة دون تحليل.'
+      : '<strong style="color:var(--text);">Request your Voice Letter</strong> — the most personal output. Read it slowly. One time through without analysis.',
+    'pw-step5': isAr
+      ? '<strong style="color:var(--text);">ثم تعمّق أكثر</strong> — درجة القناع، والأنماط، والإنيا غرام، ونقاط التدخل. هذه تضيف طبقات لما فهمته بالفعل.'
+      : '<strong style="color:var(--text);">Then go deeper</strong> — Mask Score, patterns, Enneagram, interventions. These add layers to what you have already understood.',
+    'pw-dismiss': isAr ? 'فهمت — أخفِ هذا الدليل' : 'Got it — hide this guide',
+    'interv-context': isAr ? 'إشارة واحدة. تحوّل واحد. اختر ما يلمسك وأمضِ معه أسبوعاً — قبل أن تبحث عن أخرى.' : 'One signal. One shift. Pick what resonates and sit with it for a week — before reaching for another.',
+  };
+  for (const [id, val] of Object.entries(map)) {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = val;
+  }
+}
+
 function updateConvoLanguage() {
   const isAr = lang === 'ar';
   const map = {
     'convo-how-title':    isAr ? 'كيفية استخدام هذا الوضع' : 'How to use this mode',
     'convo-tip1':         isAr ? 'ضع الجهاز بين المتحدثين — أو استخدم مكبّر الصوت في المكالمة.' : 'Place your device between both speakers — or use speaker mode on a call.',
-    'convo-tip2':         isAr ? 'اضغط تسجيل وتحدّث بشكل طبيعي. لا حاجة للتبديل.' : 'Press record and have your conversation naturally. No switching needed.',
+    'convo-tip2':         isAr ? 'اضغط تسجيل وتحدّث بشكل طبيعي. <strong style="color:var(--text);">سجّل ٣٠ ثانية على الأقل</strong> — كلما طال التسجيل، كانت النتائج أفضل.' : 'Press record and have your conversation naturally. <strong style="color:var(--text);">Record at least 30 seconds</strong> — longer gives better results.',
     'convo-tip3':         isAr ? 'عند الانتهاء، اضغط إيقاف. يُقسّم التطبيق الأصوات تلقائياً بالطبقة.' : 'When done, press stop. The app auto-splits voices by pitch and analyses both.',
     'convo-status':       isAr ? 'اضغط لبدء التسجيل' : 'Tap to start recording',
     'convo-tip-live':     isAr ? 'تحدّث بشكل طبيعي — كلا الصوتين يُسجَّلان' : 'Speak naturally — both voices are being captured',
