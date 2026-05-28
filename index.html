@@ -282,7 +282,7 @@ h1 {
   margin-bottom: 10px; display: block;
 }
 textarea {
-  width: 100%; min-height: 130px; font-size: 16px !important;
+  width: 100%; min-height: 130px;
   background: var(--surface2); border: 1px solid var(--border);
   border-radius: var(--r-sm); color: var(--text);
   font-family: system-ui, sans-serif; font-size: 15px;
@@ -1736,7 +1736,13 @@ body.ar .letter-body::before { left: auto; right: 14px; }
 
   <!-- Results -->
   <div id="results" style="display:none;">
-    <p class="results-header" id="ui-results-header">Your Voice Portrait · Signals</p>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;flex-wrap:wrap;gap:8px;">
+      <p class="results-header" id="ui-results-header" style="margin-bottom:0;">Your Voice Portrait · Signals</p>
+      <div style="display:flex;gap:8px;">
+        <button id="copy-results-btn" onclick="copyResults()" style="display:none;background:none;border:1px solid var(--border2);border-radius:20px;padding:6px 14px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--muted2);cursor:pointer;transition:all .2s;white-space:nowrap;">◈ Copy</button>
+        <button id="new-analysis-btn" onclick="newAnalysis()" style="display:none;background:none;border:1px solid var(--border2);border-radius:20px;padding:6px 14px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--muted2);cursor:pointer;transition:all .2s;white-space:nowrap;">↺ New</button>
+      </div>
+    </div>
 
     <!-- Reading pathway guide -->
     <div id="reading-pathway" style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:16px 18px;margin-bottom:16px;">
@@ -2363,6 +2369,28 @@ const T = {
 const WORKER_URL = '/.netlify/functions/claude-proxy';
 const DEMO_KEY = "server-managed"; // Proxy handles auth — no user key needed
 
+// Transparent proxy fallback: if Netlify proxy unavailable, falls back to direct Claude API
+(function patchFetch() {
+  const _f = window.fetch.bind(window);
+  window.fetch = async function(url, opts) {
+    if (url !== WORKER_URL) return _f(url, opts);
+    try {
+      const resp = await _f(url, opts);
+      if (resp.status !== 404 && resp.status !== 503) return resp;
+      throw new Error('proxy_unavailable');
+    } catch(proxyErr) {
+      if (proxyErr.name === 'AbortError') throw proxyErr;
+      const userKey = localStorage.getItem('ag_api_key') || S.get('api_key');
+      if (!userKey || userKey === DEMO_KEY) throw proxyErr;
+      return _f('https://api.anthropic.com/v1/messages', {
+        method: 'POST', signal: opts?.signal,
+        headers: { 'Content-Type':'application/json', 'x-api-key':userKey, 'anthropic-version':'2023-06-01', 'anthropic-dangerous-request-override':'allow-any' },
+        body: opts?.body
+      });
+    }
+  };
+})()
+
 let lang = S.get('lang') || 'en';
 
 function t(k) { return T[lang][k] || T.en[k] || k; }
@@ -2920,6 +2948,61 @@ function onTextInput() {
     document.getElementById('voice-status').textContent = t('recordTap');
     document.getElementById('voice-status').style.color = 'var(--muted)';
   }
+  S.set('last_transcript', document.getElementById('sample-text').value || '');
+}
+
+function copyResults() {
+  const parts = [];
+  const hdr = document.getElementById('ui-results-header');
+  if (hdr) parts.push(hdr.textContent.trim());
+  ['profile-title','profile-summary'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el?.textContent?.trim()) parts.push(el.textContent.trim());
+  });
+  document.querySelectorAll('.pattern-item').forEach(el => {
+    const lbl = el.querySelector('.pattern-label')?.textContent?.trim();
+    const val = el.querySelector('.pattern-value')?.textContent?.trim();
+    if (lbl && val) parts.push(lbl + ': ' + val);
+  });
+  ['letter-mirror-text','letter-gap-text','letter-invite-text'].forEach((id, i) => {
+    const el = document.getElementById(id);
+    if (el?.textContent?.trim()) {
+      const prefix = ['Mirror','Gap','Invitation'][i];
+      parts.push(prefix + ': ' + el.textContent.trim());
+    }
+  });
+  const text = parts.filter(Boolean).join('\n\n');
+  if (!text) return;
+  const btn = document.getElementById('copy-results-btn');
+  const markCopied = () => {
+    if (!btn) return;
+    const orig = btn.textContent;
+    btn.textContent = '✓ Copied'; btn.style.color='var(--teal)'; btn.style.borderColor='var(--teal)';
+    setTimeout(() => { btn.textContent=orig; btn.style.color='var(--muted2)'; btn.style.borderColor='var(--border2)'; }, 2000);
+  };
+  navigator.clipboard?.writeText(text).then(markCopied).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.style.cssText = 'position:fixed;top:-9999px;opacity:0;';
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
+    markCopied();
+  });
+}
+
+function newAnalysis() {
+  document.getElementById('sample-text').value = '';
+  S.set('last_transcript', '');
+  document.getElementById('results').style.display = 'none';
+  const _cb = document.getElementById('copy-results-btn');
+  const _nb = document.getElementById('new-analysis-btn');
+  if (_cb) _cb.style.display = 'none';
+  if (_nb) _nb.style.display = 'none';
+  acousticData = null;
+  lastAnalysisResult = null;
+  if (document.getElementById('acoustic-panel')) document.getElementById('acoustic-panel').style.display='none';
+  document.getElementById('voice-status').textContent = t('recordTap');
+  document.getElementById('voice-status').style.color = 'var(--muted)';
+  window.scrollTo({top:0, behavior:'smooth'});
+  setTimeout(() => document.getElementById('sample-text').focus(), 400);
 }
 
 /* ═══════════════════════════════════════════
@@ -3255,7 +3338,7 @@ ${text}`;
     renderResult(result);
   } catch(e) {
     const errMsg = e.name === 'AbortError'
-      ? 'Request timed out (15s). Check your internet connection and try again.'
+      ? 'Request timed out (45s). Check your internet connection and try again.'
       : (e.message || 'Analysis failed');
     showError(errMsg + '<br><br><small style="opacity:.7">If this keeps happening, open <a href="/test-api.html" target="_blank" style="color:var(--gold)">test-api.html</a> to diagnose your connection.</small>');
   } finally {
@@ -3463,6 +3546,10 @@ function renderResult(r) {
 
   document.getElementById('results').style.display='block';
   document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'});
+  const _cb = document.getElementById('copy-results-btn');
+  const _nb = document.getElementById('new-analysis-btn');
+  if (_cb) { _cb.style.display='inline-flex'; _cb.onmouseover=()=>{_cb.style.borderColor='var(--gold)';_cb.style.color='var(--gold)'}; _cb.onmouseout=()=>{_cb.style.borderColor='var(--border2)';_cb.style.color='var(--muted2)'}; }
+  if (_nb) { _nb.style.display='inline-flex'; _nb.onmouseover=()=>{_nb.style.borderColor='var(--teal)';_nb.style.color='var(--teal)'}; _nb.onmouseout=()=>{_nb.style.borderColor='var(--border2)';_nb.style.color='var(--muted2)'}; }
 
   // Metaprogram profile — local detection, instant
   const sampleTxt = document.getElementById('sample-text')?.value?.trim() || '';
@@ -4663,7 +4750,7 @@ async function runComparison() {
     const result = JSON.parse(match[0]);
     renderComparison(result, nameA, nameB, acA, acB);
   } catch(e) {
-    showCompError('Comparison failed: ' + e.message);
+    showCompError(e.name === 'AbortError' ? 'Comparison timed out (45s). Check your connection.' : 'Comparison failed: ' + e.message);
   } finally {
     isComparing = false;
     btn.disabled = false;
@@ -5041,7 +5128,7 @@ async function saveJournalEntry() {
     document.getElementById('j-note-input').value = '';
 
   } catch(e) {
-    showError('Journal save failed: ' + e.message);
+    showError(e.name === 'AbortError' ? 'Journal analysis timed out (45s). Check your connection.' : 'Journal save failed: ' + e.message);
   } finally {
     isSavingEntry = false;
     btn.disabled = false;
@@ -5356,7 +5443,7 @@ async function generateWeeklyPortrait() {
     const text  = data.content?.[0]?.text || '';
     document.getElementById('journal-weekly-text').textContent = text.trim();
   } catch(e) {
-    showError('Weekly portrait failed: ' + e.message);
+    showError(e.name === 'AbortError' ? 'Weekly portrait timed out (45s). Check your connection.' : 'Weekly portrait failed: ' + e.message);
   } finally {
     isGeneratingWeekly = false;
     btn.disabled = false;
@@ -7287,6 +7374,19 @@ updateApiIndicator();
 // if (!getKey()) setTimeout(openModal, 800);
 readOrbitContext();
 
+(function restoreTranscript() {
+  const saved = S.get('last_transcript');
+  if (saved) { const ta = document.getElementById('sample-text'); if (ta) { ta.value = saved; onTextInput(); } }
+})();
+
+document.addEventListener('keydown', function(e) {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+    e.preventDefault();
+    const btn = document.getElementById('btn-analyse');
+    if (btn && !btn.disabled) analyse();
+  }
+});
+
 /* ══════════════════════════════════════════════════════
    REPLY ANALYSIS MODE
    Upload their voice → extract acoustics locally
@@ -7740,8 +7840,8 @@ function renderRapportIntelligence(result, acA, acB, nameA, nameB) {
      from Supabase → Settings → API → anon public
 ════════════════════════════════════════════════════ -->
 <script>
-  window.__SUPABASE_URL__      = 'https://llyc1ptrojjnxesvnuss.supabase.co';
-  window.__SUPABASE_ANON_KEY__ = 'PASTE_YOUR_ANON_KEY_HERE';
+  window.__SUPABASE_URL__      = 'https://zbizygyswjylmkmilonq.supabase.co';
+  window.__SUPABASE_ANON_KEY__ = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpiaXp5Z3lzd2p5bG1rbWlsb25xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk5NDQ3NTgsImV4cCI6MjA5NTUyMDc1OH0.w26Pp9Ad1lubX3WJW0zAN7NIF6P4b1_79Y6V-4Gcvlw';
 </script>
 
 
