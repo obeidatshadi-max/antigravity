@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
 <meta charset="UTF-8">
@@ -2315,7 +2315,7 @@ const T = {
   en: {
     eyebrow:'Acoustic · Verbal · Psychological Intelligence',
     title:'Verbal Mirror',
-    subtitle:'Speak or type a sample. The app measures your voice acoustics — pitch, speed, hesitation, tonal emphasis — then fuses that with verbal pattern analysis to build a complete psychological portrait.',
+    subtitle:'Speak or type a few sentences about something on your mind. The app reads your voice — pitch, pace, hesitation — and produces a plain-language portrait of your current mental and emotional state. No psychology background needed.',
     inputLabel:'Text or Voice Sample',
     placeholder:'Paste any written sample, or record your voice below and the transcript will appear here…',
     hint:'3–10 sentences works best. Speaking naturally reveals more than typing.',
@@ -2346,7 +2346,7 @@ const T = {
   ar: {
     eyebrow:'ذكاء صوتي · لفظي · نفسي',
     title:'المرآة اللفظية',
-    subtitle:'تكلم أو اكتب نموذجاً. يقيس التطبيق صوتك — طبقة الصوت والسرعة والتردد والتركيز النغمي — ثم يدمج ذلك مع تحليل النمط اللفظي لبناء صورة نفسية كاملة.',
+    subtitle:'تكلم أو اكتب بضع جمل عن شيء يشغل بالك. التطبيق يقرأ صوتك — الطبقة والسرعة والتردد — ويعطيك صورة واضحة عن حالتك الذهنية والعاطفية. لا تحتاج أي خلفية في علم النفس.',
     inputLabel:'نموذج نصي أو صوتي',
     placeholder:'الصق نموذجاً مكتوباً، أو سجّل صوتك أدناه وسيظهر النص تلقائياً…',
     hint:'٣-١٠ جمل هو الأمثل. الكلام الطبيعي يكشف أكثر من الكتابة.',
@@ -3498,7 +3498,7 @@ ${text}`;
         signal: (() => { const c = new AbortController(); setTimeout(()=>c.abort(), 45000); return c.signal; })(),
         headers:{'Content-Type':'application/json'},
         body:JSON.stringify({
-          model:'claude-haiku-4-5-20251001',
+          model:'claude-sonnet-4-6',
           max_tokens:1800,
           system:sysPrompt,
           messages:[{role:'user',content:userMsg}]
@@ -3869,7 +3869,7 @@ async function generateMaskScore() {
         signal: (() => { const c = new AbortController(); setTimeout(()=>c.abort(), 45000); return c.signal; })(),
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
-          model: 'claude-haiku-4-5-20251001',
+          model: 'claude-sonnet-4-6',
           max_tokens: 1000,
           messages: [{ role: 'user', content: prompt }]
         })
@@ -4458,7 +4458,7 @@ async function generateGravityScore() {
         signal: (() => { const c = new AbortController(); setTimeout(()=>c.abort(), 45000); return c.signal; })(),
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
-          model: 'claude-haiku-4-5-20251001',
+          model: 'claude-sonnet-4-6',
           max_tokens: 1000,
           messages: [{ role: 'user', content: prompt }]
         })
@@ -5915,7 +5915,7 @@ async function generateNextResponse() {
       signal: (() => { const c = new AbortController(); setTimeout(() => c.abort(), 45000); return c.signal; })(),
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model:      'claude-haiku-4-5-20251001',
+        model:      'claude-sonnet-4-6',
         max_tokens: 1000,
         system:     sysPrompt,
         messages:   [{ role: 'user', content: userMsg }],
@@ -7458,7 +7458,7 @@ async function runComparisonFromConvo(nameA, textA, acA, nameB, textB, acB) {
       signal: (() => { const c = new AbortController(); setTimeout(()=>c.abort(),45000); return c.signal; })(),
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model:      'claude-haiku-4-5-20251001',
+        model:      'claude-sonnet-4-6',
         max_tokens: 2500,
         system:     prompt.system,
         messages:   [{ role:'user', content:prompt.user }],
@@ -7815,7 +7815,7 @@ async function runReplyAnalysis() {
       signal: (() => { const c = new AbortController(); setTimeout(()=>c.abort(), 45000); return c.signal; })(),
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
+        model: 'claude-sonnet-4-6',
         max_tokens: 1400,
         messages: [{ role: 'user', content: prompt }]
       })
