@@ -7,6 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#13141e">
 <title>Verbal Mirror — Acoustic Intelligence</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪞</text></svg>">
 
 <!-- SEO & Social Preview -->
 <meta name="description" content="Verbal Mirror — acoustic voice analysis meets psychological profiling. Gravity Score, Mask Score™, Voice Letter. Based on Antigravity by Shadi Obeidat.">
@@ -4444,7 +4445,6 @@ ${getOrbitContextString()}
 async function generateGravityScore() {
   const text = document.getElementById('sample-text').value.trim();
   if (!text || text.length < 30 || !lastAnalysisResult) return;
-  if (!key) return;
 
   const prompt = lang === 'ar'
     ? buildGravityPromptAr(text, lastAnalysisResult, acousticData, lastMaskData)
