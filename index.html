@@ -1637,7 +1637,7 @@ body.ar .letter-body::before { left: auto; right: 14px; }
     <p class="eyebrow" id="ui-eyebrow">Acoustic · Verbal · Psychological Intelligence</p>
     <h1 id="ui-title">Verbal Mirror</h1>
     <div class="divider"></div>
-    <p class="subtitle" id="ui-subtitle">Speak or type a sample. The app measures your voice acoustics — pitch, speed, hesitation, tonal emphasis — then fuses that with verbal pattern analysis to build a complete psychological portrait.</p>
+    <p class="subtitle" id="ui-subtitle">Speak or type a few sentences about something on your mind. The app reads your voice — pitch, pace, hesitation — and produces a plain-language portrait of your current mental and emotional state. No psychology background needed.</p>
   </header>
 
   <!-- Input card -->
@@ -1740,6 +1740,7 @@ body.ar .letter-body::before { left: auto; right: 14px; }
       <p class="results-header" id="ui-results-header" style="margin-bottom:0;">Your Voice Portrait · Signals</p>
       <div style="display:flex;gap:8px;">
         <button id="copy-results-btn" onclick="copyResults()" style="display:none;background:none;border:1px solid var(--border2);border-radius:20px;padding:6px 14px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--muted2);cursor:pointer;transition:all .2s;white-space:nowrap;">◈ Copy</button>
+        <button id="export-word-btn" onclick="exportToWord()" style="display:none;background:none;border:1px solid var(--border2);border-radius:20px;padding:6px 14px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--muted2);cursor:pointer;transition:all .2s;white-space:nowrap;">↓ Word</button>
         <button id="new-analysis-btn" onclick="newAnalysis()" style="display:none;background:none;border:1px solid var(--border2);border-radius:20px;padding:6px 14px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--muted2);cursor:pointer;transition:all .2s;white-space:nowrap;">↺ New</button>
       </div>
     </div>
@@ -1789,8 +1790,9 @@ body.ar .letter-body::before { left: auto; right: 14px; }
           border-radius:10px;border:1px solid rgba(155,143,224,.2);">
           <div id="sum-gravity-val" style="font-family:var(--mono);font-size:26px;
             font-weight:700;color:var(--purple);margin-bottom:4px;">—</div>
-          <div style="font-size:12px;color:var(--muted);letter-spacing:.1em;
-            text-transform:uppercase;font-family:var(--mono);" id="sum-gravity-lbl">Gravity</div>
+          <div style="font-size:12px;color:var(--muted);letter-spacing:.05em;
+            text-transform:uppercase;font-family:var(--mono);" id="sum-gravity-lbl">Mental Load</div>
+          <div style="font-size:10px;color:var(--muted);opacity:.55;font-family:var(--mono);">Gravity Score</div>
           <div id="sum-gravity-interp" style="font-size:11px;color:var(--muted2);
             margin-top:4px;line-height:1.4;"></div>
         </div>
@@ -1806,8 +1808,9 @@ body.ar .letter-body::before { left: auto; right: 14px; }
           border-radius:10px;border:1px solid rgba(232,168,74,.2);">
           <div id="sum-mask-val" style="font-family:var(--mono);font-size:26px;
             font-weight:700;color:var(--amber);margin-bottom:4px;">—</div>
-          <div style="font-size:12px;color:var(--muted);letter-spacing:.1em;
-            text-transform:uppercase;font-family:var(--mono);" id="sum-mask-lbl">Mask Score</div>
+          <div style="font-size:12px;color:var(--muted);letter-spacing:.05em;
+            text-transform:uppercase;font-family:var(--mono);" id="sum-mask-lbl">Authenticity Gap</div>
+          <div style="font-size:10px;color:var(--muted);opacity:.55;font-family:var(--mono);">Mask Score™</div>
           <div id="sum-mask-interp" style="font-size:11px;color:var(--muted2);
             margin-top:4px;line-height:1.4;"></div>
         </div>
@@ -1832,6 +1835,16 @@ body.ar .letter-body::before { left: auto; right: 14px; }
       </div>
     </div>
 
+
+    <!-- ══ PLAIN LANGUAGE ACTION CARD ══ -->
+    <div id="action-card" style="display:none;background:linear-gradient(135deg,rgba(91,191,181,.08),rgba(13,20,32,.95));border:1px solid rgba(91,191,181,.25);border-radius:16px;padding:20px;margin-bottom:16px;animation:fadeUp .4s ease both;">
+      <div style="font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);margin-bottom:14px;" id="action-card-eyebrow">◈ What This Means For You</div>
+      <div id="action-plain-summary" style="font-size:15px;color:var(--text);line-height:1.85;font-family:system-ui,sans-serif;margin-bottom:16px;"></div>
+      <div style="background:rgba(255,255,255,.04);border-radius:12px;padding:14px 16px;border-left:3px solid var(--teal);">
+        <div style="font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--teal);margin-bottom:8px;" id="action-try-label">→ Try This Today</div>
+        <div id="action-try-text" style="font-size:14px;color:var(--muted2);line-height:1.75;font-family:system-ui,sans-serif;"></div>
+      </div>
+    </div>
 
     <!-- Personality profile -->
     <div class="card-gold">
@@ -2070,6 +2083,26 @@ body.ar .letter-body::before { left: auto; right: 14px; }
 
     <!-- Closing -->
     <div class="quote-box" id="res-closing"></div>
+
+    <!-- ══ RESEARCH TRUST SIGNALS ══ -->
+    <div id="research-citations" style="display:none;margin-top:16px;padding:16px 18px;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.07);border-radius:14px;">
+      <div style="font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;" id="cite-label">◎ Research Basis</div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="font-size:12px;color:var(--muted);line-height:1.6;font-family:system-ui,sans-serif;">
+          <span style="color:var(--muted2);">Pitch & Dominance</span> — Lower vocal pitch correlates with perceived authority and extraversion. <em>ScienceDirect, 2021</em>
+        </div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.6;font-family:system-ui,sans-serif;">
+          <span style="color:var(--muted2);">Speech Rate & Anxiety</span> — Fast speech (180+ WPM) often reflects cognitive load or information concealment. <em>Psychology Today, 2019</em>
+        </div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.6;font-family:system-ui,sans-serif;">
+          <span style="color:var(--muted2);">Hesitation Markers</span> — Filler words signal conceptual difficulty, not necessarily anxiety. <em>Fraundorf, 2013; MDPI, 2023</em>
+        </div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.6;font-family:system-ui,sans-serif;">
+          <span style="color:var(--muted2);">Pitch Variance</span> — High tonal range indicates emotional openness; flat intonation suggests controlled presentation. <em>British J. Social Psychology, 2023</em>
+        </div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px;font-family:system-ui,sans-serif;font-style:italic;">All findings are probabilistic pattern indicators — not clinical diagnoses. Based on <em>Antigravity</em> by Shadi Obeidat.</div>
+      </div>
+    </div>
 
     <!-- ══ THE VOICE LETTER ══ -->
     <div class="letter-section" id="letter-section" style="margin-top:24px;">
@@ -2992,10 +3025,9 @@ function newAnalysis() {
   document.getElementById('sample-text').value = '';
   S.set('last_transcript', '');
   document.getElementById('results').style.display = 'none';
-  const _cb = document.getElementById('copy-results-btn');
-  const _nb = document.getElementById('new-analysis-btn');
-  if (_cb) _cb.style.display = 'none';
-  if (_nb) _nb.style.display = 'none';
+  ['copy-results-btn','new-analysis-btn','export-word-btn'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.style.display = 'none';
+  });
   acousticData = null;
   lastAnalysisResult = null;
   if (document.getElementById('acoustic-panel')) document.getElementById('acoustic-panel').style.display='none';
@@ -3003,6 +3035,153 @@ function newAnalysis() {
   document.getElementById('voice-status').style.color = 'var(--muted)';
   window.scrollTo({top:0, behavior:'smooth'});
   setTimeout(() => document.getElementById('sample-text').focus(), 400);
+}
+
+function buildActionCard(r) {
+  const isAr = lang === 'ar';
+  const gravTotal = r.gravityScore?.total ?? null;
+  const maskScore = r.maskScore?.composite ?? null;
+  const patterns  = r.patterns || [];
+  const heaviest  = (() => {
+    const scores = [
+      {name: isAr?'التفكير':'Thinking',   val: r.gravityScore?.thinking  ?? 0},
+      {name: isAr?'العاطفة':'Emotional', val: r.gravityScore?.emotional ?? 0},
+      {name: isAr?'السلوك':'Behavioral', val: r.gravityScore?.physical  ?? 0},
+    ];
+    return scores.reduce((a,b) => a.val > b.val ? a : b);
+  })();
+
+  let summary = '';
+  let action  = '';
+
+  if (isAr) {
+    if (gravTotal !== null && gravTotal >= 7) {
+      summary = `صوتك يحمل ثقلاً ذهنياً ملحوظاً الآن — خاصةً في مجال ${heaviest.name}. هذا ليس حكماً، بل إشارة: جزء كبير من طاقتك يُصرف في المعالجة الداخلية بدلاً من التعبير الخارجي.`;
+      action  = `قبل محادثتك القادمة، خصص 3 دقائق لكتابة ما يشغل ذهنك. تفريغ الأفكار على الورق يُخفف الحمل المعرفي ويجعل صوتك أكثر هدوءاً.`;
+    } else if (maskScore !== null && maskScore >= 50) {
+      summary = `هناك فجوة بين ما تقوله وطريقة قولك — صوتك يحمل إشارات لا تنعكس دائماً في الكلمات. هذا شائع جداً في البيئات المهنية عالية الضغط.`;
+      action  = `في محادثتك القادمة، جرّب أن تقول ما تشعر به مباشرةً مرة واحدة — حتى لو بدت الجملة صغيرة. الصدق الصغير يقلل الفجوة تدريجياً.`;
+    } else {
+      summary = `أنماطك اللفظية والصوتية تبدو متوازنة نسبياً الآن. ${patterns[0] ? `النمط الأبرز لديك: ${patterns[0].label}.` : ''} هذا وقت جيد للتواصل والتعبير.`;
+      action  = `استفد من هذا التوازن — إذا كان لديك محادثة صعبة مؤجلة، اليوم يوم جيد لها.`;
+    }
+  } else {
+    if (gravTotal !== null && gravTotal >= 7) {
+      summary = `Your voice is carrying notable mental weight right now — especially in the ${heaviest.name} domain. This isn't a problem, it's information: a significant portion of your energy is going inward rather than outward.`;
+      action  = `Before your next conversation, spend 3 minutes writing down what's occupying your mind. Externalising thoughts reduces cognitive load and makes your voice noticeably calmer.`;
+    } else if (maskScore !== null && maskScore >= 50) {
+      summary = `There's a gap between what you're saying and how you're saying it — your voice carries signals that don't always show in your words. This is very common in high-pressure professional environments.`;
+      action  = `In your next conversation, try saying what you actually feel once — even if it's a small sentence. Small honesty reduces the gap gradually over time.`;
+    } else {
+      summary = `Your verbal and acoustic patterns look relatively balanced right now. ${patterns[0] ? `Your most prominent pattern: ${patterns[0].label}.` : ''} This is a good state for clear communication.`;
+      action  = `Take advantage of this balance — if you have a difficult conversation you've been postponing, today is a good day for it.`;
+    }
+  }
+
+  const card = document.getElementById('action-card');
+  const sumEl = document.getElementById('action-plain-summary');
+  const tryEl = document.getElementById('action-try-text');
+  const eyeEl = document.getElementById('action-card-eyebrow');
+  const lblEl = document.getElementById('action-try-label');
+  if (eyeEl) eyeEl.textContent = isAr ? '◈ ماذا يعني هذا لك' : '◈ What This Means For You';
+  if (lblEl) lblEl.textContent = isAr ? '→ جرّب هذا اليوم' : '→ Try This Today';
+  if (sumEl) sumEl.textContent = summary;
+  if (tryEl) tryEl.textContent = action;
+  if (card)  card.style.display = 'block';
+}
+
+function exportToWord() {
+  const isAr = lang === 'ar';
+  const date = new Date().toLocaleDateString(isAr ? 'ar-SA' : 'en-GB', {year:'numeric',month:'long',day:'numeric'});
+
+  const getT = id => document.getElementById(id)?.textContent?.trim() || '';
+
+  const patterns = [];
+  document.querySelectorAll('.pattern-item').forEach(el => {
+    const lbl = el.querySelector('.pattern-label')?.textContent?.trim();
+    const val = el.querySelector('.pattern-value')?.textContent?.trim();
+    const bdg = el.querySelector('.badge')?.textContent?.trim();
+    if (lbl && val) patterns.push(`<tr><td style="padding:6px 12px;border:1px solid #e0d8cc;font-weight:600;color:#444;">${lbl}</td><td style="padding:6px 12px;border:1px solid #e0d8cc;">${val}${bdg?' <span style="color:#9b7fd4;">['+bdg+']</span>':''}</td></tr>`);
+  });
+
+  const letterBody = document.getElementById('letter-body')?.innerHTML || '';
+  const hasLetter  = letterBody.trim().length > 10;
+
+  const htmlDoc = `
+<!DOCTYPE html>
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+      xmlns:w="urn:schemas-microsoft-com:office:word"
+      xmlns="http://www.w3.org/TR/REC-html40" ${isAr?'dir="rtl"':''}>
+<head>
+<meta charset="UTF-8">
+<title>Verbal Mirror — Voice Analysis Report</title>
+<style>
+  body { font-family: 'Georgia', serif; color: #1a1a2e; margin: 40px; line-height: 1.7; ${isAr?'direction:rtl;text-align:right;':''} }
+  h1   { font-size: 28px; color: #1a1a2e; border-bottom: 2px solid #c8a96e; padding-bottom: 10px; margin-bottom: 6px; }
+  h2   { font-size: 18px; color: #4a3f6b; margin-top: 28px; margin-bottom: 8px; border-bottom: 1px solid #e0d8cc; padding-bottom: 6px; }
+  h3   { font-size: 15px; color: #c8a96e; margin-top: 20px; margin-bottom: 6px; }
+  p    { margin: 8px 0; font-size: 14px; color: #333; }
+  .meta { font-size: 12px; color: #888; margin-bottom: 24px; }
+  .score-box { display: inline-block; padding: 8px 20px; border-radius: 8px; font-size: 22px; font-weight: bold; margin: 6px 4px; text-align: center; min-width: 80px; }
+  .score-lbl  { font-size: 11px; display: block; margin-top: 3px; color: #666; letter-spacing: .08em; }
+  .score-purple { background: #f0eeff; border: 1px solid #c5bce8; color: #4a3f6b; }
+  .score-amber  { background: #fff8ec; border: 1px solid #e8c87a; color: #7a5a1e; }
+  .action-box { background: #f0fbfa; border-left: 4px solid #5bbfb5; padding: 14px 18px; border-radius: 6px; margin: 16px 0; }
+  .letter-box { background: #faf9f6; border: 1px solid #e0d8cc; padding: 20px 24px; border-radius: 8px; font-style: italic; font-size: 15px; line-height: 1.9; margin: 16px 0; }
+  .citation   { font-size: 11px; color: #aaa; margin-top: 4px; }
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+  td    { font-size: 13px; }
+  .footer { margin-top: 36px; padding-top: 12px; border-top: 1px solid #e0d8cc; font-size: 11px; color: #aaa; }
+</style>
+</head>
+<body>
+  <h1>Verbal Mirror — ${isAr?'تقرير التحليل الصوتي':'Voice Analysis Report'}</h1>
+  <p class="meta">${isAr?'التاريخ:':'Date:'} ${date} &nbsp;|&nbsp; ${isAr?'المصدر: مرآة الكلام — الذكاء الصوتي':'Source: Verbal Mirror — Acoustic Intelligence'}</p>
+
+  <h2>${isAr?'نظرة سريعة':'At a Glance'}</h2>
+  <div>
+    <div class="score-box score-purple">
+      ${getT('sum-gravity-val')}<br><span class="score-lbl">${isAr?'الحمل الذهني':'Mental Load'}</span>
+    </div>
+    <div class="score-box score-amber">
+      ${getT('sum-mask-val')}<br><span class="score-lbl">${isAr?'فجوة الأصالة':'Authenticity Gap'}</span>
+    </div>
+  </div>
+  <p style="font-size:13px;color:#666;margin-top:8px;">${getT('sum-gravity-imbalance')}</p>
+
+  <h2>${isAr?'ما يعنيه هذا لك':'What This Means For You'}</h2>
+  <p>${getT('action-plain-summary')}</p>
+  <div class="action-box">
+    <strong>${isAr?'جرّب هذا اليوم:':'Try This Today:'}</strong> ${getT('action-try-text')}
+  </div>
+
+  <h2>${isAr?'صورتك الشخصية':'Your Profile'}</h2>
+  <h3>${getT('res-profile-title')}</h3>
+  <p>${getT('res-profile-summary') || getT('profile-summary')}</p>
+
+  ${patterns.length ? `<h2>${isAr?'الأنماط الرئيسية':'Key Patterns'}</h2><table>${patterns.join('')}</table>` : ''}
+
+  <h2>${isAr?'ملاحظة المحادثة':'Closing Insight'}</h2>
+  <p>${getT('res-closing')}</p>
+
+  ${hasLetter ? `<h2>${isAr?'رسالتك الصوتية':'Your Voice Letter'}</h2><div class="letter-box">${letterBody}</div>` : ''}
+
+  <div class="footer">
+    ${isAr?'التحليل مبني على أنماط لغوية وصوتية. ليس تشخيصاً سريرياً.':'Analysis based on verbal and acoustic patterns. Not a clinical diagnosis.'}<br>
+    Based on <em>Antigravity</em> by Shadi Obeidat · verbal-mirror.netlify.app
+  </div>
+</body>
+</html>`;
+
+  const blob = new Blob(['﻿', htmlDoc], {type: 'application/msword'});
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = `verbal-mirror-report-${new Date().toISOString().slice(0,10)}.doc`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 }
 
 /* ═══════════════════════════════════════════
@@ -3548,8 +3727,12 @@ function renderResult(r) {
   document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'});
   const _cb = document.getElementById('copy-results-btn');
   const _nb = document.getElementById('new-analysis-btn');
+  const _wb = document.getElementById('export-word-btn');
   if (_cb) { _cb.style.display='inline-flex'; _cb.onmouseover=()=>{_cb.style.borderColor='var(--gold)';_cb.style.color='var(--gold)'}; _cb.onmouseout=()=>{_cb.style.borderColor='var(--border2)';_cb.style.color='var(--muted2)'}; }
   if (_nb) { _nb.style.display='inline-flex'; _nb.onmouseover=()=>{_nb.style.borderColor='var(--teal)';_nb.style.color='var(--teal)'}; _nb.onmouseout=()=>{_nb.style.borderColor='var(--border2)';_nb.style.color='var(--muted2)'}; }
+  if (_wb) { _wb.style.display='inline-flex'; _wb.onmouseover=()=>{_wb.style.borderColor='var(--purple)';_wb.style.color='var(--purple)'}; _wb.onmouseout=()=>{_wb.style.borderColor='var(--border2)';_wb.style.color='var(--muted2)'}; }
+  buildActionCard(r);
+  const _rc = document.getElementById('research-citations'); if (_rc) _rc.style.display='block';
 
   // Metaprogram profile — local detection, instant
   const sampleTxt = document.getElementById('sample-text')?.value?.trim() || '';
