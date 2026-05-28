@@ -8420,23 +8420,34 @@ function openAuthModal() {
 
 window.__sbSaveAnalysis = async function(result, transcript, acoustics) {
   if (!sb || !SB_USER) return;
+
+  // Fix field paths — AI returns gravityScore.* and maskScore.* not gravity.* / mask.*
+  const gt   = result?.gravityScore?.thinking  ?? result?.gravity?.thinking  ?? null;
+  const ge   = result?.gravityScore?.emotional ?? result?.gravity?.emotional ?? null;
+  const gp   = result?.gravityScore?.physical  ?? result?.gravity?.physical  ?? null;
+  const gtot = result?.gravityScore?.total     ?? result?.gravity?.total     ?? null;
+  const ms   = result?.maskScore?.composite    ?? result?.mask?.score        ?? null;
+  const mt   = result?.maskScore?.dominant_type ?? result?.mask?.dominant_type ?? null;
+
   try {
+    // 1. Save to Signal's own vm_analyses table
     const { error } = await sb.from('vm_analyses').insert({
       user_id:           SB_USER.id,
       orbit_persona_id:  ORBIT_CONTEXT?.personaId || null,
-      mode:              'solo', input_type: acoustics ? 'voice' : 'text',
+      mode:              'solo',
+      input_type:        acoustics ? 'voice' : 'text',
       transcript:        transcript || null,
-      pitch_hz_avg:      acoustics?.pitchAvg    || null,
-      pace_wpm:          acoustics?.paceWpm      || null,
-      hesitation_index:  acoustics?.hesitation   || null,
-      gravity_thinking:  result?.gravity?.thinking  ?? null,
-      gravity_emotional: result?.gravity?.emotional ?? null,
-      gravity_physical:  result?.gravity?.physical  ?? null,
-      gravity_total:     result?.gravity?.total      ?? null,
-      mask_score:        result?.mask?.score         ?? null,
-      mask_type:         result?.mask?.dominant_type ?? null,
+      pitch_hz_avg:      acoustics?.pitchAvg   || null,
+      pace_wpm:          acoustics?.paceWpm    || null,
+      hesitation_index:  acoustics?.hesitation || null,
+      gravity_thinking:  gt,
+      gravity_emotional: ge,
+      gravity_physical:  gp,
+      gravity_total:     gtot,
+      mask_score:        ms,
+      mask_type:         mt,
       archetype_label:   result?.archetype?.label    ?? null,
-      profile_summary:   result?.profile_summary     ?? null,
+      profile_summary:   result?.profileSummary      ?? result?.profile_summary ?? null,
       letter_mirror:     result?.voice_letter?.mirror     ?? null,
       letter_gap:        result?.voice_letter?.gap        ?? null,
       letter_invitation: result?.voice_letter?.invitation ?? null,
@@ -8445,8 +8456,46 @@ window.__sbSaveAnalysis = async function(result, transcript, acoustics) {
       raw_ai_response:   result,
     });
     if (error) throw error;
-    console.info('[VM→Supabase] Analysis saved ✓');
-  } catch(e) { console.error('[VM→Supabase] Analysis save failed:', e.message); }
+    console.info('[Signal] Analysis saved to vm_analyses ✓');
+  } catch(e) { console.error('[Signal] vm_analyses save failed:', e.message); }
+
+  // 2. ORBIT Bridge — save to voice_sessions + update profile gravity domains
+  try {
+    const domScores = [
+      { name:'Thinking',   val: parseFloat(gt) || 0 },
+      { name:'Emotional',  val: parseFloat(ge) || 0 },
+      { name:'Behavioral', val: parseFloat(gp) || 0 },
+    ];
+    const dominant = domScores.reduce((a,b) => a.val > b.val ? a : b).name;
+    const coachMsg = result?.closingInsight
+      || (result?.interventions?.[0]
+        ? (typeof result.interventions[0] === 'string'
+            ? result.interventions[0]
+            : result.interventions[0].description || '')
+        : '');
+
+    const { error: vsErr } = await sb.from('voice_sessions').insert({
+      user_id:         SB_USER.id,
+      transcript:      transcript || '',
+      gravity_score:   parseFloat(gtot) || 0,
+      mask_score:      Math.round(parseFloat(ms) || 0),
+      patterns:        result?.patterns ?? [],
+      coach_msg:       coachMsg,
+      dominant_domain: dominant,
+      gravity_desc:    result?.profileSummary || result?.profile_summary || '',
+      mask_desc:       result?.maskScore?.synthesis || '',
+    });
+    if (vsErr) throw vsErr;
+
+    // Update ORBIT profile gravity domains with latest Signal readings
+    await sb.from('profiles').update({
+      domain_think: Math.round(parseFloat(gt) || 5),
+      domain_emot:  Math.round(parseFloat(ge) || 5),
+      domain_behav: Math.round(parseFloat(gp) || 5),
+    }).eq('id', SB_USER.id);
+
+    console.info('[Signal→ORBIT] Bridge sync complete ✓');
+  } catch(e) { console.error('[Signal→ORBIT] Bridge failed:', e.message); }
 };
 
 window.__sbSaveJournal = async function(entry) {
